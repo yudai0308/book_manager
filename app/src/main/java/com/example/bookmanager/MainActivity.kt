@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         val list = mutableListOf<MyBook>()
         for (i in 1..10) {
             val image = R.mipmap.ic_launcher
-            val title = "海辺のカフカ"
-            val author = "村上春樹"
+            val title = "鬼滅の刃(${i})"
+            val author = "吾峠呼世晴"
             list.add(MyBook(image, title, author))
         }
         return list

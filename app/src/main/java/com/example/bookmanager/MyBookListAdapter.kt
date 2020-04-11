@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 class MyBookListAdapter(private val listData: MutableList<MyBook>) :
     RecyclerView.Adapter<MyBookListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyBookListViewHolder {
-        val inflate = LayoutInflater.from(parent.context)
-        val view = inflate.inflate(R.layout.row_my_book_list, parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val view = inflater.inflate(R.layout.row_my_book_list, parent, false)
         return MyBookListViewHolder(view)
     }
 
