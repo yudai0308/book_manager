@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Book Manager</string>
+    <string name="toolbar_title">マイブックリスト</string>
 </resources>

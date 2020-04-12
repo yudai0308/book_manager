@@ -1,13 +1,14 @@
 package com.example.bookmanager
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,20 +16,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val books = createDummyData()
+        setDataToRecyclerView(books)
+        setFabClickListener()
+        setUpToolbar()
+    }
+
+    private fun setDataToRecyclerView(data: MutableList<MyBook>) {
         val recyclerView = findViewById<RecyclerView>(R.id.rvMyBookList)
-        val adapter = MyBookListAdapter(createDummyData())
+        val adapter = MyBookListAdapter(data)
         val manager = LinearLayoutManager(this)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
 
         val decorator = DividerItemDecoration(this, manager.orientation)
         recyclerView?.addItemDecoration(decorator)
-
-        val fab: View = findViewById(R.id.fabAddBook)
-        fab.setOnClickListener {
-            val intent = Intent(applicationContext, BookSearchActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun createDummyData(): MutableList<MyBook> {
@@ -40,5 +42,20 @@ class MainActivity : AppCompatActivity() {
             list.add(MyBook(image, title, author))
         }
         return list
+    }
+
+    private fun setFabClickListener() {
+        val fab: View = findViewById(R.id.fabAddBook)
+        fab.setOnClickListener {
+            val intent = Intent(applicationContext, BookSearchActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun setUpToolbar() {
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.setTitle(R.string.toolbar_title)
+        toolbar.setTitleTextColor(Color.WHITE)
+//        setSupportActionBar(toolbar)
     }
 }
