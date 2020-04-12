@@ -56,6 +56,6 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setTitle(R.string.toolbar_title)
         toolbar.setTitleTextColor(Color.WHITE)
-//        setSupportActionBar(toolbar)
+        setSupportActionBar(toolbar)
     }
 }
