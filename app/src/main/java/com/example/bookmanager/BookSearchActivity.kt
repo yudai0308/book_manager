@@ -1,31 +1,27 @@
 package com.example.bookmanager
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.mancj.materialsearchbar.MaterialSearchBar
 
-class BookSearchActivity : AppCompatActivity() {
+class BookSearchActivity : AppCompatActivity(), MaterialSearchBar.OnSearchActionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_search)
 
-        setUpToolbar()
+        setUpSearchBar()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> finish()
-        }
-        return super.onOptionsItemSelected(item)
+    private fun setUpSearchBar() {
+        val searchBar = findViewById<MaterialSearchBar>(R.id.searchBar)
+        searchBar.setOnSearchActionListener(this)
+        searchBar.openSearch()
     }
 
-    private fun setUpToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.title = "search"
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-    }
+    override fun onButtonClicked(buttonCode: Int) {}
+
+    override fun onSearchStateChanged(enabled: Boolean) {}
+
+    override fun onSearchConfirmed(text: CharSequence?) {}
 }

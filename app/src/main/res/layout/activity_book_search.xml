@@ -6,7 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".BookSearchActivity">
 
-    <include layout="@layout/toolbar" />
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/searchBar"
+        style="@style/MaterialSearchBarLight"
+        app:mt_searchBarColor="#dcdddd"
+        app:mt_roundedSearchBarEnabled="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mt_dividerColor="@color/colorAccent"
+        app:mt_hint="Custom hint"
+        app:mt_maxSuggestionsCount="10"
+        app:mt_speechMode="false" />
 
     <TextView
         android:layout_width="wrap_content"
