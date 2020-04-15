@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
         for (i in 1..10) {
             val image = R.mipmap.ic_launcher
             val title = "鬼滅の刃(${i})"
-            val author = "吾峠呼世晴"
-            list.add(MyBook(image, title, author))
+            val authors = arrayListOf("吾峠呼世晴", "TEST")
+            list.add(MyBook(image, title, authors))
         }
         return list
     }
