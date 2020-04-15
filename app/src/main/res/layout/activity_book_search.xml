@@ -9,8 +9,6 @@
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:id="@+id/searchBar"
         style="@style/MaterialSearchBarLight"
-        app:mt_searchBarColor="#dcdddd"
-        app:mt_roundedSearchBarEnabled="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -22,15 +20,16 @@
         app:mt_dividerColor="@color/colorAccent"
         app:mt_hint="Custom hint"
         app:mt_maxSuggestionsCount="10"
+        app:mt_roundedSearchBarEnabled="true"
+        app:mt_searchBarColor="#dcdddd"
         app:mt_speechMode="false" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Book Search Page"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
