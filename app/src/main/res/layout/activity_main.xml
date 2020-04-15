@@ -10,7 +10,7 @@
     <include layout="@layout/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMyBookList"
+        android:id="@+id/my_book_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddBook"
+        android:id="@+id/fab_add_book"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

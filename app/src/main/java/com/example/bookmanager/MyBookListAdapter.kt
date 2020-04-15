@@ -15,9 +15,9 @@ class MyBookListAdapter(private val listData: MutableList<MyBook>) :
 
     override fun onBindViewHolder(holder: MyBookListViewHolder, position: Int) {
         val item = listData[position]
-        holder.ivMyBookImage.setImageResource(item.mImage)
-        holder.tvMyBookTitle.text = item.mTitle
-        holder.tvMyBookAuthor.text = listToString(item.mAuthors)
+        holder.myBookImage.setImageResource(item.mImage)
+        holder.myBookTitle.text = item.mTitle
+        holder.myBookAuthors.text = listToString(item.mAuthors)
     }
 
     override fun getItemCount(): Int {

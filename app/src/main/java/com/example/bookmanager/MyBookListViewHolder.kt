@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class MyBookListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    var ivMyBookImage: ImageView = itemView.findViewById(R.id.ivMyBookImage)
-    var tvMyBookTitle: TextView = itemView.findViewById(R.id.tvMyBookTitle)
-    var tvMyBookAuthor: TextView = itemView.findViewById(R.id.tvMyBookAuthor)
+    var myBookImage: ImageView = itemView.findViewById(R.id.my_book_image)
+    var myBookTitle: TextView = itemView.findViewById(R.id.my_book_title)
+    var myBookAuthors: TextView = itemView.findViewById(R.id.my_book_author)
 }
