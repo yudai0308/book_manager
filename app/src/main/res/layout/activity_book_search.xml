@@ -21,7 +21,7 @@
         app:mt_hint="Custom hint"
         app:mt_maxSuggestionsCount="10"
         app:mt_roundedSearchBarEnabled="true"
-        app:mt_searchBarColor="#dcdddd"
+        app:mt_searchBarColor="#f5f5f5"
         app:mt_speechMode="false" />
 
     <androidx.recyclerview.widget.RecyclerView
