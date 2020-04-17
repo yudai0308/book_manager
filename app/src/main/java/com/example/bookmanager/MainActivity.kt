@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDataToRecyclerView(data: MutableList<MyBook>) {
-        val recyclerView = findViewById<RecyclerView>(R.id.rvMyBookList)
+        val recyclerView = findViewById<RecyclerView>(R.id.my_book_list)
         val adapter = MyBookListAdapter(data)
         val manager = LinearLayoutManager(this)
         recyclerView.layoutManager = manager
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setFabClickListener() {
-        val fab: View = findViewById(R.id.fabAddBook)
+        val fab: View = findViewById(R.id.fab_add_book)
         fab.setOnClickListener {
             val intent = Intent(applicationContext, BookSearchActivity::class.java)
             startActivity(intent)
