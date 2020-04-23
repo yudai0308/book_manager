@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Book Manager</string>
     <string name="toolbar_title">マイブックリスト</string>
+    <string name="search_error_message">エラーが発生しました。再度お試しください。</string>
 </resources>
