@@ -101,20 +101,30 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onResponse(call: Call, response: Response) {
             val resBody = response.body?.string()
             val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
-            if (!resBody.isNullOrBlank()) {
-                val result = adapter.fromJson(resBody)
-                createSearchResultView(result)
-            } else {
-                Snackbar.make(
-                    findViewById(R.id.book_search_root),
-                    R.string.search_error_message,
-                    Snackbar.LENGTH_LONG
-                ).show()
+            if (resBody.isNullOrBlank()) {
+                showSnackbar(getString(R.string.search_error_message))
+                return
             }
+
+            val result = adapter.fromJson(resBody)
+            if (result == null) {
+                showSnackbar(getString(R.string.search_error_message))
+                return
+            }
+
+            createSearchResultView(result)
         }
     }
 
-    private fun createSearchResultView(result: SearchResult?) {
+    private fun showSnackbar(msg: String) {
+        Snackbar.make(
+            findViewById(R.id.book_search_root),
+            msg,
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
+
+    private fun createSearchResultView(result: SearchResult) {
         // 先頭から 10 個分の NewBook オブジェクトを生成
         // 10 行分のリストを生成
         // スクロールが一番下に到達したら、追加で 10 行分を生成
