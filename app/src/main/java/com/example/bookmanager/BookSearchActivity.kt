@@ -1,6 +1,7 @@
 package com.example.bookmanager
 
 import android.os.Bundle
+import android.os.Handler
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,8 @@ import okhttp3.*
 import java.io.IOException
 
 class BookSearchActivity : AppCompatActivity() {
+
+    var handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +59,7 @@ class BookSearchActivity : AppCompatActivity() {
             newBooks.add(
                 NewBook(
                     "進撃の巨人${i}",
-                    "諫山創",
+                    listOf("諫山創"),
                     "巨人たちが襲いかかる！",
                     "image.jpg"
                 )
@@ -71,12 +74,14 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onSearchStateChanged(enabled: Boolean) {}
 
         override fun onSearchConfirmed(text: CharSequence?) {
+            // 現在表示されているリストをクリア。
+            removeAllItem()
             // 入力値を取得してパラメーター付き URL を作成。
             val searchBar = findViewById<MaterialSearchBar>(R.id.book_search_bar)
             val spinner = findViewById<Spinner>(R.id.spinner_book_search_type)
             val keyword = searchBar.text
             val searchType = spinner.selectedItem.toString()
-            val param = createUrlParameter(keyword, searchType)
+            val param = createUrlParameter(searchType, keyword)
             val url = Const.BOOK_SEARCH_API_URL + param
 
             val req = Request.Builder().url(url).get().build()
@@ -85,7 +90,17 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun createUrlParameter(keyword: String, type: String): String {
+    private fun removeAllItem() {
+        val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
+        val adapter = recyclerView.adapter as BookSearchResultsAdapter
+        val cnt = adapter.itemCount
+        adapter.removeAll()
+        for (i in (cnt - 1)..0) {
+            adapter.notifyItemRemoved(i)
+        }
+    }
+
+    private fun createUrlParameter(type: String, keyword: String, index: Int = 0): String {
         var param = "?q="
         param = when (type) {
             Const.SEARCH_TITLE -> param + Const.PARAM_TITLE + ":"
@@ -102,18 +117,52 @@ class BookSearchActivity : AppCompatActivity() {
             val resBody = response.body?.string()
             val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
             if (resBody.isNullOrBlank()) {
-                showSnackbar(getString(R.string.search_error_message))
+                showSnackbar(getString(R.string.search_error))
                 return
             }
 
             val result = adapter.fromJson(resBody)
             if (result == null) {
-                showSnackbar(getString(R.string.search_error_message))
+                showSnackbar(getString(R.string.search_error))
                 return
             }
 
-            createSearchResultView(result)
+            handler.post { createSearchResultView(result) }
+//            createSearchResultView(result)
         }
+    }
+
+    private fun createSearchResultView(result: SearchResult) {
+        // 先頭から 10 個分の NewBook オブジェクトを生成
+        // 10 行分のリストを生成
+        // スクロールが一番下に到達したら、追加で 10 行分を生成
+        val items = result.items
+        if (items.isNullOrEmpty()) {
+            showSnackbar(getString(R.string.search_no_item))
+            return
+        }
+
+        val newBooks = mutableListOf<NewBook>()
+        items.forEach { item ->
+            val info = item.volumeInfo
+            val title = if (info?.title != null) info.title as String else ""
+            val authors = if (info?.authors != null) info.authors as List<String> else ArrayList()
+            val desc = if (info?.description != null) info.description as String else ""
+            val image = if (info?.imageLinks?.thumbnail != null) {
+                info.imageLinks?.thumbnail as String
+            } else {
+                ""
+            }
+            newBooks.add(NewBook(title, authors, desc, image))
+        }
+
+        val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
+        val adapter = BookSearchResultsAdapter(newBooks)
+        recyclerView.adapter = adapter
+
+
+//        val decorator = DividerItemDecoration(this, manager.orientation)
+//        recyclerView.addItemDecoration(decorator)
     }
 
     private fun showSnackbar(msg: String) {
@@ -122,11 +171,5 @@ class BookSearchActivity : AppCompatActivity() {
             msg,
             Snackbar.LENGTH_LONG
         ).show()
-    }
-
-    private fun createSearchResultView(result: SearchResult) {
-        // 先頭から 10 個分の NewBook オブジェクトを生成
-        // 10 行分のリストを生成
-        // スクロールが一番下に到達したら、追加で 10 行分を生成
     }
 }

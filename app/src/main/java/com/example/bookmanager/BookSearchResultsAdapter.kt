@@ -16,10 +16,15 @@ class BookSearchResultsAdapter(private val listData: MutableList<NewBook>) :
     override fun onBindViewHolder(holder: BookSearchResultsViewHolder, position: Int) {
         val item = listData[position]
         holder.mBookTitle.text = item.mTitle
-        holder.mBookAuthor.text = item.mAuthor
+        holder.mBookAuthor.text = Libs.listToString(item.mAuthors)
     }
 
     override fun getItemCount(): Int {
         return listData.size
     }
+
+    fun removeAll() {
+        listData.removeAll { true }
+    }
+
 }

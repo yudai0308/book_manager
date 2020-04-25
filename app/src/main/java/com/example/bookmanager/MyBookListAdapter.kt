@@ -17,20 +17,10 @@ class MyBookListAdapter(private val listData: MutableList<MyBook>) :
         val item = listData[position]
         holder.myBookImage.setImageResource(item.mImage)
         holder.myBookTitle.text = item.mTitle
-        holder.myBookAuthors.text = listToString(item.mAuthors)
+        holder.myBookAuthors.text = Libs.listToString(item.mAuthors)
     }
 
     override fun getItemCount(): Int {
         return listData.size
-    }
-
-    private fun listToString(list: List<String>, divider: String = ", "): String {
-        var returnVal = ""
-        val count = list.size
-        list.forEachIndexed { index: Int, string: String ->
-            val add = if (index == count - 1) string else string + divider
-            returnVal += add
-        }
-        return returnVal
     }
 }
