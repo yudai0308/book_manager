@@ -96,11 +96,7 @@ class BookSearchActivity : AppCompatActivity() {
         val adapter = recyclerView.adapter as BookSearchResultsAdapter
         val cnt = adapter.itemCount
         if (cnt < 1) return
-
         adapter.removeAll()
-        for (i in (cnt - 1)..0) {
-            adapter.notifyItemRemoved(i)
-        }
     }
 
     private fun createUrlParameter(

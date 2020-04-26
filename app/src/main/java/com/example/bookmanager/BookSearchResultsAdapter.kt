@@ -24,7 +24,11 @@ class BookSearchResultsAdapter(private val listData: MutableList<NewBook>) :
     }
 
     fun removeAll() {
+        val cnt = listData.size
         listData.removeAll { true }
+        for (i: Int in (cnt - 1)..0) {
+            notifyItemRemoved(i)
+        }
     }
 
 }
