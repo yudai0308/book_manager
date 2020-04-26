@@ -8,7 +8,12 @@ class Const {
         const val SEARCH_TITLE = "タイトル検索"
         const val SEARCH_AUTHOR = "著者名検索"
         // パラメータ
-        const val PARAM_TITLE = "intitle"
-        const val PARAM_AUTHOR = "inauthor"
+        const val ADD_QUERY = "?q="
+        const val PARAM_TITLE = "intitle:"
+        const val PARAM_AUTHOR = "inauthor:"
+        const val PARAM_MAX = "&maxResults="
+        const val PARAM_INDEX = "&startIndex="
+        // Book 関連
+        const val UNKNOWN = "Unknown"
     }
 }

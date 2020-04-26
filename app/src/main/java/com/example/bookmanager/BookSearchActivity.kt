@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookmanager.searchresoult.Item
 import com.example.bookmanager.searchresoult.SearchResult
 import com.google.android.material.snackbar.Snackbar
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -100,14 +101,19 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun createUrlParameter(type: String, keyword: String, index: Int = 0): String {
-        var param = "?q="
-        param = when (type) {
-            Const.SEARCH_TITLE -> param + Const.PARAM_TITLE + ":"
-            Const.SEARCH_AUTHOR -> param + Const.PARAM_AUTHOR + ":"
-            else -> param
+    private fun createUrlParameter(
+        type: String,
+        keyword: String,
+        max: Int = 30,
+        index: Int = 0
+    ): String {
+        var param = Const.ADD_QUERY
+        param += when (type) {
+            Const.SEARCH_TITLE -> Const.PARAM_TITLE
+            Const.SEARCH_AUTHOR -> Const.PARAM_AUTHOR
+            else -> ""
         }
-        return param + keyword
+        return param + keyword + Const.PARAM_MAX + max + Const.PARAM_INDEX + index
     }
 
     inner class HttpCallback : Callback {
@@ -128,41 +134,59 @@ class BookSearchActivity : AppCompatActivity() {
             }
 
             handler.post { createSearchResultView(result) }
-//            createSearchResultView(result)
         }
     }
 
     private fun createSearchResultView(result: SearchResult) {
-        // 先頭から 10 個分の NewBook オブジェクトを生成
-        // 10 行分のリストを生成
-        // スクロールが一番下に到達したら、追加で 10 行分を生成
         val items = result.items
         if (items.isNullOrEmpty()) {
             showSnackbar(getString(R.string.search_no_item))
             return
         }
 
+        val newBooks = createNewBooksFromItems(items)
+        if (newBooks.isEmpty()) {
+            showSnackbar(getString(R.string.search_no_item))
+            return
+        }
+
+        val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
+        val adapter = BookSearchResultsAdapter(newBooks as MutableList<NewBook>)
+        recyclerView.adapter = adapter
+    }
+
+    private fun createNewBooksFromItems(items: List<Item>): List<NewBook> {
         val newBooks = mutableListOf<NewBook>()
-        items.forEach { item ->
+        for (item in items) {
             val info = item.volumeInfo
-            val title = if (info?.title != null) info.title as String else ""
-            val authors = if (info?.authors != null) info.authors as List<String> else ArrayList()
-            val desc = if (info?.description != null) info.description as String else ""
-            val image = if (info?.imageLinks?.thumbnail != null) {
+
+            val title = if (info?.title != null) {
+                info.title as String
+            } else {
+                continue
+            }
+
+            val authors = if (info.authors != null) {
+                info.authors as List<String>
+            } else {
+                listOf(Const.UNKNOWN)
+            }
+
+            val desc = if (info.description != null) {
+                info.description as String
+            } else {
+                ""
+            }
+
+            val image = if (info.imageLinks?.thumbnail != null) {
                 info.imageLinks?.thumbnail as String
             } else {
                 ""
             }
+
             newBooks.add(NewBook(title, authors, desc, image))
         }
-
-        val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
-        val adapter = BookSearchResultsAdapter(newBooks)
-        recyclerView.adapter = adapter
-
-
-//        val decorator = DividerItemDecoration(this, manager.orientation)
-//        recyclerView.addItemDecoration(decorator)
+        return newBooks
     }
 
     private fun showSnackbar(msg: String) {
