@@ -45,7 +45,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun createDummyResults() {
         val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
-        val adapter = BookSearchResultsAdapter(this,createDummyData())
+        val adapter = BookSearchResultsAdapter(this, createDummyData())
         val manager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = manager
@@ -61,7 +61,6 @@ class BookSearchActivity : AppCompatActivity() {
                 NewBook(
                     "進撃の巨人${i}",
                     listOf("諫山創"),
-                    "巨人たちが襲いかかる！",
                     "image.jpg"
                 )
             )
@@ -170,19 +169,13 @@ class BookSearchActivity : AppCompatActivity() {
                 listOf(Const.UNKNOWN)
             }
 
-            val desc = if (info.description != null) {
-                info.description as String
-            } else {
-                ""
-            }
-
             val image = if (info.imageLinks?.thumbnail != null) {
                 info.imageLinks?.thumbnail as String
             } else {
                 ""
             }
 
-            newBooks.add(NewBook(title, authors, desc, image))
+            newBooks.add(NewBook(title, authors, image))
         }
         return newBooks
     }

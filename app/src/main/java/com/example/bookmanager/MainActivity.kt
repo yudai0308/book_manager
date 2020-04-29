@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val books = createDummyData()
         setDataToRecyclerView(books)
         setFabClickListener()
-        setUpToolbar()
+        initToolbar()
     }
 
     private fun setDataToRecyclerView(data: MutableList<MyBook>) {
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpToolbar() {
+    private fun initToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setTitle(R.string.toolbar_title)
         toolbar.setTitleTextColor(Color.WHITE)

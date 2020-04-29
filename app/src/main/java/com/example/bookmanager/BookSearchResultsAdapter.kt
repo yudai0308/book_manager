@@ -37,5 +37,4 @@ class BookSearchResultsAdapter(
             notifyItemRemoved(i)
         }
     }
-
 }
