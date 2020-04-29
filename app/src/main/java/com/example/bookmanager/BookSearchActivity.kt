@@ -45,7 +45,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun createDummyResults() {
         val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
-        val adapter = BookSearchResultsAdapter(createDummyData())
+        val adapter = BookSearchResultsAdapter(this,createDummyData())
         val manager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = manager
@@ -149,7 +149,7 @@ class BookSearchActivity : AppCompatActivity() {
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
-        val adapter = BookSearchResultsAdapter(newBooks as MutableList<NewBook>)
+        val adapter = BookSearchResultsAdapter(this, newBooks as MutableList<NewBook>)
         recyclerView.adapter = adapter
     }
 

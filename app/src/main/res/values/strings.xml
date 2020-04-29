@@ -3,4 +3,5 @@
     <string name="toolbar_title">マイブックリスト</string>
     <string name="search_error">エラーが発生しました。再度お試しください。</string>
     <string name="search_no_item">お探しの本が見つかりませんでした。</string>
+    <string name="description_book_image">Book Image</string>
 </resources>

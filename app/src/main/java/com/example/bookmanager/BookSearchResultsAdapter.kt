@@ -1,11 +1,15 @@
 package com.example.bookmanager
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
-class BookSearchResultsAdapter(private val listData: MutableList<NewBook>) :
-    RecyclerView.Adapter<BookSearchResultsViewHolder>() {
+class BookSearchResultsAdapter(
+    private val context: Context,
+    private val listData: MutableList<NewBook>
+) : RecyclerView.Adapter<BookSearchResultsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookSearchResultsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -17,6 +21,9 @@ class BookSearchResultsAdapter(private val listData: MutableList<NewBook>) :
         val item = listData[position]
         holder.mBookTitle.text = item.mTitle
         holder.mBookAuthor.text = Libs.listToString(item.mAuthors)
+        Glide.with(context)
+            .load(item.mImage)
+            .into(holder.mBookImage)
     }
 
     override fun getItemCount(): Int {
