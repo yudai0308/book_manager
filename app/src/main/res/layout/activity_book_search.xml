@@ -10,35 +10,35 @@
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:id="@+id/book_search_bar"
         style="@style/MaterialSearchBarLight"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/match_constraint"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/space_default"
+        android:layout_marginTop="@dimen/space_default"
+        android:layout_marginEnd="@dimen/space_default"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:mt_dividerColor="@color/colorAccent"
         app:mt_hint="Custom hint"
-        app:mt_maxSuggestionsCount="10"
+        app:mt_maxSuggestionsCount="@integer/max_suggestions_count"
         app:mt_roundedSearchBarEnabled="true"
-        app:mt_searchBarColor="#f5f5f5"
+        app:mt_searchBarColor="@color/search_bar_background"
         app:mt_speechMode="false" />
 
     <Spinner
         android:id="@+id/spinner_book_search_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="@dimen/space_default"
+        android:layout_marginEnd="@dimen/space_default"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/book_search_bar" />
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="@dimen/match_constraint"
+        android:layout_marginTop="@dimen/space_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,9 +48,9 @@
             android:id="@+id/book_search_results"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginTop="@dimen/space_default"
+            android:layout_marginEnd="@dimen/space_default"
             app:layout_constraintHorizontal_bias="1.0" />
     </ScrollView>
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="match_constraint">0dp</dimen>
+    <dimen name="space_default">8dp</dimen>
+    <dimen name="space_wide">16dp</dimen>
+
+    <dimen name="book_row_image_width">64dp</dimen>
+    <dimen name="book_row_image_height">80dp</dimen>
+
+    <dimen name="text_size_book_title">18sp</dimen>
+    <dimen name="text_size_book_author">16sp</dimen>
+</resources>
