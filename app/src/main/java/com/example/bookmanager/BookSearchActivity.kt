@@ -45,7 +45,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun createDummyResults() {
         val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
-        val adapter = BookSearchResultsAdapter(this, createDummyData())
+        val adapter = BookListAdapter(this, createDummyData())
         val manager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = manager
@@ -54,18 +54,18 @@ class BookSearchActivity : AppCompatActivity() {
         recyclerView.addItemDecoration(decorator)
     }
 
-    private fun createDummyData(): MutableList<NewBook> {
-        val newBooks = mutableListOf<NewBook>()
+    private fun createDummyData(): MutableList<Book> {
+        val books = mutableListOf<Book>()
         for (i in 1..10) {
-            newBooks.add(
-                NewBook(
+            books.add(
+                Book(
                     "進撃の巨人${i}",
                     listOf("諫山創"),
-                    "image.jpg"
+                    "http://books.google.com/books/content?id=b_e3DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
                 )
             )
         }
-        return newBooks
+        return books
     }
 
     private inner class SearchActionListener : MaterialSearchBar.OnSearchActionListener {
@@ -92,7 +92,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun removeAllItem() {
         val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
-        val adapter = recyclerView.adapter as BookSearchResultsAdapter
+        val adapter = recyclerView.adapter as BookListAdapter
         val cnt = adapter.itemCount
         if (cnt < 1) return
         adapter.removeAll()
@@ -141,19 +141,19 @@ class BookSearchActivity : AppCompatActivity() {
             return
         }
 
-        val newBooks = createNewBooksFromItems(items)
-        if (newBooks.isEmpty()) {
+        val books = createBooksFromItems(items)
+        if (books.isEmpty()) {
             showSnackbar(getString(R.string.search_no_item))
             return
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
-        val adapter = BookSearchResultsAdapter(this, newBooks as MutableList<NewBook>)
+        val adapter = BookListAdapter(this, books as MutableList<Book>)
         recyclerView.adapter = adapter
     }
 
-    private fun createNewBooksFromItems(items: List<Item>): List<NewBook> {
-        val newBooks = mutableListOf<NewBook>()
+    private fun createBooksFromItems(items: List<Item>): List<Book> {
+        val books = mutableListOf<Book>()
         for (item in items) {
             val info = item.volumeInfo
 
@@ -175,9 +175,9 @@ class BookSearchActivity : AppCompatActivity() {
                 ""
             }
 
-            newBooks.add(NewBook(title, authors, image))
+            books.add(Book(title, authors, image))
         }
-        return newBooks
+        return books
     }
 
     private fun showSnackbar(msg: String) {

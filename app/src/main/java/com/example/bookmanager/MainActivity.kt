@@ -22,9 +22,9 @@ class MainActivity : AppCompatActivity() {
         initToolbar()
     }
 
-    private fun setDataToRecyclerView(data: MutableList<MyBook>) {
+    private fun setDataToRecyclerView(data: MutableList<Book>) {
         val recyclerView = findViewById<RecyclerView>(R.id.my_book_list)
-        val adapter = MyBookListAdapter(data)
+        val adapter = BookListAdapter(this, data)
         val manager = LinearLayoutManager(this)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
@@ -33,15 +33,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView?.addItemDecoration(decorator)
     }
 
-    private fun createDummyData(): MutableList<MyBook> {
-        val list = mutableListOf<MyBook>()
+    private fun createDummyData(): MutableList<Book> {
+        val books = mutableListOf<Book>()
         for (i in 1..10) {
-            val image = R.mipmap.ic_launcher
+            val image = "http://books.google.com/books/content?id=13gDwgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
             val title = "鬼滅の刃(${i})"
             val authors = arrayListOf("吾峠呼世晴", "TEST")
-            list.add(MyBook(image, title, authors))
+            books.add(Book(title, authors, image))
         }
-        return list
+        return books
     }
 
     private fun setFabClickListener() {
