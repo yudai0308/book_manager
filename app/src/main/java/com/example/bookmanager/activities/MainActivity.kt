@@ -39,10 +39,11 @@ class MainActivity : AppCompatActivity() {
     private fun createDummyData(): MutableList<Book> {
         val books = mutableListOf<Book>()
         for (i in 1..10) {
+            val id = "abc"
             val image = "http://books.google.com/books/content?id=13gDwgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
             val title = "鬼滅の刃(${i})"
             val authors = arrayListOf("吾峠呼世晴", "TEST")
-            books.add(Book(title, authors, image))
+            books.add(Book(id, title, authors, image))
         }
         return books
     }

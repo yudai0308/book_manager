@@ -1,7 +1,8 @@
 package com.example.bookmanager.models
 
-class Book (title: String, authors: List<String>, image: String) {
-    var mTitle: String = title
-    var mAuthors: List<String> = authors
-    var mImage: String = image
-}
+data class Book (
+    val id: String,
+    val title: String,
+    val authors: List<String>,
+    val image: String
+)

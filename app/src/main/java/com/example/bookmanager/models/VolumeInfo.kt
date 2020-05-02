@@ -8,5 +8,4 @@ class VolumeInfo(
     var authors: List<String>?,
     var description: String?,
     var imageLinks: ImageLinks?
-) {
-}
+)

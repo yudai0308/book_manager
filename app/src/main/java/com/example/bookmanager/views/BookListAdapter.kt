@@ -31,10 +31,10 @@ class BookListAdapter(
 
     override fun onBindViewHolder(holder: BookListViewHolder, position: Int) {
         val item = mListData[position]
-        holder.mBookTitle.text = item.mTitle
-        holder.mBookAuthor.text = Libs.listToString(item.mAuthors)
+        holder.mBookTitle.text = item.title
+        holder.mBookAuthor.text = Libs.listToString(item.authors)
         Glide.with(mContext)
-            .load(item.mImage)
+            .load(item.image)
             .into(holder.mBookImage)
     }
 

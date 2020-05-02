@@ -1,5 +1,6 @@
 package com.example.bookmanager.activities
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -54,7 +55,7 @@ class BookSearchActivity : AppCompatActivity() {
         val adapter = BookListAdapter(
             this,
             createDummyData(),
-            OnNewBookClickListener()
+            OnSearchResultClickListener()
         )
         val manager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -69,6 +70,7 @@ class BookSearchActivity : AppCompatActivity() {
         for (i in 1..10) {
             books.add(
                 Book(
+                    "abc",
                     "進撃の巨人${i}",
                     listOf("諫山創"),
                     "http://books.google.com/books/content?id=b_e3DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
@@ -169,6 +171,7 @@ class BookSearchActivity : AppCompatActivity() {
         val books = mutableListOf<Book>()
         for (item in items) {
             val info = item.volumeInfo
+            val id = item.id
 
             val title = if (info?.title != null) {
                 info.title as String
@@ -188,20 +191,27 @@ class BookSearchActivity : AppCompatActivity() {
                 ""
             }
 
-            books.add(Book(title, authors, image))
+            books.add(Book(id, title, authors, image))
         }
         return books
     }
 
-    inner class OnNewBookClickListener : View.OnClickListener {
+    inner class OnSearchResultClickListener : View.OnClickListener {
         override fun onClick(v: View?) {
             AlertDialog.Builder(this@BookSearchActivity)
                 .setTitle(getString(R.string.dialog_add_book_title))
                 .setMessage(getString(R.string.dialog_add_book_msg))
-                .setPositiveButton(getString(R.string.button_yes), null)
+                .setPositiveButton(getString(R.string.button_yes), OnOkButtonClickListener())
                 .setNegativeButton(getString(R.string.button_no), null)
                 .show()
         }
+    }
+
+    inner class OnOkButtonClickListener(): DialogInterface.OnClickListener {
+        override fun onClick(dialog: DialogInterface?, which: Int) {
+            showSnackBar("追加したよ！")
+        }
+
     }
 
     private fun showSnackBar(msg: String) {
