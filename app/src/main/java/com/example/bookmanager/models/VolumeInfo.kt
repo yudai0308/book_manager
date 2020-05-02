@@ -1,4 +1,4 @@
-package com.example.bookmanager.searchresoult
+package com.example.bookmanager.models
 
 import com.squareup.moshi.JsonClass
 

@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.utils
 
 class Const {
     companion object {

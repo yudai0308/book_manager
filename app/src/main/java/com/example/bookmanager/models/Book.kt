@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.models
 
 class Book (title: String, authors: List<String>, image: String) {
     var mTitle: String = title

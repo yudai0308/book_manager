@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.activities
 
 import android.content.Intent
 import android.graphics.Color
@@ -9,6 +9,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookmanager.models.Book
+import com.example.bookmanager.R
+import com.example.bookmanager.views.BookListAdapter
 
 class MainActivity : AppCompatActivity() {
 

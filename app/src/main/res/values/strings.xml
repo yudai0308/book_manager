@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">Book Manager</string>
     <string name="toolbar_title">マイブックリスト</string>
+    <!-- エラーメッセージ -->
     <string name="search_error">エラーが発生しました。再度お試しください。</string>
     <string name="search_no_item">お探しの本が見つかりませんでした。</string>
+    <!-- ダイアログメッセージ -->
+    <string name="dialog_add_book_title">本棚に追加</string>
+    <string name="dialog_add_book_msg">本棚に追加しますか？</string>
+    <!-- ボタン表示項目 -->
+    <string name="button_yes">はい</string>
+    <string name="button_no">キャンセル</string>
+    <!-- 画像説明 -->
     <string name="description_book_image">Book Image</string>
 </resources>
