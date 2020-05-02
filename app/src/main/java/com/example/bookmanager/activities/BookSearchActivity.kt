@@ -11,11 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookmanager.models.Book
 import com.example.bookmanager.R
-import com.example.bookmanager.utils.Const
+import com.example.bookmanager.models.Book
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
+import com.example.bookmanager.utils.Const
 import com.example.bookmanager.views.BookListAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -207,7 +207,7 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    inner class OnOkButtonClickListener(): DialogInterface.OnClickListener {
+    inner class OnOkButtonClickListener : DialogInterface.OnClickListener {
         override fun onClick(dialog: DialogInterface?, which: Int) {
             showSnackBar("追加したよ！")
         }
