@@ -16,7 +16,7 @@ class BookListAdapter(
     private val mContext: Context,
     private val mListData: MutableList<Book>,
     private val mClickListener: View.OnClickListener? = null
-) : RecyclerView.Adapter<BookListViewHolder>() {
+) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -49,10 +49,10 @@ class BookListAdapter(
             notifyItemRemoved(i)
         }
     }
-}
 
-class BookListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    var mBookTitle: TextView = itemView.findViewById(R.id.book_list_title)
-    var mBookAuthor: TextView = itemView.findViewById(R.id.book_list_author)
-    var mBookImage: ImageView = itemView.findViewById(R.id.book_list_image)
+    inner class BookListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var mBookTitle: TextView = itemView.findViewById(R.id.book_list_title)
+        var mBookAuthor: TextView = itemView.findViewById(R.id.book_list_author)
+        var mBookImage: ImageView = itemView.findViewById(R.id.book_list_image)
+    }
 }
