@@ -39,8 +39,13 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha02'
     implementation 'com.google.android.material:material:1.2.0-alpha06'
     implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
-    implementation 'com.squareup.okhttp3:okhttp:4.5.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.6.0'
     implementation 'com.squareup.moshi:moshi:1.9.2'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+
+    def room_version = "2.2.5"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
 }
