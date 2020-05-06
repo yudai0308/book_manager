@@ -9,8 +9,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookmanager.models.Book
 import com.example.bookmanager.R
+import com.example.bookmanager.models.ResultBook
 import com.example.bookmanager.views.BookListAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         initToolbar()
     }
 
-    private fun setDataToRecyclerView(data: MutableList<Book>) {
+    private fun setDataToRecyclerView(data: MutableList<ResultBook>) {
         val recyclerView = findViewById<RecyclerView>(R.id.my_book_list)
         val adapter = BookListAdapter(this, data)
         val manager = LinearLayoutManager(this)
@@ -36,14 +36,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView?.addItemDecoration(decorator)
     }
 
-    private fun createDummyData(): MutableList<Book> {
-        val books = mutableListOf<Book>()
+    private fun createDummyData(): MutableList<ResultBook> {
+        val books = mutableListOf<ResultBook>()
         for (i in 1..10) {
             val id = "abc"
-            val image = "http://books.google.com/books/content?id=13gDwgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+            val image =
+                "http://books.google.com/books/content?id=13gDwgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
             val title = "鬼滅の刃(${i})"
             val authors = arrayListOf("吾峠呼世晴", "TEST")
-            books.add(Book(id, title, authors, image))
+            books.add(ResultBook(id, title, authors, image))
         }
         return books
     }

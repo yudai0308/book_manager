@@ -1,6 +1,6 @@
 package com.example.bookmanager.models
 
-data class Book (
+data class ResultBook (
     val id: String,
     val title: String,
     val authors: List<String>,

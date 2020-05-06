@@ -7,5 +7,5 @@ import com.example.bookmanager.rooms.entities.Book
 @Dao
 interface BookDao {
     @Insert
-    fun insert(book: Book)
+    suspend fun insert(book: Book)
 }

@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
-import com.example.bookmanager.models.Book
+import com.example.bookmanager.models.ResultBook
 import com.example.bookmanager.utils.Libs
 
 class BookListAdapter(
     private val mContext: Context,
-    private val mListData: MutableList<Book>,
+    private val mListData: MutableList<ResultBook>,
     private val mClickListener: View.OnClickListener? = null
 ) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 

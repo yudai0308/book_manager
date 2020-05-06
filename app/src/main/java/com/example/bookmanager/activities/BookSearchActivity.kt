@@ -11,15 +11,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.example.bookmanager.R
-import com.example.bookmanager.models.Book
 import com.example.bookmanager.models.Item
+import com.example.bookmanager.models.ResultBook
 import com.example.bookmanager.models.SearchResult
+import com.example.bookmanager.rooms.database.BookDatabase
+import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.Const
 import com.example.bookmanager.views.BookListAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import java.io.IOException
 
@@ -65,11 +69,11 @@ class BookSearchActivity : AppCompatActivity() {
         recyclerView.addItemDecoration(decorator)
     }
 
-    private fun createDummyData(): MutableList<Book> {
-        val books = mutableListOf<Book>()
+    private fun createDummyData(): MutableList<ResultBook> {
+        val books = mutableListOf<ResultBook>()
         for (i in 1..10) {
             books.add(
-                Book(
+                ResultBook(
                     "abc",
                     "進撃の巨人${i}",
                     listOf("諫山創"),
@@ -162,13 +166,13 @@ class BookSearchActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
         val adapter = BookListAdapter(
             this,
-            books as MutableList<Book>
+            books as MutableList<ResultBook>
         )
         recyclerView.adapter = adapter
     }
 
-    private fun createBooksFromItems(items: List<Item>): List<Book> {
-        val books = mutableListOf<Book>()
+    private fun createBooksFromItems(items: List<Item>): List<ResultBook> {
+        val books = mutableListOf<ResultBook>()
         for (item in items) {
             val info = item.volumeInfo
             val id = item.id
@@ -191,7 +195,7 @@ class BookSearchActivity : AppCompatActivity() {
                 ""
             }
 
-            books.add(Book(id, title, authors, image))
+            books.add(ResultBook(id, title, authors, image))
         }
         return books
     }
@@ -209,9 +213,21 @@ class BookSearchActivity : AppCompatActivity() {
 
     inner class OnOkButtonClickListener : DialogInterface.OnClickListener {
         override fun onClick(dialog: DialogInterface?, which: Int) {
+            val db = Room.databaseBuilder(
+                applicationContext,
+                BookDatabase::class.java,
+                "book_database"
+            ).build()
+            val bookDao = db.bookDao()
+            val now = System.currentTimeMillis()
+            val newBook = Book(
+                "id!", "title!", "image!", "comment!", now, now
+            )
+            runBlocking {
+                bookDao.insert(newBook)
+            }
             showSnackBar("追加したよ！")
         }
-
     }
 
     private fun showSnackBar(msg: String) {
