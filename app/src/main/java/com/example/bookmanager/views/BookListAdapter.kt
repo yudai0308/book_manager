@@ -18,9 +18,11 @@ class BookListAdapter(
     private val clickListener: View.OnClickListener? = null
 ) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
+    private lateinit var view: View
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.row_book_list, parent, false)
+        view = inflater.inflate(R.layout.row_book_list, parent, false)
 
         if (clickListener != null) {
             view.setOnClickListener(clickListener)

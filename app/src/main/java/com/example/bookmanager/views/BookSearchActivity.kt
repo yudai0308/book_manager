@@ -21,7 +21,6 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.Const
 import com.example.bookmanager.utils.Libs
-import com.google.android.material.snackbar.Snackbar
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.runBlocking
@@ -32,6 +31,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private var handler = Handler()
     private lateinit var view: ConstraintLayout
+    private var resultBooks: MutableList<ResultBook>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,8 +161,8 @@ class BookSearchActivity : AppCompatActivity() {
             return
         }
 
-        val books = createBooksFromItems(items)
-        if (books.isEmpty()) {
+        createBooksFromItems(items)
+        if (resultBooks.isNullOrEmpty()) {
             Libs.showSnackBar(view, getString(R.string.search_no_item))
             return
         }
@@ -170,13 +170,13 @@ class BookSearchActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
         val adapter = BookListAdapter(
             this,
-            books as MutableList<ResultBook>,
+            resultBooks as MutableList<ResultBook>,
             OnSearchResultClickListener()
         )
         recyclerView.adapter = adapter
     }
 
-    private fun createBooksFromItems(items: List<Item>): List<ResultBook> {
+    private fun createBooksFromItems(items: List<Item>) {
         val books = mutableListOf<ResultBook>()
         for (item in items) {
             val info = item.volumeInfo
@@ -202,21 +202,31 @@ class BookSearchActivity : AppCompatActivity() {
 
             books.add(ResultBook(id, title, authors, image))
         }
-        return books
+        resultBooks = books
     }
 
     inner class OnSearchResultClickListener : View.OnClickListener {
         override fun onClick(v: View?) {
+            v ?: return
+            val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
+            val position = recyclerView.getChildAdapterPosition(v)
+            val resultBook = resultBooks?.get(position)
+            resultBook ?: return
             AlertDialog.Builder(this@BookSearchActivity)
                 .setTitle(getString(R.string.dialog_add_book_title))
                 .setMessage(getString(R.string.dialog_add_book_msg))
-                .setPositiveButton(getString(R.string.button_yes), OnOkButtonClickListener())
+                .setPositiveButton(
+                    getString(R.string.button_yes),
+                    OnOkButtonClickListener(resultBook)
+                )
                 .setNegativeButton(getString(R.string.button_no), null)
                 .show()
         }
     }
 
-    inner class OnOkButtonClickListener : DialogInterface.OnClickListener {
+    inner class OnOkButtonClickListener(private val resultBook: ResultBook) :
+        DialogInterface.OnClickListener {
+
         override fun onClick(dialog: DialogInterface?, which: Int) {
             val db = Room.databaseBuilder(
                 applicationContext,
@@ -226,8 +236,16 @@ class BookSearchActivity : AppCompatActivity() {
             val bookDao = db.bookDao()
             val now = System.currentTimeMillis()
             val newBook = Book(
-                "id!", "title!", "image!", "comment!", now, now
+                resultBook.id,
+                resultBook.title,
+                resultBook.image,
+                null,
+                now,
+                now
             )
+//            val newBook = Book(
+//                "id!", "title!", "image!", "comment!", now, now
+//            )
             runBlocking {
                 bookDao.insert(newBook)
             }

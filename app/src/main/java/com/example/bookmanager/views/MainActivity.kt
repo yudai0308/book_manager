@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         val decorator = DividerItemDecoration(this, manager.orientation)
-        recyclerView?.addItemDecoration(decorator)
+        recyclerView.addItemDecoration(decorator)
     }
 
     private fun createDummyData(): MutableList<ResultBook> {
