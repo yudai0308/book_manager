@@ -1,4 +1,4 @@
-package com.example.bookmanager.activities
+package com.example.bookmanager.views
 
 import android.content.Intent
 import android.graphics.Color
@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.R
 import com.example.bookmanager.models.ResultBook
-import com.example.bookmanager.views.BookListAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDataToRecyclerView(data: MutableList<ResultBook>) {
-        val recyclerView = findViewById<RecyclerView>(R.id.my_book_list)
+        val recyclerView: RecyclerView = findViewById(R.id.my_book_list)
         val adapter = BookListAdapter(this, data)
         val manager = LinearLayoutManager(this)
         recyclerView.layoutManager = manager
@@ -58,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         toolbar.setTitle(R.string.toolbar_title)
         toolbar.setTitleTextColor(Color.WHITE)
         setSupportActionBar(toolbar)

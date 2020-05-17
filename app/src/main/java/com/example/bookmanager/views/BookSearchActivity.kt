@@ -1,4 +1,4 @@
-package com.example.bookmanager.activities
+package com.example.bookmanager.views
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +20,7 @@ import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.Const
-import com.example.bookmanager.views.BookListAdapter
+import com.example.bookmanager.utils.Libs
 import com.google.android.material.snackbar.Snackbar
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.squareup.moshi.Moshi
@@ -29,11 +30,14 @@ import java.io.IOException
 
 class BookSearchActivity : AppCompatActivity() {
 
-    var handler = Handler()
+    private var handler = Handler()
+    private lateinit var view: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_search)
+
+        view = findViewById(R.id.book_search_root)
 
         initSearchBar()
         initSpinner()
@@ -41,13 +45,13 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun initSearchBar() {
-        val searchBar = findViewById<MaterialSearchBar>(R.id.book_search_bar)
+        val searchBar: MaterialSearchBar = findViewById(R.id.book_search_bar)
         searchBar.setOnSearchActionListener(SearchActionListener())
         searchBar.openSearch()
     }
 
     private fun initSpinner() {
-        val spinner = findViewById<Spinner>(R.id.spinner_book_search_type)
+        val spinner: Spinner = findViewById(R.id.spinner_book_search_type)
         val items = listOf(Const.SEARCH_FREE_WORD, Const.SEARCH_TITLE, Const.SEARCH_AUTHOR)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -55,7 +59,7 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun createDummyResults() {
-        val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
+        val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
         val adapter = BookListAdapter(
             this,
             createDummyData(),
@@ -93,8 +97,8 @@ class BookSearchActivity : AppCompatActivity() {
             // 現在表示されているリストをクリア。
             removeAllItem()
             // 入力値を取得してパラメーター付き URL を作成。
-            val searchBar = findViewById<MaterialSearchBar>(R.id.book_search_bar)
-            val spinner = findViewById<Spinner>(R.id.spinner_book_search_type)
+            val searchBar: MaterialSearchBar = findViewById(R.id.book_search_bar)
+            val spinner: Spinner = findViewById(R.id.spinner_book_search_type)
             val keyword = searchBar.text
             val searchType = spinner.selectedItem.toString()
             val param = createUrlWithParameter(searchType, keyword)
@@ -107,7 +111,7 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun removeAllItem() {
-        val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
+        val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
         val adapter = recyclerView.adapter as BookListAdapter
         val cnt = adapter.itemCount
         if (cnt < 1) return
@@ -136,13 +140,13 @@ class BookSearchActivity : AppCompatActivity() {
             val resBody = response.body?.string()
             val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
             if (resBody.isNullOrBlank()) {
-                showSnackBar(getString(R.string.search_error))
+                Libs.showSnackBar(view, getString(R.string.search_error))
                 return
             }
 
             val result = adapter.fromJson(resBody)
             if (result == null) {
-                showSnackBar(getString(R.string.search_error))
+                Libs.showSnackBar(view, getString(R.string.search_error))
                 return
             }
 
@@ -153,20 +157,21 @@ class BookSearchActivity : AppCompatActivity() {
     private fun createSearchResultView(result: SearchResult) {
         val items = result.items
         if (items.isNullOrEmpty()) {
-            showSnackBar(getString(R.string.search_no_item))
+            Libs.showSnackBar(view, getString(R.string.search_no_item))
             return
         }
 
         val books = createBooksFromItems(items)
         if (books.isEmpty()) {
-            showSnackBar(getString(R.string.search_no_item))
+            Libs.showSnackBar(view, getString(R.string.search_no_item))
             return
         }
 
-        val recyclerView = findViewById<RecyclerView>(R.id.book_search_results)
+        val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
         val adapter = BookListAdapter(
             this,
-            books as MutableList<ResultBook>
+            books as MutableList<ResultBook>,
+            OnSearchResultClickListener()
         )
         recyclerView.adapter = adapter
     }
@@ -226,15 +231,7 @@ class BookSearchActivity : AppCompatActivity() {
             runBlocking {
                 bookDao.insert(newBook)
             }
-            showSnackBar("追加したよ！")
+            Libs.showSnackBar(view, "追加したよ！")
         }
-    }
-
-    private fun showSnackBar(msg: String) {
-        Snackbar.make(
-            findViewById(R.id.book_search_root),
-            msg,
-            Snackbar.LENGTH_LONG
-        ).show()
     }
 }

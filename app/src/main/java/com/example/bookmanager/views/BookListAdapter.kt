@@ -13,46 +13,46 @@ import com.example.bookmanager.models.ResultBook
 import com.example.bookmanager.utils.Libs
 
 class BookListAdapter(
-    private val mContext: Context,
-    private val mListData: MutableList<ResultBook>,
-    private val mClickListener: View.OnClickListener? = null
+    private val context: Context,
+    private val listData: MutableList<ResultBook>,
+    private val clickListener: View.OnClickListener? = null
 ) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.row_book_list, parent, false)
 
-        if (mClickListener != null) {
-            view.setOnClickListener(mClickListener)
+        if (clickListener != null) {
+            view.setOnClickListener(clickListener)
         }
 
         return BookListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: BookListViewHolder, position: Int) {
-        val item = mListData[position]
-        holder.mBookTitle.text = item.title
-        holder.mBookAuthor.text = Libs.listToString(item.authors)
-        Glide.with(mContext)
+        val item = listData[position]
+        holder.bookTitle.text = item.title
+        holder.bookAuthor.text = Libs.listToString(item.authors)
+        Glide.with(context)
             .load(item.image)
-            .into(holder.mBookImage)
+            .into(holder.bookImage)
     }
 
     override fun getItemCount(): Int {
-        return mListData.size
+        return listData.size
     }
 
     fun removeAll() {
-        val cnt = mListData.size
-        mListData.removeAll { true }
+        val cnt = listData.size
+        listData.removeAll { true }
         for (i: Int in (cnt - 1)..0) {
             notifyItemRemoved(i)
         }
     }
 
     inner class BookListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var mBookTitle: TextView = itemView.findViewById(R.id.book_list_title)
-        var mBookAuthor: TextView = itemView.findViewById(R.id.book_list_author)
-        var mBookImage: ImageView = itemView.findViewById(R.id.book_list_image)
+        var bookTitle: TextView = itemView.findViewById(R.id.book_list_title)
+        var bookAuthor: TextView = itemView.findViewById(R.id.book_list_author)
+        var bookImage: ImageView = itemView.findViewById(R.id.book_list_image)
     }
 }

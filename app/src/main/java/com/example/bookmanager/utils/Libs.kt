@@ -1,5 +1,8 @@
 package com.example.bookmanager.utils
 
+import android.view.View
+import com.google.android.material.snackbar.Snackbar
+
 class Libs {
     companion object {
         fun listToString(list: List<String>, divider: String = ", "): String {
@@ -10,6 +13,14 @@ class Libs {
                 returnVal += add
             }
             return returnVal
+        }
+
+        fun showSnackBar(view: View, msg: String) {
+            Snackbar.make(
+                view,
+                msg,
+                Snackbar.LENGTH_LONG
+            ).show()
         }
     }
 }
