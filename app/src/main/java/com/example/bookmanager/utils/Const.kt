@@ -13,7 +13,9 @@ class Const {
         const val PARAM_AUTHOR = "inauthor:"
         const val PARAM_MAX = "&maxResults="
         const val PARAM_INDEX = "&startIndex="
-        // Book 関連
+        // 本検索ページ関連
         const val UNKNOWN = "Unknown"
+        const val ADD_BOOK = "本棚に追加しました。"
+        const val CONNECTION_FAILURE_MSG = "通信に失敗しました。\n検索をやり直してください。"
     }
 }

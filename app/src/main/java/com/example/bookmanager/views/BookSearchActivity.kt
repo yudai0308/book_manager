@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -26,6 +27,7 @@ import com.squareup.moshi.Moshi
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class BookSearchActivity : AppCompatActivity() {
 
@@ -39,9 +41,16 @@ class BookSearchActivity : AppCompatActivity() {
 
         view = findViewById(R.id.book_search_root)
 
+        initMessageView()
         initSearchBar()
         initSpinner()
-        createDummyResults()
+    }
+
+    private fun initMessageView() {
+        findViewById<TextView>(R.id.book_search_message).apply {
+            text = "検索結果がありません。"
+            visibility = View.VISIBLE
+        }
     }
 
     private fun initSearchBar() {
@@ -58,44 +67,15 @@ class BookSearchActivity : AppCompatActivity() {
         spinner.adapter = adapter
     }
 
-    private fun createDummyResults() {
-        val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
-        val adapter = BookListAdapter(
-            this,
-            createDummyData(),
-            OnSearchResultClickListener()
-        )
-        val manager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = manager
-
-        val decorator = DividerItemDecoration(this, manager.orientation)
-        recyclerView.addItemDecoration(decorator)
-    }
-
-    private fun createDummyData(): MutableList<ResultBook> {
-        val books = mutableListOf<ResultBook>()
-        for (i in 1..10) {
-            books.add(
-                ResultBook(
-                    "abc",
-                    "進撃の巨人${i}",
-                    listOf("諫山創"),
-                    "http://books.google.com/books/content?id=b_e3DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-                )
-            )
-        }
-        return books
-    }
-
     private inner class SearchActionListener : MaterialSearchBar.OnSearchActionListener {
         override fun onButtonClicked(buttonCode: Int) {}
 
         override fun onSearchStateChanged(enabled: Boolean) {}
 
         override fun onSearchConfirmed(text: CharSequence?) {
+            showProgressBar()
             // 現在表示されているリストをクリア。
-            removeAllItem()
+//            removeAllItems()
             // 入力値を取得してパラメーター付き URL を作成。
             val searchBar: MaterialSearchBar = findViewById(R.id.book_search_bar)
             val spinner: Spinner = findViewById(R.id.spinner_book_search_type)
@@ -103,16 +83,24 @@ class BookSearchActivity : AppCompatActivity() {
             val searchType = spinner.selectedItem.toString()
             val param = createUrlWithParameter(searchType, keyword)
             val url = Const.BOOK_SEARCH_API_URL + param
-
+            // API へリクエストを送る。
             val req = Request.Builder().url(url).get().build()
-            val call = OkHttpClient().newCall(req)
+            val client = OkHttpClient.Builder().apply {
+                readTimeout(10, TimeUnit.SECONDS)
+                connectTimeout(10, TimeUnit.SECONDS)
+            }.build()
+            val call = client.newCall(req)
             call.enqueue(BookSearchCallback())
         }
     }
 
-    private fun removeAllItem() {
+    private fun removeAllItems() {
         val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
-        val adapter = recyclerView.adapter as BookListAdapter
+        val adapter = if (recyclerView.adapter != null) {
+            recyclerView.adapter as BookListAdapter
+        } else {
+            return
+        }
         val cnt = adapter.itemCount
         if (cnt < 1) return
         adapter.removeAll()
@@ -134,9 +122,21 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     inner class BookSearchCallback : Callback {
-        override fun onFailure(call: Call, e: IOException) {}
+        override fun onFailure(call: Call, e: IOException) {
+            handler.post {
+                hideProgressBar()
+                showMessage(Const.CONNECTION_FAILURE_MSG)
+                removeAllItems()
+            }
+        }
 
         override fun onResponse(call: Call, response: Response) {
+            handler.post {
+                hideProgressBar()
+                hideMessage()
+                removeAllItems()
+            }
+
             val resBody = response.body?.string()
             val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
             if (resBody.isNullOrBlank()) {
@@ -157,23 +157,26 @@ class BookSearchActivity : AppCompatActivity() {
     private fun createSearchResultView(result: SearchResult) {
         val items = result.items
         if (items.isNullOrEmpty()) {
-            Libs.showSnackBar(view, getString(R.string.search_no_item))
+            showMessage(Const.CONNECTION_FAILURE_MSG)
             return
         }
 
         createBooksFromItems(items)
         if (resultBooks.isNullOrEmpty()) {
-            Libs.showSnackBar(view, getString(R.string.search_no_item))
+            showMessage(getString(R.string.search_no_item))
             return
         }
 
-        val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
+        val manager = LinearLayoutManager(this)
         val adapter = BookListAdapter(
             this,
             resultBooks as MutableList<ResultBook>,
             OnSearchResultClickListener()
         )
-        recyclerView.adapter = adapter
+        findViewById<RecyclerView>(R.id.book_search_results).apply {
+            layoutManager = manager
+            this.adapter = adapter
+        }
     }
 
     private fun createBooksFromItems(items: List<Item>) {
@@ -243,13 +246,37 @@ class BookSearchActivity : AppCompatActivity() {
                 now,
                 now
             )
-//            val newBook = Book(
-//                "id!", "title!", "image!", "comment!", now, now
-//            )
             runBlocking {
                 bookDao.insert(newBook)
             }
-            Libs.showSnackBar(view, "追加したよ！")
+            Libs.showSnackBar(view, Const.ADD_BOOK)
         }
     }
+
+    private fun hideProgressBar() {
+        findViewById<ProgressBar>(R.id.book_search_progress_bar).apply {
+            visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showProgressBar() {
+        findViewById<ProgressBar>(R.id.book_search_progress_bar).apply {
+            visibility = View.VISIBLE
+            bringToFront()
+        }
+    }
+
+    private fun showMessage(msg: String) {
+        findViewById<TextView>(R.id.book_search_message).apply {
+            this.text = msg
+            visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideMessage() {
+        findViewById<TextView>(R.id.book_search_message).apply {
+            visibility = View.INVISIBLE
+        }
+    }
+
 }
