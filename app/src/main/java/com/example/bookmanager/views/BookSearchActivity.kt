@@ -18,6 +18,7 @@ import com.example.bookmanager.R
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.ResultBook
 import com.example.bookmanager.models.SearchResult
+import com.example.bookmanager.rooms.dao.BookDao
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.Const
@@ -31,15 +32,22 @@ import java.util.concurrent.TimeUnit
 
 class BookSearchActivity : AppCompatActivity() {
 
-    private var handler = Handler()
     private lateinit var view: ConstraintLayout
-    private var resultBooks: MutableList<ResultBook>? = null
+    private val handler = Handler()
+    private var resultBooks: MutableList<ResultBook> = mutableListOf()
+    private lateinit var bookDao: BookDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_search)
 
         view = findViewById(R.id.book_search_root)
+        val db = Room.databaseBuilder(
+            this,
+            BookDatabase::class.java,
+            "book_database"
+        ).build()
+        bookDao = db.bookDao()
 
         initMessageView()
         initSearchBar()
@@ -74,8 +82,6 @@ class BookSearchActivity : AppCompatActivity() {
 
         override fun onSearchConfirmed(text: CharSequence?) {
             showProgressBar()
-            // 現在表示されているリストをクリア。
-//            removeAllItems()
             // 入力値を取得してパラメーター付き URL を作成。
             val searchBar: MaterialSearchBar = findViewById(R.id.book_search_bar)
             val spinner: Spinner = findViewById(R.id.spinner_book_search_type)
@@ -83,6 +89,7 @@ class BookSearchActivity : AppCompatActivity() {
             val searchType = spinner.selectedItem.toString()
             val param = createUrlWithParameter(searchType, keyword)
             val url = Const.BOOK_SEARCH_API_URL + param
+
             // API へリクエストを送る。
             val req = Request.Builder().url(url).get().build()
             val client = OkHttpClient.Builder().apply {
@@ -163,14 +170,15 @@ class BookSearchActivity : AppCompatActivity() {
 
         createBooksFromItems(items)
         if (resultBooks.isNullOrEmpty()) {
-            showMessage(getString(R.string.search_no_item))
+            showMessage(getString(R.string.item_not_fount))
             return
         }
 
+        // FIXME: 初回はアダプターを生成、２回目以降はアダプターを再利用
         val manager = LinearLayoutManager(this)
         val adapter = BookListAdapter(
             this,
-            resultBooks as MutableList<ResultBook>,
+            resultBooks,
             OnSearchResultClickListener()
         )
         findViewById<RecyclerView>(R.id.book_search_results).apply {
@@ -213,8 +221,7 @@ class BookSearchActivity : AppCompatActivity() {
             v ?: return
             val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
             val position = recyclerView.getChildAdapterPosition(v)
-            val resultBook = resultBooks?.get(position)
-            resultBook ?: return
+            val resultBook = resultBooks[position]
             AlertDialog.Builder(this@BookSearchActivity)
                 .setTitle(getString(R.string.dialog_add_book_title))
                 .setMessage(getString(R.string.dialog_add_book_msg))
@@ -231,12 +238,11 @@ class BookSearchActivity : AppCompatActivity() {
         DialogInterface.OnClickListener {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {
-            val db = Room.databaseBuilder(
-                applicationContext,
-                BookDatabase::class.java,
-                "book_database"
-            ).build()
-            val bookDao = db.bookDao()
+            // 本棚に存在するか確認。
+            if (haveBook(resultBook.id)) {
+                Libs.showSnackBar(view, getString(R.string.exists_in_my_shelf))
+                return
+            }
             val now = System.currentTimeMillis()
             val newBook = Book(
                 resultBook.id,
@@ -251,6 +257,13 @@ class BookSearchActivity : AppCompatActivity() {
             }
             Libs.showSnackBar(view, Const.ADD_BOOK)
         }
+    }
+
+    private fun haveBook(id: String): Boolean {
+        val count = runBlocking {
+            bookDao.count(id)
+        }
+        return count > 0
     }
 
     private fun hideProgressBar() {
