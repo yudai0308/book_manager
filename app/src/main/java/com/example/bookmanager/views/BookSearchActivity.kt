@@ -45,7 +45,7 @@ class BookSearchActivity : AppCompatActivity() {
         val db = Room.databaseBuilder(
             this,
             BookDatabase::class.java,
-            "book_database"
+            Const.DB_NAME
         ).build()
         bookDao = db.bookDao()
 

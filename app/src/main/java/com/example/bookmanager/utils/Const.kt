@@ -3,6 +3,7 @@ package com.example.bookmanager.utils
 class Const {
     companion object {
         const val BOOK_SEARCH_API_URL = "https://www.googleapis.com/books/v1/volumes"
+        const val DB_NAME = "book_database"
         // 検索方法
         const val SEARCH_FREE_WORD = "フリーワード検索"
         const val SEARCH_TITLE = "タイトル検索"
