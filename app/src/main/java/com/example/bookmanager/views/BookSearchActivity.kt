@@ -62,9 +62,10 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun initSearchBar() {
-        val searchBar: MaterialSearchBar = findViewById(R.id.book_search_bar)
-        searchBar.setOnSearchActionListener(SearchActionListener())
-        searchBar.openSearch()
+        findViewById<MaterialSearchBar>(R.id.book_search_bar).apply {
+            setOnSearchActionListener(SearchActionListener())
+            openSearch()
+        }
     }
 
     private fun initSpinner() {
@@ -134,6 +135,7 @@ class BookSearchActivity : AppCompatActivity() {
                 hideProgressBar()
                 showMessage(Const.CONNECTION_FAILURE_MSG)
                 removeAllItems()
+                findViewById<MaterialSearchBar>(R.id.book_search_bar).clearFocus()
             }
         }
 
@@ -142,6 +144,7 @@ class BookSearchActivity : AppCompatActivity() {
                 hideProgressBar()
                 hideMessage()
                 removeAllItems()
+                findViewById<MaterialSearchBar>(R.id.book_search_bar).clearFocus()
             }
 
             val resBody = response.body?.string()
