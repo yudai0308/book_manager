@@ -15,7 +15,8 @@ import kotlinx.coroutines.internal.synchronized
 
 @Database(
     entities = [Book::class, Author::class, AuthorBook::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class BookDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
