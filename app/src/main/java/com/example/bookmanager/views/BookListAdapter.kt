@@ -1,60 +1,56 @@
 package com.example.bookmanager.views
 
-import android.content.Context
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
+import com.example.bookmanager.databinding.RowBookListBinding
 import com.example.bookmanager.models.ResultBook
 import com.example.bookmanager.utils.Libs
 
 class BookListAdapter(
-    private val context: Context,
-    private val listData: MutableList<ResultBook>,
+    private val activity: Activity,
+    private var resultBooks: List<ResultBook>,
     private val clickListener: View.OnClickListener? = null
 ) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
-    private lateinit var view: View
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookListViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        view = inflater.inflate(R.layout.row_book_list, parent, false)
-
-        if (clickListener != null) {
-            view.setOnClickListener(clickListener)
-        }
-
-        return BookListViewHolder(view)
+        val binding: RowBookListBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(parent.context),
+            R.layout.row_book_list,
+            parent,
+            false
+        )
+        binding.root.setOnClickListener(clickListener)
+        return BookListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BookListViewHolder, position: Int) {
-        val item = listData[position]
-        holder.bookTitle.text = item.title
-        holder.bookAuthor.text = Libs.listToString(item.authors)
-        Glide.with(context)
-            .load(item.image)
-            .into(holder.bookImage)
+        val resultBook = resultBooks[position]
+        holder.binding.apply {
+            lifecycleOwner = activity as LifecycleOwner
+            bookListTitle.text = resultBook.title
+            bookListAuthor.text = Libs.listToString(resultBook.authors)
+        }
+        Glide.with(activity)
+            .load(resultBook.image)
+            .into(holder.binding.bookListImage)
     }
 
     override fun getItemCount(): Int {
-        return listData.size
+        return resultBooks.size
     }
 
-    fun removeAll() {
-        val cnt = listData.size
-        listData.removeAll { true }
-        for (i: Int in (cnt - 1) downTo  0) {
-            notifyItemRemoved(i)
-        }
+    fun update(resultBooks: List<ResultBook>) {
+        this.resultBooks = resultBooks
+        notifyDataSetChanged()
     }
 
-    inner class BookListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var bookTitle: TextView = itemView.findViewById(R.id.book_list_title)
-        var bookAuthor: TextView = itemView.findViewById(R.id.book_list_author)
-        var bookImage: ImageView = itemView.findViewById(R.id.book_list_image)
-    }
+    inner class BookListViewHolder(val binding: RowBookListBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

@@ -5,71 +5,87 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.ProgressBar
 import android.widget.Spinner
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.bookmanager.R
-import com.example.bookmanager.models.Item
+import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.models.ResultBook
-import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.rooms.dao.BookDao
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.Const
 import com.example.bookmanager.utils.Libs
+import com.example.bookmanager.viewmodels.BookResultViewModel
 import com.mancj.materialsearchbar.MaterialSearchBar
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.runBlocking
-import okhttp3.*
-import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 class BookSearchActivity : AppCompatActivity() {
 
-    private lateinit var view: ConstraintLayout
+    private lateinit var view: View
     private val handler = Handler()
-    private var resultBooks: MutableList<ResultBook> = mutableListOf()
+
     private lateinit var bookDao: BookDao
+    private lateinit var viewModel: BookResultViewModel
+    private lateinit var binding: ActivityBookSearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_search)
 
-        view = findViewById(R.id.book_search_root)
-        val db = Room.databaseBuilder(
+        viewModel = ViewModelProvider(this).get(BookResultViewModel::class.java)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_book_search)
+
+        binding.also {
+            it.viewModel = viewModel
+            it.lifecycleOwner = this
+        }
+
+        view = binding.root
+        // TODO: DB 関連の処理はモデルに持たせる。
+        bookDao = Room.databaseBuilder(
             this,
             BookDatabase::class.java,
             Const.DB_NAME
-        ).build()
-        bookDao = db.bookDao()
+        ).build().bookDao()
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         initMessageView()
         initSearchBar()
         initSpinner()
+
+        binding.bookSearchResults.also {
+            it.adapter = BookListAdapter(this, listOf(), OnSearchResultClickListener())
+            it.layoutManager = LinearLayoutManager(this)
+            it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        }
     }
 
     private fun initMessageView() {
-        findViewById<TextView>(R.id.book_search_message).apply {
-            text = "検索結果がありません。"
+        binding.bookSearchMessage.apply {
+            text = getString(R.string.item_not_fount)
             visibility = View.VISIBLE
         }
     }
 
     private fun initSearchBar() {
-        findViewById<MaterialSearchBar>(R.id.book_search_bar).apply {
+        binding.bookSearchBar.apply {
             setOnSearchActionListener(SearchActionListener())
             openSearch()
         }
     }
 
     private fun initSpinner() {
-        val spinner: Spinner = findViewById(R.id.spinner_book_search_type)
+        val spinner: Spinner = binding.spinnerBookSearchType
         val items = listOf(Const.SEARCH_FREE_WORD, Const.SEARCH_TITLE, Const.SEARCH_AUTHOR)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -82,149 +98,37 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onSearchStateChanged(enabled: Boolean) {}
 
         override fun onSearchConfirmed(text: CharSequence?) {
-            showProgressBar()
-            // 入力値を取得してパラメーター付き URL を作成。
-            val searchBar: MaterialSearchBar = findViewById(R.id.book_search_bar)
-            val spinner: Spinner = findViewById(R.id.spinner_book_search_type)
-            val keyword = searchBar.text
-            val searchType = spinner.selectedItem.toString()
-            val param = createUrlWithParameter(searchType, keyword)
-            val url = Const.BOOK_SEARCH_API_URL + param
+            viewModel.onSearch(binding, object : BookResultViewModel.SearchCallback {
+                override fun onStartSearch() {
+                    showProgressBar()
+                }
 
-            // API へリクエストを送る。
-            val req = Request.Builder().url(url).get().build()
-            val client = OkHttpClient.Builder().apply {
-                readTimeout(10, TimeUnit.SECONDS)
-                connectTimeout(10, TimeUnit.SECONDS)
-            }.build()
-            val call = client.newCall(req)
-            call.enqueue(BookSearchCallback())
+                override fun onSucceededSearch(resultBooks: List<ResultBook>) {
+                    hideProgressBar()
+                    clearFocus()
+                    if (resultBooks.isEmpty()) {
+                        showMessage(getString(R.string.item_not_fount))
+                    } else {
+                        hideMessage()
+                    }
+                }
+
+                override fun onFailedStart() {
+                    hideMessage()
+                    showMessage(getString(R.string.search_error))
+                }
+            })
         }
-    }
-
-    private fun removeAllItems() {
-        val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
-        val adapter = if (recyclerView.adapter != null) {
-            recyclerView.adapter as BookListAdapter
-        } else {
-            return
-        }
-        val cnt = adapter.itemCount
-        if (cnt < 1) return
-        adapter.removeAll()
-    }
-
-    private fun createUrlWithParameter(
-        type: String,
-        keyword: String,
-        max: Int = 30,
-        index: Int = 0
-    ): String {
-        var param = Const.ADD_QUERY
-        param += when (type) {
-            Const.SEARCH_TITLE -> Const.PARAM_TITLE
-            Const.SEARCH_AUTHOR -> Const.PARAM_AUTHOR
-            else -> ""
-        }
-        return param + keyword + Const.PARAM_MAX + max + Const.PARAM_INDEX + index
-    }
-
-    inner class BookSearchCallback : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-            handler.post {
-                hideProgressBar()
-                showMessage(Const.CONNECTION_FAILURE_MSG)
-                removeAllItems()
-                findViewById<MaterialSearchBar>(R.id.book_search_bar).clearFocus()
-            }
-        }
-
-        override fun onResponse(call: Call, response: Response) {
-            handler.post {
-                hideProgressBar()
-                hideMessage()
-                removeAllItems()
-                findViewById<MaterialSearchBar>(R.id.book_search_bar).clearFocus()
-            }
-
-            val resBody = response.body?.string()
-            val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
-            if (resBody.isNullOrBlank()) {
-                Libs.showSnackBar(view, getString(R.string.search_error))
-                return
-            }
-
-            val result = adapter.fromJson(resBody)
-            if (result == null) {
-                Libs.showSnackBar(view, getString(R.string.search_error))
-                return
-            }
-
-            handler.post { createSearchResultView(result) }
-        }
-    }
-
-    private fun createSearchResultView(result: SearchResult) {
-        val items = result.items
-        if (items.isNullOrEmpty()) {
-            showMessage(Const.CONNECTION_FAILURE_MSG)
-            return
-        }
-
-        createBooksFromItems(items)
-        if (resultBooks.isNullOrEmpty()) {
-            showMessage(getString(R.string.item_not_fount))
-            return
-        }
-
-        // FIXME: 初回はアダプターを生成、２回目以降はアダプターを再利用
-        val manager = LinearLayoutManager(this)
-        val adapter = BookListAdapter(
-            this,
-            resultBooks,
-            OnSearchResultClickListener()
-        )
-        findViewById<RecyclerView>(R.id.book_search_results).apply {
-            layoutManager = manager
-            this.adapter = adapter
-        }
-    }
-
-    private fun createBooksFromItems(items: List<Item>) {
-        val books = mutableListOf<ResultBook>()
-        for (item in items) {
-            val info = item.volumeInfo
-            val id = item.id
-
-            val title = if (info?.title != null) {
-                info.title as String
-            } else {
-                continue
-            }
-
-            val authors = if (info.authors != null) {
-                info.authors as List<String>
-            } else {
-                listOf(Const.UNKNOWN)
-            }
-
-            val image = if (info.imageLinks?.thumbnail != null) {
-                info.imageLinks?.thumbnail as String
-            } else {
-                ""
-            }
-
-            books.add(ResultBook(id, title, authors, image))
-        }
-        resultBooks = books
     }
 
     inner class OnSearchResultClickListener : View.OnClickListener {
         override fun onClick(v: View?) {
             v ?: return
-            val recyclerView: RecyclerView = findViewById(R.id.book_search_results)
+            val recyclerView: RecyclerView = binding.bookSearchResults
             val position = recyclerView.getChildAdapterPosition(v)
-            val resultBook = resultBooks[position]
+            // FIXME: resultBook が null だった場合の処理を検討。
+            val resultBook = viewModel.resultBooks.value?.get(position)
+            resultBook ?: return
             AlertDialog.Builder(this@BookSearchActivity)
                 .setTitle(getString(R.string.dialog_add_book_title))
                 .setMessage(getString(R.string.dialog_add_book_msg))
@@ -270,28 +174,36 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun hideProgressBar() {
-        findViewById<ProgressBar>(R.id.book_search_progress_bar).apply {
+        binding.bookSearchProgressBar.apply {
             visibility = View.INVISIBLE
         }
     }
 
     private fun showProgressBar() {
-        findViewById<ProgressBar>(R.id.book_search_progress_bar).apply {
+        binding.bookSearchProgressBar.apply {
             visibility = View.VISIBLE
             bringToFront()
         }
     }
 
     private fun showMessage(msg: String) {
-        findViewById<TextView>(R.id.book_search_message).apply {
-            this.text = msg
-            visibility = View.VISIBLE
+        handler.post {
+            binding.bookSearchMessage.apply {
+                this.text = msg
+                visibility = View.VISIBLE
+            }
         }
     }
 
     private fun hideMessage() {
-        findViewById<TextView>(R.id.book_search_message).apply {
+        binding.bookSearchMessage.apply {
             visibility = View.INVISIBLE
+        }
+    }
+
+    private fun clearFocus() {
+        handler.post {
+            binding.bookSearchBar.clearFocus()
         }
     }
 

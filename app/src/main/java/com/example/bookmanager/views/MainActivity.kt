@@ -6,17 +6,27 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.R
+import com.example.bookmanager.databinding.ActivityMainBinding
 import com.example.bookmanager.models.ResultBook
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         val books = createDummyData()
         setDataToRecyclerView(books)
@@ -25,14 +35,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDataToRecyclerView(data: MutableList<ResultBook>) {
-        val recyclerView: RecyclerView = findViewById(R.id.my_book_list)
-        val adapter = BookListAdapter(this, data)
+        val adapter = BookListAdapter(this, data).apply {
+            update(data)
+        }
         val manager = LinearLayoutManager(this)
-        recyclerView.layoutManager = manager
-        recyclerView.adapter = adapter
-
-        val decorator = DividerItemDecoration(this, manager.orientation)
-        recyclerView.addItemDecoration(decorator)
+        binding.myBookList.also {
+            it.layoutManager = manager
+            it.adapter = adapter
+            it.addItemDecoration(DividerItemDecoration(this, manager.orientation))
+        }
     }
 
     private fun createDummyData(): MutableList<ResultBook> {
@@ -49,17 +60,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setFabClickListener() {
-        val fab: View = findViewById(R.id.fab_add_book)
-        fab.setOnClickListener {
+        binding.fabAddBook.setOnClickListener {
             val intent = Intent(applicationContext, BookSearchActivity::class.java)
             startActivity(intent)
         }
     }
 
     private fun initToolbar() {
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        toolbar.setTitle(R.string.toolbar_title)
-        toolbar.setTitleTextColor(Color.WHITE)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar).apply {
+            setTitle(R.string.toolbar_title)
+            setTitleTextColor(Color.WHITE)
+        }
         setSupportActionBar(toolbar)
     }
 }

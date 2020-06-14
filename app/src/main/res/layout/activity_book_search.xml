@@ -1,78 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/book_search_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.BookSearchActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ProgressBar
-        android:id="@+id/book_search_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/book_search_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="viewModel"
+            type="com.example.bookmanager.viewmodels.BookResultViewModel" />
+    </data>
 
-    <com.mancj.materialsearchbar.MaterialSearchBar
-        android:id="@+id/book_search_bar"
-        style="@style/MaterialSearchBarLight"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/space_default"
-        android:layout_marginTop="@dimen/space_default"
-        android:layout_marginEnd="@dimen/space_default"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:mt_dividerColor="@color/colorAccent"
-        app:mt_hint="Custom hint"
-        app:mt_maxSuggestionsCount="@integer/max_suggestions_count"
-        app:mt_roundedSearchBarEnabled="true"
-        app:mt_searchBarColor="@color/search_bar_background"
-        app:mt_speechMode="false" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/book_search_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.BookSearchActivity">
 
-    <Spinner
-        android:id="@+id/spinner_book_search_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_default"
-        android:layout_marginEnd="@dimen/space_default"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/book_search_bar" />
+        <ProgressBar
+            android:id="@+id/book_search_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="@dimen/match_constraint"
-        android:layout_marginTop="@dimen/space_default"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_book_search_type">
+        <TextView
+            android:id="@+id/book_search_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/book_search_results"
-            android:layout_width="match_parent"
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            android:id="@+id/book_search_bar"
+            style="@style/MaterialSearchBarLight"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_default"
             android:layout_marginTop="@dimen/space_default"
             android:layout_marginEnd="@dimen/space_default"
-            app:layout_constraintHorizontal_bias="1.0" />
-    </ScrollView>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:mt_dividerColor="@color/colorAccent"
+            app:mt_hint="Custom hint"
+            app:mt_maxSuggestionsCount="@integer/max_suggestions_count"
+            app:mt_roundedSearchBarEnabled="true"
+            app:mt_searchBarColor="@color/search_bar_background"
+            app:mt_speechMode="false" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Spinner
+            android:id="@+id/spinner_book_search_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_default"
+            android:layout_marginEnd="@dimen/space_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_search_bar" />
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:layout_marginTop="@dimen/space_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_book_search_type">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/book_search_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_default"
+                android:layout_marginTop="@dimen/space_default"
+                android:layout_marginEnd="@dimen/space_default"
+                app:resultBooks="@{viewModel.resultBooks}" />
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
