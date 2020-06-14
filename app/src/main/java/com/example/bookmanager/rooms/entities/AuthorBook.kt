@@ -1,9 +1,6 @@
 package com.example.bookmanager.rooms.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(
     tableName = "authors_books",
@@ -18,6 +15,10 @@ import androidx.room.PrimaryKey
             parentColumns = arrayOf("id"),
             childColumns = arrayOf("book_id")
         )
+    ],
+    indices = [
+        Index(value = ["author_id"], unique = true),
+        Index(value = ["book_id"], unique = true)
     ]
 )
 data class AuthorBook(
