@@ -3,16 +3,14 @@ package com.example.bookmanager.views
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityMainBinding
-import com.example.bookmanager.models.ResultBook
+import com.example.bookmanager.models.Book
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         initToolbar()
     }
 
-    private fun setDataToRecyclerView(data: MutableList<ResultBook>) {
+    private fun setDataToRecyclerView(data: MutableList<Book>) {
         val adapter = BookListAdapter(this, data).apply {
             update(data)
         }
@@ -46,15 +44,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createDummyData(): MutableList<ResultBook> {
-        val books = mutableListOf<ResultBook>()
+    private fun createDummyData(): MutableList<Book> {
+        val books = mutableListOf<Book>()
         for (i in 1..10) {
             val id = "abc"
             val image =
                 "http://books.google.com/books/content?id=13gDwgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
             val title = "鬼滅の刃(${i})"
             val authors = arrayListOf("吾峠呼世晴", "TEST")
-            books.add(ResultBook(id, title, authors, image))
+            books.add(Book(id, title, authors, image))
         }
         return books
     }

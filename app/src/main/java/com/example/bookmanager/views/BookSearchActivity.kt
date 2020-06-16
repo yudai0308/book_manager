@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
-import com.example.bookmanager.models.ResultBook
 import com.example.bookmanager.rooms.dao.BookDao
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
@@ -103,7 +102,7 @@ class BookSearchActivity : AppCompatActivity() {
                     showProgressBar()
                 }
 
-                override fun onSucceededSearch(resultBooks: List<ResultBook>) {
+                override fun onSucceededSearch(resultBooks: List<com.example.bookmanager.models.Book>) {
                     hideProgressBar()
                     clearFocus()
                     if (resultBooks.isEmpty()) {
@@ -141,7 +140,7 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    inner class OnOkButtonClickListener(private val resultBook: ResultBook) :
+    inner class OnOkButtonClickListener(private val resultBook: com.example.bookmanager.models.Book) :
         DialogInterface.OnClickListener {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {

@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.RowBookListBinding
-import com.example.bookmanager.models.ResultBook
+import com.example.bookmanager.models.Book
 import com.example.bookmanager.utils.Libs
 
 class BookListAdapter(
     private val activity: Activity,
-    private var resultBooks: List<ResultBook>,
+    private var resultBooks: List<Book>,
     private val clickListener: View.OnClickListener? = null
 ) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
@@ -46,7 +46,7 @@ class BookListAdapter(
         return resultBooks.size
     }
 
-    fun update(resultBooks: List<ResultBook>) {
+    fun update(resultBooks: List<Book>) {
         this.resultBooks = resultBooks
         notifyDataSetChanged()
     }
