@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="match_constraint">0dp</dimen>
+    <dimen name="space_narrow">4dp</dimen>
     <dimen name="space_default">8dp</dimen>
     <dimen name="space_wide">16dp</dimen>
 
