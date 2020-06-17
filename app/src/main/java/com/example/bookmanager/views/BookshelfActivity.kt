@@ -12,7 +12,7 @@ import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityMainBinding
 import com.example.bookmanager.models.Book
 
-class MainActivity : AppCompatActivity() {
+class BookshelfActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 

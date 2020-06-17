@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".views.BookSearchActivity" />
-        <activity android:name=".views.MainActivity">
+        <activity android:name=".views.BookshelfActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
