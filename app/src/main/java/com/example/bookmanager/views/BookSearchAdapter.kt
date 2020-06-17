@@ -17,9 +17,9 @@ class BookSearchAdapter(
     private val activity: Activity,
     private var resultBooks: List<Book>,
     private val clickListener: View.OnClickListener? = null
-) : RecyclerView.Adapter<BookSearchAdapter.BookListViewHolder>() {
+) : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookSearchViewHolder {
         val binding: ListItemBookSearchBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.list_item_book_search,
@@ -27,10 +27,10 @@ class BookSearchAdapter(
             false
         )
         binding.root.setOnClickListener(clickListener)
-        return BookListViewHolder(binding)
+        return BookSearchViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: BookListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BookSearchViewHolder, position: Int) {
         val resultBook = resultBooks[position]
         holder.binding.apply {
             lifecycleOwner = activity as LifecycleOwner
@@ -51,6 +51,6 @@ class BookSearchAdapter(
         notifyDataSetChanged()
     }
 
-    inner class BookListViewHolder(val binding: ListItemBookSearchBinding) :
+    inner class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
         RecyclerView.ViewHolder(binding.root)
 }
