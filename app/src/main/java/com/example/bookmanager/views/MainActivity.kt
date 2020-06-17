@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDataToRecyclerView(data: MutableList<Book>) {
-        val adapter = BookListAdapter(this, data).apply {
+        val adapter = BookSearchAdapter(this, data).apply {
             update(data)
         }
         val manager = LinearLayoutManager(this)

@@ -13,11 +13,11 @@ import com.example.bookmanager.databinding.ListItemBookSearchBinding
 import com.example.bookmanager.models.Book
 import com.example.bookmanager.utils.Libs
 
-class BookListAdapter(
+class BookSearchAdapter(
     private val activity: Activity,
     private var resultBooks: List<Book>,
     private val clickListener: View.OnClickListener? = null
-) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
+) : RecyclerView.Adapter<BookSearchAdapter.BookListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookListViewHolder {
         val binding: ListItemBookSearchBinding = DataBindingUtil.inflate(

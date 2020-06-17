@@ -63,7 +63,7 @@ class BookSearchActivity : AppCompatActivity() {
         initSpinner()
 
         binding.bookSearchResults.also {
-            it.adapter = BookListAdapter(this, listOf(), OnSearchResultClickListener())
+            it.adapter = BookSearchAdapter(this, listOf(), OnSearchResultClickListener())
             it.layoutManager = LinearLayoutManager(this)
             it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         }
