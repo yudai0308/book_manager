@@ -9,7 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
-import com.example.bookmanager.databinding.RowBookListBinding
+import com.example.bookmanager.databinding.ListItemBookSearchBinding
 import com.example.bookmanager.models.Book
 import com.example.bookmanager.utils.Libs
 
@@ -20,9 +20,9 @@ class BookListAdapter(
 ) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookListViewHolder {
-        val binding: RowBookListBinding = DataBindingUtil.inflate(
+        val binding: ListItemBookSearchBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.row_book_list,
+            R.layout.list_item_book_search,
             parent,
             false
         )
@@ -34,12 +34,12 @@ class BookListAdapter(
         val resultBook = resultBooks[position]
         holder.binding.apply {
             lifecycleOwner = activity as LifecycleOwner
-            bookListTitle.text = resultBook.title
-            bookListAuthor.text = Libs.listToString(resultBook.authors)
+            titleBookSearchItem.text = resultBook.title
+            authorBookSearchItem.text = Libs.listToString(resultBook.authors)
         }
         Glide.with(activity)
             .load(resultBook.image)
-            .into(holder.binding.bookListImage)
+            .into(holder.binding.imageBookSearchItem)
     }
 
     override fun getItemCount(): Int {
@@ -51,6 +51,6 @@ class BookListAdapter(
         notifyDataSetChanged()
     }
 
-    inner class BookListViewHolder(val binding: RowBookListBinding) :
+    inner class BookListViewHolder(val binding: ListItemBookSearchBinding) :
         RecyclerView.ViewHolder(binding.root)
 }
