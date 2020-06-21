@@ -51,6 +51,8 @@ class BookSearchAdapter(
         notifyDataSetChanged()
     }
 
+    // TODO: 本棚に登録 -> DB に保存 -> Glide を使って Bitmap 形式で画像を取得 -> 内部ストレージに保存
+
     inner class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

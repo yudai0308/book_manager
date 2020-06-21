@@ -6,55 +6,44 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityMainBinding
 import com.example.bookmanager.models.Book
+import com.example.bookmanager.viewmodels.BookshelfViewModel
 
 class BookshelfActivity : AppCompatActivity() {
 
+    private lateinit var viewModel: BookshelfViewModel
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewModel = ViewModelProvider(this).get(BookshelfViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
     }
 
     override fun onResume() {
         super.onResume()
 
-        val books = createDummyData()
-        setDataToRecyclerView(books)
-        setFabClickListener()
         initToolbar()
+        initRecyclerView()
+        setFabClickListener()
     }
 
-    private fun setDataToRecyclerView(data: MutableList<Book>) {
-        val adapter = BookSearchAdapter(this, data).apply {
-            update(data)
-        }
-        val manager = LinearLayoutManager(this)
-        binding.myBookList.also {
+    private fun initRecyclerView() {
+        val adapter = BookshelfAdapter()
+        val manager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
+        binding.bookshelfRoot.also {
             it.layoutManager = manager
             it.adapter = adapter
-            it.addItemDecoration(DividerItemDecoration(this, manager.orientation))
+//            it.addItemDecoration(DividerItemDecoration(this, manager.orientation))
         }
-    }
-
-    private fun createDummyData(): MutableList<Book> {
-        val books = mutableListOf<Book>()
-        for (i in 1..10) {
-            val id = "abc"
-            val image =
-                "http://books.google.com/books/content?id=13gDwgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-            val title = "鬼滅の刃(${i})"
-            val authors = arrayListOf("吾峠呼世晴", "TEST")
-            books.add(Book(id, title, authors, image))
-        }
-        return books
     }
 
     private fun setFabClickListener() {
