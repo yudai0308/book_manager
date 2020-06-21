@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
-import com.example.bookmanager.models.ResultBook
 import com.example.bookmanager.rooms.dao.BookDao
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
@@ -64,7 +63,7 @@ class BookSearchActivity : AppCompatActivity() {
         initSpinner()
 
         binding.bookSearchResults.also {
-            it.adapter = BookListAdapter(this, listOf(), OnSearchResultClickListener())
+            it.adapter = BookSearchAdapter(this, listOf(), OnSearchResultClickListener())
             it.layoutManager = LinearLayoutManager(this)
             it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         }
@@ -98,12 +97,12 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onSearchStateChanged(enabled: Boolean) {}
 
         override fun onSearchConfirmed(text: CharSequence?) {
-            viewModel.onSearch(binding, object : BookResultViewModel.SearchCallback {
-                override fun onStartSearch() {
+            viewModel.searchBook(binding, object : BookResultViewModel.SearchCallback {
+                override fun onSearchStart() {
                     showProgressBar()
                 }
 
-                override fun onSucceededSearch(resultBooks: List<ResultBook>) {
+                override fun onSearchSucceeded(resultBooks: List<com.example.bookmanager.models.Book>) {
                     hideProgressBar()
                     clearFocus()
                     if (resultBooks.isEmpty()) {
@@ -113,7 +112,7 @@ class BookSearchActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailedStart() {
+                override fun onSearchFailed() {
                     hideMessage()
                     showMessage(getString(R.string.search_error))
                 }
@@ -141,7 +140,7 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    inner class OnOkButtonClickListener(private val resultBook: ResultBook) :
+    inner class OnOkButtonClickListener(private val resultBook: com.example.bookmanager.models.Book) :
         DialogInterface.OnClickListener {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {

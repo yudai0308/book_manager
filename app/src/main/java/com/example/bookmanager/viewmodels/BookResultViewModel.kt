@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.models.Item
-import com.example.bookmanager.models.ResultBook
+import com.example.bookmanager.models.Book
 import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.utils.Const
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -16,20 +16,20 @@ import java.io.IOException
 
 class BookResultViewModel : ViewModel() {
 
-    private val _resultBooks: MutableLiveData<List<ResultBook>> = MutableLiveData()
-    val resultBooks: LiveData<List<ResultBook>> = _resultBooks
+    private val _resultBooks: MutableLiveData<List<Book>> = MutableLiveData()
+    val resultBooks: LiveData<List<Book>> = _resultBooks
 
     private var searchCallback: SearchCallback? = null
 
     interface SearchCallback {
-        fun onStartSearch()
-        fun onSucceededSearch(resultBooks: List<ResultBook>)
-        fun onFailedStart()
+        fun onSearchStart()
+        fun onSearchSucceeded(resultBooks: List<Book>)
+        fun onSearchFailed()
     }
 
-    fun onSearch(binding: ActivityBookSearchBinding, callback: SearchCallback) {
+    fun searchBook(binding: ActivityBookSearchBinding, callback: SearchCallback) {
         searchCallback = callback
-        searchCallback?.onStartSearch()
+        searchCallback?.onSearchStart()
         val url = createUrl(binding)
         fetch(url)
     }
@@ -69,7 +69,7 @@ class BookResultViewModel : ViewModel() {
     inner class BookSearchCallback : Callback {
         override fun onFailure(call: Call, e: IOException) {
             // TODO: 検索失敗時の処理
-            searchCallback?.onFailedStart()
+            searchCallback?.onSearchFailed()
         }
 
         override fun onResponse(call: Call, response: Response) {
@@ -85,12 +85,12 @@ class BookResultViewModel : ViewModel() {
                 createResultBooks(result.items as List<Item>)
             }
             _resultBooks.postValue(resultBooks)
-            searchCallback?.onSucceededSearch(resultBooks)
+            searchCallback?.onSearchSucceeded(resultBooks)
         }
     }
 
-    private fun createResultBooks(items: List<Item>): List<ResultBook> {
-        val books = mutableListOf<ResultBook>()
+    private fun createResultBooks(items: List<Item>): List<Book> {
+        val books = mutableListOf<Book>()
         for (item in items) {
             val info = item.volumeInfo
             val id = item.id
@@ -113,7 +113,7 @@ class BookResultViewModel : ViewModel() {
                 ""
             }
 
-            books.add(ResultBook(id, title, authors, image))
+            books.add(Book(id, title, authors, image))
         }
         return books
     }

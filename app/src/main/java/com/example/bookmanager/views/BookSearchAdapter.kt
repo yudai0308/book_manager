@@ -9,48 +9,50 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
-import com.example.bookmanager.databinding.RowBookListBinding
-import com.example.bookmanager.models.ResultBook
+import com.example.bookmanager.databinding.ListItemBookSearchBinding
+import com.example.bookmanager.models.Book
 import com.example.bookmanager.utils.Libs
 
-class BookListAdapter(
+class BookSearchAdapter(
     private val activity: Activity,
-    private var resultBooks: List<ResultBook>,
+    private var resultBooks: List<Book>,
     private val clickListener: View.OnClickListener? = null
-) : RecyclerView.Adapter<BookListAdapter.BookListViewHolder>() {
+) : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookListViewHolder {
-        val binding: RowBookListBinding = DataBindingUtil.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookSearchViewHolder {
+        val binding: ListItemBookSearchBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.row_book_list,
+            R.layout.list_item_book_search,
             parent,
             false
         )
         binding.root.setOnClickListener(clickListener)
-        return BookListViewHolder(binding)
+        return BookSearchViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: BookListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BookSearchViewHolder, position: Int) {
         val resultBook = resultBooks[position]
         holder.binding.apply {
             lifecycleOwner = activity as LifecycleOwner
-            bookListTitle.text = resultBook.title
-            bookListAuthor.text = Libs.listToString(resultBook.authors)
+            titleBookSearchItem.text = resultBook.title
+            authorBookSearchItem.text = Libs.listToString(resultBook.authors)
         }
         Glide.with(activity)
             .load(resultBook.image)
-            .into(holder.binding.bookListImage)
+            .into(holder.binding.imageBookSearchItem)
     }
 
     override fun getItemCount(): Int {
         return resultBooks.size
     }
 
-    fun update(resultBooks: List<ResultBook>) {
+    fun update(resultBooks: List<Book>) {
         this.resultBooks = resultBooks
         notifyDataSetChanged()
     }
 
-    inner class BookListViewHolder(val binding: RowBookListBinding) :
+    // TODO: 本棚に登録 -> DB に保存 -> Glide を使って Bitmap 形式で画像を取得 -> 内部ストレージに保存
+
+    inner class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
         RecyclerView.ViewHolder(binding.root)
 }
