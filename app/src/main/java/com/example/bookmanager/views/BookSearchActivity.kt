@@ -62,8 +62,11 @@ class BookSearchActivity : AppCompatActivity() {
         initSearchBar()
         initSpinner()
 
+        val listener = BookSearchAdapter().apply {
+            setListener(OnSearchResultClickListener())
+        }
         binding.bookSearchResults.also {
-            it.adapter = BookSearchAdapter(this, listOf(), OnSearchResultClickListener())
+            it.adapter = listener
             it.layoutManager = LinearLayoutManager(this)
             it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         }

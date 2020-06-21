@@ -1,6 +1,7 @@
 package com.example.bookmanager.views
 
 import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,31 +14,36 @@ import com.example.bookmanager.databinding.ListItemBookSearchBinding
 import com.example.bookmanager.models.Book
 import com.example.bookmanager.utils.Libs
 
-class BookSearchAdapter(
-    private val activity: Activity,
-    private var resultBooks: List<Book>,
-    private val clickListener: View.OnClickListener? = null
-) : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewHolder>() {
+class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewHolder>() {
+
+    private lateinit var context: Context
+    private var resultBooks: List<Book> = listOf()
+    private var listener: View.OnClickListener? = null
+
+    fun setListener(listener: View.OnClickListener) {
+        this.listener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookSearchViewHolder {
+        context = parent.context
         val binding: ListItemBookSearchBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             R.layout.list_item_book_search,
             parent,
             false
         )
-        binding.root.setOnClickListener(clickListener)
+        binding.root.setOnClickListener(listener)
         return BookSearchViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BookSearchViewHolder, position: Int) {
         val resultBook = resultBooks[position]
         holder.binding.apply {
-            lifecycleOwner = activity as LifecycleOwner
+            lifecycleOwner = context as LifecycleOwner
             titleBookSearchItem.text = resultBook.title
             authorBookSearchItem.text = Libs.listToString(resultBook.authors)
         }
-        Glide.with(activity)
+        Glide.with(context)
             .load(resultBook.image)
             .into(holder.binding.imageBookSearchItem)
     }
