@@ -27,7 +27,7 @@ class BookResultViewModel : ViewModel() {
         fun onSearchFailed()
     }
 
-    fun onSearch(binding: ActivityBookSearchBinding, callback: SearchCallback) {
+    fun searchBook(binding: ActivityBookSearchBinding, callback: SearchCallback) {
         searchCallback = callback
         searchCallback?.onSearchStart()
         val url = createUrl(binding)

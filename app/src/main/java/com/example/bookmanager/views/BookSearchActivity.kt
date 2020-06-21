@@ -97,7 +97,7 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onSearchStateChanged(enabled: Boolean) {}
 
         override fun onSearchConfirmed(text: CharSequence?) {
-            viewModel.onSearch(binding, object : BookResultViewModel.SearchCallback {
+            viewModel.searchBook(binding, object : BookResultViewModel.SearchCallback {
                 override fun onSearchStart() {
                     showProgressBar()
                 }
