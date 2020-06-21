@@ -22,14 +22,14 @@ class BookResultViewModel : ViewModel() {
     private var searchCallback: SearchCallback? = null
 
     interface SearchCallback {
-        fun onStartSearch()
-        fun onSucceededSearch(resultBooks: List<Book>)
-        fun onFailedStart()
+        fun onSearchStart()
+        fun onSearchSucceeded(resultBooks: List<Book>)
+        fun onSearchFailed()
     }
 
     fun onSearch(binding: ActivityBookSearchBinding, callback: SearchCallback) {
         searchCallback = callback
-        searchCallback?.onStartSearch()
+        searchCallback?.onSearchStart()
         val url = createUrl(binding)
         fetch(url)
     }
@@ -69,7 +69,7 @@ class BookResultViewModel : ViewModel() {
     inner class BookSearchCallback : Callback {
         override fun onFailure(call: Call, e: IOException) {
             // TODO: 検索失敗時の処理
-            searchCallback?.onFailedStart()
+            searchCallback?.onSearchFailed()
         }
 
         override fun onResponse(call: Call, response: Response) {
@@ -85,7 +85,7 @@ class BookResultViewModel : ViewModel() {
                 createResultBooks(result.items as List<Item>)
             }
             _resultBooks.postValue(resultBooks)
-            searchCallback?.onSucceededSearch(resultBooks)
+            searchCallback?.onSearchSucceeded(resultBooks)
         }
     }
 

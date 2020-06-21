@@ -98,11 +98,11 @@ class BookSearchActivity : AppCompatActivity() {
 
         override fun onSearchConfirmed(text: CharSequence?) {
             viewModel.onSearch(binding, object : BookResultViewModel.SearchCallback {
-                override fun onStartSearch() {
+                override fun onSearchStart() {
                     showProgressBar()
                 }
 
-                override fun onSucceededSearch(resultBooks: List<com.example.bookmanager.models.Book>) {
+                override fun onSearchSucceeded(resultBooks: List<com.example.bookmanager.models.Book>) {
                     hideProgressBar()
                     clearFocus()
                     if (resultBooks.isEmpty()) {
@@ -112,7 +112,7 @@ class BookSearchActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun onFailedStart() {
+                override fun onSearchFailed() {
                     hideMessage()
                     showMessage(getString(R.string.search_error))
                 }
