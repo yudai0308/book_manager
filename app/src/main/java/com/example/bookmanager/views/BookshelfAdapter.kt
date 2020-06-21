@@ -14,9 +14,9 @@ import com.example.bookmanager.models.Book
 
 class BookshelfAdapter() : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>() {
 
-    lateinit var context : Context
+    lateinit var context: Context
     private val books: List<Book> = fetchBooks()
-    private var listener : View.OnClickListener? = null
+    private var listener: View.OnClickListener? = null
 
     fun setListener(listener: View.OnClickListener) {
         this.listener = listener
