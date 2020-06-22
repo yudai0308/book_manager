@@ -6,7 +6,6 @@ import android.os.Handler
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -62,11 +61,11 @@ class BookSearchActivity : AppCompatActivity() {
         initSearchBar()
         initSpinner()
 
-        val listener = BookSearchAdapter().apply {
+        val adapter = BookSearchAdapter().apply {
             setListener(OnSearchResultClickListener())
         }
         binding.bookSearchResults.also {
-            it.adapter = listener
+            it.adapter = adapter
             it.layoutManager = LinearLayoutManager(this)
             it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         }
@@ -131,15 +130,17 @@ class BookSearchActivity : AppCompatActivity() {
             // FIXME: resultBook が null だった場合の処理を検討。
             val resultBook = viewModel.resultBooks.value?.get(position)
             resultBook ?: return
-            AlertDialog.Builder(this@BookSearchActivity)
-                .setTitle(getString(R.string.dialog_add_book_title))
-                .setMessage(getString(R.string.dialog_add_book_msg))
-                .setPositiveButton(
-                    getString(R.string.button_yes),
+            val dialog = SimpleDialogFragment().apply {
+                val activity = this@BookSearchActivity
+                setTitle(activity.getString(R.string.dialog_add_book_title))
+                setMessage(activity.getString(R.string.dialog_add_book_msg))
+                setPositiveButton(
+                    activity.getString(R.string.button_yes),
                     OnOkButtonClickListener(resultBook)
                 )
-                .setNegativeButton(getString(R.string.button_no), null)
-                .show()
+                setNegativeButton(activity.getString(R.string.button_no), null)
+            }
+            dialog.show(supportFragmentManager, Const.ADD_BOOK_DIALOG_TAG)
         }
     }
 
@@ -154,13 +155,10 @@ class BookSearchActivity : AppCompatActivity() {
             }
             val now = System.currentTimeMillis()
             val newBook = Book(
-                resultBook.id,
-                resultBook.title,
-                resultBook.image,
-                null,
-                now,
-                now
+                resultBook.id, resultBook.title, resultBook.image,
+                null, now, now
             )
+            // TODO: 内部ストレージに画像を保存
             runBlocking {
                 bookDao.insert(newBook)
             }
