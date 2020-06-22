@@ -1,27 +1,20 @@
 package com.example.bookmanager.views
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.icu.text.CaseMap
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import java.lang.IllegalStateException
 
 class SimpleDialogFragment : DialogFragment() {
 
-//    private var activity: Activity? = null
     private var title: String = ""
     private var message: String = ""
     private var positiveButtonLabel: String = ""
     private var negativeButtonLabel: String = ""
     private var positiveButtonClickListener: DialogInterface.OnClickListener? = null
     private var negativeButtonClickListener: DialogInterface.OnClickListener? = null
-
-//    fun setActivity(activity: Activity) {
-//        this.activity = activity
-//    }
 
     fun setTitle(title: String) {
         this.title = title
