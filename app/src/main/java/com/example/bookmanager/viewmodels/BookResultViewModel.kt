@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.models.Item
-import com.example.bookmanager.models.Book
+import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.utils.Const
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -16,14 +16,14 @@ import java.io.IOException
 
 class BookResultViewModel : ViewModel() {
 
-    private val _resultBooks: MutableLiveData<List<Book>> = MutableLiveData()
-    val resultBooks: LiveData<List<Book>> = _resultBooks
+    private val _resultBooks: MutableLiveData<List<BookSearchResult>> = MutableLiveData()
+    val resultBooks: LiveData<List<BookSearchResult>> = _resultBooks
 
     private var searchCallback: SearchCallback? = null
 
     interface SearchCallback {
         fun onSearchStart()
-        fun onSearchSucceeded(resultBooks: List<Book>)
+        fun onSearchSucceeded(resultBooks: List<BookSearchResult>)
         fun onSearchFailed()
     }
 
@@ -89,8 +89,8 @@ class BookResultViewModel : ViewModel() {
         }
     }
 
-    private fun createResultBooks(items: List<Item>): List<Book> {
-        val books = mutableListOf<Book>()
+    private fun createResultBooks(items: List<Item>): List<BookSearchResult> {
+        val books = mutableListOf<BookSearchResult>()
         for (item in items) {
             val info = item.volumeInfo
             val id = item.id
@@ -113,7 +113,7 @@ class BookResultViewModel : ViewModel() {
                 ""
             }
 
-            books.add(Book(id, title, authors, image))
+            books.add(BookSearchResult(id, title, authors, image))
         }
         return books
     }
