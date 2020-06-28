@@ -4,6 +4,7 @@ class Const {
     companion object {
         const val BOOK_SEARCH_API_URL = "https://www.googleapis.com/books/v1/volumes"
         const val DB_NAME = "book_database"
+        const val DIRECTORY_NAME_BOOK_IMAGE = "book_image"
         // 検索方法
         const val SEARCH_FREE_WORD = "フリーワード検索"
         const val SEARCH_TITLE = "タイトル検索"
@@ -19,5 +20,7 @@ class Const {
         const val UNKNOWN = "Unknown"
         const val ADD_BOOK = "本棚に追加しました。"
         const val CONNECTION_FAILURE_MSG = "通信に失敗しました。\n検索をやり直してください。"
+        // DialogFragment タグ
+        const val ADD_BOOK_DIALOG_TAG = "add_book_dialog"
     }
 }

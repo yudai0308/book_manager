@@ -7,12 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityMainBinding
-import com.example.bookmanager.models.Book
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 
 class BookshelfActivity : AppCompatActivity() {

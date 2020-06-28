@@ -1,12 +1,15 @@
 package com.example.bookmanager.views
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.DialogInterface
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.rooms.dao.BookDao
@@ -23,7 +27,13 @@ import com.example.bookmanager.utils.Const
 import com.example.bookmanager.utils.Libs
 import com.example.bookmanager.viewmodels.BookResultViewModel
 import com.mancj.materialsearchbar.MaterialSearchBar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class BookSearchActivity : AppCompatActivity() {
 
@@ -62,8 +72,11 @@ class BookSearchActivity : AppCompatActivity() {
         initSearchBar()
         initSpinner()
 
+        val adapter = BookSearchAdapter().apply {
+            setListener(OnSearchResultClickListener())
+        }
         binding.bookSearchResults.also {
-            it.adapter = BookSearchAdapter(this, listOf(), OnSearchResultClickListener())
+            it.adapter = adapter
             it.layoutManager = LinearLayoutManager(this)
             it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         }
@@ -128,15 +141,17 @@ class BookSearchActivity : AppCompatActivity() {
             // FIXME: resultBook が null だった場合の処理を検討。
             val resultBook = viewModel.resultBooks.value?.get(position)
             resultBook ?: return
-            AlertDialog.Builder(this@BookSearchActivity)
-                .setTitle(getString(R.string.dialog_add_book_title))
-                .setMessage(getString(R.string.dialog_add_book_msg))
-                .setPositiveButton(
-                    getString(R.string.button_yes),
+            val dialog = SimpleDialogFragment().apply {
+                val activity = this@BookSearchActivity
+                setTitle(activity.getString(R.string.dialog_add_book_title))
+                setMessage(activity.getString(R.string.dialog_add_book_msg))
+                setPositiveButton(
+                    activity.getString(R.string.button_yes),
                     OnOkButtonClickListener(resultBook)
                 )
-                .setNegativeButton(getString(R.string.button_no), null)
-                .show()
+                setNegativeButton(activity.getString(R.string.button_no), null)
+            }
+            dialog.show(supportFragmentManager, Const.ADD_BOOK_DIALOG_TAG)
         }
     }
 
@@ -151,17 +166,43 @@ class BookSearchActivity : AppCompatActivity() {
             }
             val now = System.currentTimeMillis()
             val newBook = Book(
-                resultBook.id,
-                resultBook.title,
-                resultBook.image,
-                null,
-                now,
-                now
+                resultBook.id, resultBook.title, resultBook.image,
+                null, now, now
             )
-            runBlocking {
+            GlobalScope.launch {
                 bookDao.insert(newBook)
             }
+            if (!newBook.image.isNullOrBlank()) {
+                saveImageToInternalStorage(newBook.image, newBook.id)
+            }
             Libs.showSnackBar(view, Const.ADD_BOOK)
+        }
+    }
+
+    // TODO: 画像保存の処理はアクティビティから分離させたい。
+    private fun saveImageToInternalStorage(url: String, fileName: String) =
+        GlobalScope.launch(Dispatchers.IO) {
+            val bitmap = Glide.with(this@BookSearchActivity)
+                .asBitmap()
+                .load(url)
+                .submit()
+                .get()
+            saveToInternalStorage(bitmap, fileName)
+        }
+
+    private fun saveToInternalStorage(bitmap: Bitmap, fileName: String): Boolean {
+        return try {
+            val contextWrapper = ContextWrapper(this)
+            val directory =
+                contextWrapper.getDir(Const.DIRECTORY_NAME_BOOK_IMAGE, Context.MODE_PRIVATE)
+            val path = File(directory, fileName)
+            FileOutputStream(path).use {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+            }
+            true
+        } catch (e: IOException) {
+            Log.e(null, "画像の保存に失敗。")
+            false
         }
     }
 
