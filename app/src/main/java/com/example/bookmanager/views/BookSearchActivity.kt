@@ -115,7 +115,7 @@ class BookSearchActivity : AppCompatActivity() {
                     showProgressBar()
                 }
 
-                override fun onSearchSucceeded(resultBooks: List<com.example.bookmanager.models.Book>) {
+                override fun onSearchSucceeded(resultBooks: List<com.example.bookmanager.models.BookSearchResult>) {
                     hideProgressBar()
                     clearFocus()
                     if (resultBooks.isEmpty()) {
@@ -155,7 +155,7 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    inner class OnOkButtonClickListener(private val resultBook: com.example.bookmanager.models.Book) :
+    inner class OnOkButtonClickListener(private val resultBook: com.example.bookmanager.models.BookSearchResult) :
         DialogInterface.OnClickListener {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {

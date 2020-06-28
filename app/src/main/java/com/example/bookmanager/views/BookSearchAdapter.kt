@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ListItemBookSearchBinding
-import com.example.bookmanager.models.Book
+import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.utils.Libs
 
 class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewHolder>() {
 
     private lateinit var context: Context
-    private var resultBooks: List<Book> = listOf()
+    private var resultBooks: List<BookSearchResult> = listOf()
     private var listener: View.OnClickListener? = null
 
     fun setListener(listener: View.OnClickListener) {
@@ -51,7 +51,7 @@ class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewH
         return resultBooks.size
     }
 
-    fun update(resultBooks: List<Book>) {
+    fun update(resultBooks: List<BookSearchResult>) {
         this.resultBooks = resultBooks
         notifyDataSetChanged()
     }
