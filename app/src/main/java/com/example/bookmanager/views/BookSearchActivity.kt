@@ -20,8 +20,9 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
-import com.example.bookmanager.rooms.dao.BookDao
+import com.example.bookmanager.rooms.common.DaoController
 import com.example.bookmanager.rooms.database.BookDatabase
+import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.Const
 import com.example.bookmanager.utils.Libs
@@ -38,10 +39,23 @@ import java.io.IOException
 class BookSearchActivity : AppCompatActivity() {
 
     private lateinit var view: View
+
     private val handler = Handler()
 
-    private lateinit var bookDao: BookDao
+    private val dao by lazy { DaoController(this) }
+
+    private val db by lazy {
+        Room.databaseBuilder(
+            this,
+            BookDatabase::class.java,
+            Const.DB_NAME
+        ).build()
+    }
+
+    private val bookDao by lazy { db.bookDao() }
+
     private lateinit var viewModel: BookResultViewModel
+
     private lateinit var binding: ActivityBookSearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,12 +71,6 @@ class BookSearchActivity : AppCompatActivity() {
         }
 
         view = binding.root
-        // TODO: DB 関連の処理はモデルに持たせる。
-        bookDao = Room.databaseBuilder(
-            this,
-            BookDatabase::class.java,
-            Const.DB_NAME
-        ).build().bookDao()
     }
 
     override fun onResume() {
@@ -164,13 +172,14 @@ class BookSearchActivity : AppCompatActivity() {
                 Libs.showSnackBar(view, getString(R.string.exists_in_my_shelf))
                 return
             }
-            val now = System.currentTimeMillis()
-            val newBook = Book(
-                resultBook.id, resultBook.title, resultBook.image,
-                null, now, now
+
+            val newBook = Book.create(
+                resultBook.id, resultBook.title, resultBook.image
             )
+            val authors = Author.createAll(resultBook.authors)
+
             GlobalScope.launch {
-                bookDao.insert(newBook)
+                dao.insertBookWithAuthors(newBook, authors)
             }
             if (!newBook.image.isNullOrBlank()) {
                 saveImageToInternalStorage(newBook.image, newBook.id)
@@ -207,10 +216,10 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun haveBook(id: String): Boolean {
-        val count = runBlocking {
-            bookDao.count(id)
+        val flag = runBlocking {
+            bookDao.exists(id)
         }
-        return count > 0
+        return flag > 0
     }
 
     private fun hideProgressBar() {

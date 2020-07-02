@@ -22,7 +22,13 @@ import androidx.room.*
     ]
 )
 data class AuthorBook(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "author_id") val authorId: String,
+    @PrimaryKey(autoGenerate = true) val id: Long,
+    @ColumnInfo(name = "author_id") val authorId: Long,
     @ColumnInfo(name = "book_id") val bookId: String
-)
+) {
+    companion object {
+        fun create(authorId: Long, bookId: String): AuthorBook {
+            return AuthorBook(0, authorId, bookId)
+        }
+    }
+}

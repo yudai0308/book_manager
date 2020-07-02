@@ -8,8 +8,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.room.Room
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityMainBinding
+import com.example.bookmanager.rooms.database.BookDatabase
+import com.example.bookmanager.utils.Const
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 
 class BookshelfActivity : AppCompatActivity() {
@@ -23,6 +26,12 @@ class BookshelfActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(BookshelfViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        val bookDao = Room.databaseBuilder(
+            this,
+            BookDatabase::class.java,
+            Const.DB_NAME
+        ).build().bookDao()
     }
 
     override fun onResume() {

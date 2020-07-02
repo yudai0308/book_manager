@@ -8,4 +8,7 @@ import com.example.bookmanager.rooms.entities.Author
 interface AuthorDao {
     @Insert
     suspend fun insert(author: Author)
+
+    @Insert
+    suspend fun insertAll(authors: List<Author>): List<Long>
 }
