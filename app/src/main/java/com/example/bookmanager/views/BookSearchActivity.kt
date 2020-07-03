@@ -202,8 +202,10 @@ class BookSearchActivity : AppCompatActivity() {
     private fun saveToInternalStorage(bitmap: Bitmap, fileName: String): Boolean {
         return try {
             val contextWrapper = ContextWrapper(this)
-            val directory =
-                contextWrapper.getDir(Const.DIRECTORY_NAME_BOOK_IMAGE, Context.MODE_PRIVATE)
+            val directory = contextWrapper.getDir(
+                Const.DIRECTORY_NAME_BOOK_IMAGE,
+                Context.MODE_PRIVATE
+            )
             val path = File(directory, fileName)
             FileOutputStream(path).use {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
