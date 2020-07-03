@@ -6,7 +6,7 @@ import androidx.room.Relation
 
 
 data class BookInfo(
-    @Embedded var book: Book = Book.create("", "", ""),
+    @Embedded val book: Book,
     @Relation(
         entity = Author::class,
         parentColumn = "id",
@@ -17,5 +17,5 @@ data class BookInfo(
             entityColumn = "author_id"
         )
     )
-    var authors: List<Author> = arrayListOf()
+    val authors: List<Author>
 )

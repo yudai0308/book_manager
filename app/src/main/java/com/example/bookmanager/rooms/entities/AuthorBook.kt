@@ -1,24 +1,15 @@
 package com.example.bookmanager.rooms.entities
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "authors_books",
-    foreignKeys = [
-        ForeignKey(
-            entity = Author::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("author_id")
-        ),
-        ForeignKey(
-            entity = Book::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("book_id")
-        )
-    ],
     indices = [
-        Index(value = ["author_id"], unique = true),
-        Index(value = ["book_id"], unique = true)
+        // author_id と book_id の組み合わせを重複させない。
+        Index(value = ["author_id", "book_id"], unique = true)
     ]
 )
 data class AuthorBook(
