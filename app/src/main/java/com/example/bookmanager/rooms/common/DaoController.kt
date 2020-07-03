@@ -26,6 +26,7 @@ class DaoController(private val context: Context) {
     private val authorBookDao by lazy { db.authorBookDao() }
 
     // TODO: トランザクションが正常に動作しているか確認。
+    // TODO: 著者がすでに登録されていたら中間テーブルにのみ登録。
     @Transaction
     suspend fun insertBookWithAuthors(book: Book, authors: List<Author>) {
         bookDao.insert(book)
