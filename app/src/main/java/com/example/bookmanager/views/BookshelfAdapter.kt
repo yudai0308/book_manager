@@ -1,21 +1,26 @@
 package com.example.bookmanager.views
 
 import android.content.Context
+import android.content.ContextWrapper
+import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ListItemBookshelfBinding
-import com.example.bookmanager.models.BookSearchResult
+import com.example.bookmanager.rooms.entities.Book
+import com.example.bookmanager.utils.Const
+import kotlinx.coroutines.runBlocking
+import java.io.File
+import java.io.IOException
 
-class BookshelfAdapter() : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>() {
+class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>() {
 
     lateinit var context: Context
-    private val books: List<BookSearchResult> = fetchBooks()
+    private var books: List<Book> = listOf()
     private var listener: View.OnClickListener? = null
 
     fun setListener(listener: View.OnClickListener) {
@@ -36,37 +41,40 @@ class BookshelfAdapter() : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder
 
     override fun onBindViewHolder(holder: BookShelfHolder, position: Int) {
         val book = books[position]
+        val image = if (book.image != null) {
+            runBlocking { readFromInternalStorage(book.id) }
+        } else {
+            null
+        }
+
         holder.binding.apply {
             titleBookshelfItem.text = book.title
+            imageBookshelfItem.setImageDrawable(image)
         }
-        Glide.with(context)
-            .load(book.image)
-            .transform(RoundedCorners(4))
-            .into(holder.binding.imageBookshelfItem)
     }
 
     override fun getItemCount(): Int {
         return books.size
     }
 
-    /**
-     * DB から本棚に登録されている本の情報を取得する。
-     */
-    private fun fetchBooks(): List<BookSearchResult> {
-        return createDummyData()
+    private fun readFromInternalStorage(fileName: String): Drawable? {
+        return try {
+            val contextWrapper = ContextWrapper(context)
+            val directory = contextWrapper.getDir(
+                Const.DIRECTORY_NAME_BOOK_IMAGE,
+                Context.MODE_PRIVATE
+            )
+            val path = File(directory, fileName)
+            Drawable.createFromPath(path.toString())
+        } catch (e: IOException) {
+            Log.e(null, "画像の読み込みに失敗しました。")
+            null
+        }
     }
 
-    private fun createDummyData(): MutableList<BookSearchResult> {
-        val books = mutableListOf<BookSearchResult>()
-        for (i in 1..10) {
-            val id = "abc"
-            val image =
-                "http://books.google.com/books/content?id=13gDwgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-            val title = "鬼滅の刃(${i})"
-            val authors = arrayListOf("吾峠呼世晴", "TEST")
-            books.add(BookSearchResult(id, title, authors, image))
-        }
-        return books
+    fun update(books: List<Book>) {
+        this.books = books
+        notifyDataSetChanged()
     }
 
     inner class BookShelfHolder(val binding: ListItemBookshelfBinding) :

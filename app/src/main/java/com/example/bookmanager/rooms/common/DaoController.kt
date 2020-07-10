@@ -8,6 +8,8 @@ import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.AuthorBook
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.Const
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class DaoController(private val context: Context) {
 
@@ -29,11 +31,28 @@ class DaoController(private val context: Context) {
     // TODO: 著者がすでに登録されていたら中間テーブルにのみ登録。
     @Transaction
     suspend fun insertBookWithAuthors(book: Book, authors: List<Author>) {
+        // TODO: 著者名が登録済みなら登録しない（登録しようとするとユニーク制約エラー発生）
         bookDao.insert(book)
-        val authorIds = authorDao.insertAll(authors)
+        val authorIds = insertOrGetIdAll(authors)
         val authorBooks = authorIds.map {
             AuthorBook.create(it, book.id)
         }
         authorBookDao.insertAll(authorBooks)
+    }
+
+    private suspend fun insertOrGetIdAll(authors: List<Author>): List<Long> {
+        return authors.map { insertOrGetId(it) }
+    }
+
+    /**
+     * DB にレコードが存在する場合は ID を返し、存在しない場合は保存したうえで ID を返す。
+     */
+    private suspend fun insertOrGetId(author: Author): Long {
+        val insertedAuthor = withContext(Dispatchers.Default) {
+            authorDao.loadByName(author.name)
+        }
+
+        return insertedAuthor?.id ?: authorDao.insert(author)
+
     }
 }

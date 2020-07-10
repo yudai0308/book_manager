@@ -45,24 +45,19 @@ class BookSearchActivity : AppCompatActivity() {
     private val dao by lazy { DaoController(this) }
 
     private val db by lazy {
-        Room.databaseBuilder(
-            this,
-            BookDatabase::class.java,
-            Const.DB_NAME
-        ).build()
+        Room.databaseBuilder(this, BookDatabase::class.java, Const.DB_NAME).build()
     }
 
     private val bookDao by lazy { db.bookDao() }
 
-    private lateinit var viewModel: BookResultViewModel
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(BookResultViewModel::class.java)
+    }
 
     private lateinit var binding: ActivityBookSearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_book_search)
-
-        viewModel = ViewModelProvider(this).get(BookResultViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_book_search)
 
         binding.also {
@@ -76,6 +71,7 @@ class BookSearchActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        // TODO: onCreate() に移動するべき？
         initMessageView()
         initSearchBar()
         initSpinner()
@@ -189,7 +185,7 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     // TODO: 画像保存の処理はアクティビティから分離させたい。
-    private fun saveImageToInternalStorage(url: String, fileName: String) =
+    private fun saveImageToInternalStorage(url: String, fileName: String) {
         GlobalScope.launch(Dispatchers.IO) {
             val bitmap = Glide.with(this@BookSearchActivity)
                 .asBitmap()
@@ -198,6 +194,7 @@ class BookSearchActivity : AppCompatActivity() {
                 .get()
             saveToInternalStorage(bitmap, fileName)
         }
+    }
 
     private fun saveToInternalStorage(bitmap: Bitmap, fileName: String): Boolean {
         return try {
@@ -208,11 +205,11 @@ class BookSearchActivity : AppCompatActivity() {
             )
             val path = File(directory, fileName)
             FileOutputStream(path).use {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
             true
         } catch (e: IOException) {
-            Log.e(null, "画像の保存に失敗。")
+            Log.e(null, "画像の保存に失敗しました。")
             false
         }
     }

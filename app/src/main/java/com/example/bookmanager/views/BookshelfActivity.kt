@@ -8,38 +8,41 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.room.Room
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityMainBinding
-import com.example.bookmanager.rooms.database.BookDatabase
-import com.example.bookmanager.utils.Const
 import com.example.bookmanager.viewmodels.BookshelfViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class BookshelfActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: BookshelfViewModel
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
+        ).get(BookshelfViewModel::class.java)
+    }
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        viewModel = ViewModelProvider(this).get(BookshelfViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val bookDao = Room.databaseBuilder(
-            this,
-            BookDatabase::class.java,
-            Const.DB_NAME
-        ).build().bookDao()
-    }
-
-    override fun onResume() {
-        super.onResume()
+        binding.also {
+            it.viewModel = viewModel
+            it.lifecycleOwner = this
+        }
 
         initToolbar()
         initRecyclerView()
         setFabClickListener()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        GlobalScope.launch { viewModel.reload() }
     }
 
     private fun initRecyclerView() {
