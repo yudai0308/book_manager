@@ -10,4 +10,7 @@
 
     <dimen name="text_size_book_title">18sp</dimen>
     <dimen name="text_size_book_author">16sp</dimen>
+
+    <dimen name="bookshelf_image_elevation">20dp</dimen>
+    <dimen name="bookshelf_image_height">150dp</dimen>
 </resources>

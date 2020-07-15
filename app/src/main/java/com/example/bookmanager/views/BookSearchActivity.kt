@@ -20,8 +20,9 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
-import com.example.bookmanager.rooms.dao.BookDao
+import com.example.bookmanager.rooms.common.DaoController
 import com.example.bookmanager.rooms.database.BookDatabase
+import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.Const
 import com.example.bookmanager.utils.Libs
@@ -38,17 +39,25 @@ import java.io.IOException
 class BookSearchActivity : AppCompatActivity() {
 
     private lateinit var view: View
+
     private val handler = Handler()
 
-    private lateinit var bookDao: BookDao
-    private lateinit var viewModel: BookResultViewModel
+    private val dao by lazy { DaoController(this) }
+
+    private val db by lazy {
+        Room.databaseBuilder(this, BookDatabase::class.java, Const.DB_NAME).build()
+    }
+
+    private val bookDao by lazy { db.bookDao() }
+
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(BookResultViewModel::class.java)
+    }
+
     private lateinit var binding: ActivityBookSearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_book_search)
-
-        viewModel = ViewModelProvider(this).get(BookResultViewModel::class.java)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_book_search)
 
         binding.also {
@@ -57,17 +66,12 @@ class BookSearchActivity : AppCompatActivity() {
         }
 
         view = binding.root
-        // TODO: DB 関連の処理はモデルに持たせる。
-        bookDao = Room.databaseBuilder(
-            this,
-            BookDatabase::class.java,
-            Const.DB_NAME
-        ).build().bookDao()
     }
 
     override fun onResume() {
         super.onResume()
 
+        // TODO: onCreate() に移動するべき？
         initMessageView()
         initSearchBar()
         initSpinner()
@@ -164,13 +168,14 @@ class BookSearchActivity : AppCompatActivity() {
                 Libs.showSnackBar(view, getString(R.string.exists_in_my_shelf))
                 return
             }
-            val now = System.currentTimeMillis()
-            val newBook = Book(
-                resultBook.id, resultBook.title, resultBook.image,
-                null, now, now
+
+            val newBook = Book.create(
+                resultBook.id, resultBook.title, resultBook.image
             )
+            val authors = Author.createAll(resultBook.authors)
+
             GlobalScope.launch {
-                bookDao.insert(newBook)
+                dao.insertBookWithAuthors(newBook, authors)
             }
             if (!newBook.image.isNullOrBlank()) {
                 saveImageToInternalStorage(newBook.image, newBook.id)
@@ -180,7 +185,7 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     // TODO: 画像保存の処理はアクティビティから分離させたい。
-    private fun saveImageToInternalStorage(url: String, fileName: String) =
+    private fun saveImageToInternalStorage(url: String, fileName: String) {
         GlobalScope.launch(Dispatchers.IO) {
             val bitmap = Glide.with(this@BookSearchActivity)
                 .asBitmap()
@@ -189,28 +194,31 @@ class BookSearchActivity : AppCompatActivity() {
                 .get()
             saveToInternalStorage(bitmap, fileName)
         }
+    }
 
     private fun saveToInternalStorage(bitmap: Bitmap, fileName: String): Boolean {
         return try {
             val contextWrapper = ContextWrapper(this)
-            val directory =
-                contextWrapper.getDir(Const.DIRECTORY_NAME_BOOK_IMAGE, Context.MODE_PRIVATE)
+            val directory = contextWrapper.getDir(
+                Const.DIRECTORY_NAME_BOOK_IMAGE,
+                Context.MODE_PRIVATE
+            )
             val path = File(directory, fileName)
             FileOutputStream(path).use {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
             true
         } catch (e: IOException) {
-            Log.e(null, "画像の保存に失敗。")
+            Log.e(null, "画像の保存に失敗しました。")
             false
         }
     }
 
     private fun haveBook(id: String): Boolean {
-        val count = runBlocking {
-            bookDao.count(id)
+        val flag = runBlocking {
+            bookDao.exists(id)
         }
-        return count > 0
+        return flag > 0
     }
 
     private fun hideProgressBar() {

@@ -9,6 +9,16 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["name"], unique = true)]
 )
 data class Author(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String
-)
+) {
+    companion object {
+        fun create(name: String): Author {
+            return Author(0, name)
+        }
+
+        fun createAll(names: List<String>): List<Author> {
+            return names.map { Author(0, it) }
+        }
+    }
+}

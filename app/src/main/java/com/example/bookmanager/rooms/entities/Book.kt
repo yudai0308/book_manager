@@ -12,4 +12,11 @@ data class Book(
     val comment: String?,
     @ColumnInfo(name = "created_at") val createdAt: Long,
     @ColumnInfo(name = "updated_at") val updatedAt: Long
-)
+) {
+    companion object {
+        fun create(id: String, title: String, image: String?): Book {
+            val now = System.currentTimeMillis()
+            return Book(id, title, image, null, now, now)
+        }
+    }
+}
