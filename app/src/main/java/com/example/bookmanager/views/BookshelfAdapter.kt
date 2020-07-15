@@ -20,7 +20,9 @@ import java.io.IOException
 class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>() {
 
     lateinit var context: Context
+
     private var books: List<Book> = listOf()
+
     private var listener: View.OnClickListener? = null
 
     fun setListener(listener: View.OnClickListener) {
@@ -47,9 +49,8 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
             null
         }
 
-        holder.binding.apply {
-            titleBookshelfItem.text = book.title
-            imageBookshelfItem.setImageDrawable(image)
+        holder.binding.imageBookshelfItem.apply {
+            setImageDrawable(image)
         }
     }
 

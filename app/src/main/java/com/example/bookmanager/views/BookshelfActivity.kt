@@ -23,11 +23,12 @@ class BookshelfActivity : AppCompatActivity() {
         ).get(BookshelfViewModel::class.java)
     }
 
-    private lateinit var binding: ActivityMainBinding
+    private val binding by lazy {
+        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding.also {
             it.viewModel = viewModel
@@ -46,12 +47,16 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
+        val spanCount = resources.getInteger(R.integer.bookshelf_grid_span_count)
+        val spacing = resources.getInteger(R.integer.bookshelf_grid_spacing)
         val adapter = BookshelfAdapter()
-        val manager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
+        val manager = GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
         binding.bookshelfRoot.also {
             it.layoutManager = manager
             it.adapter = adapter
-//            it.addItemDecoration(DividerItemDecoration(this, manager.orientation))
+            it.addItemDecoration(
+                GridSpacingItemDecoration(spanCount, spacing, true)
+            )
         }
     }
 
