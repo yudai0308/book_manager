@@ -3,6 +3,7 @@ package com.example.bookmanager.views
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -49,7 +50,13 @@ class BookshelfActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         val spanCount = resources.getInteger(R.integer.bookshelf_grid_span_count)
         val spacing = resources.getInteger(R.integer.bookshelf_grid_spacing)
-        val adapter = BookshelfAdapter()
+
+        val intent = Intent(applicationContext, BookReviewActivity::class.java)
+        val listener = View.OnClickListener { startActivity(intent) }
+
+        val adapter = BookshelfAdapter().apply {
+            setListener(listener)
+        }
         val manager = GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
         binding.bookshelfRoot.also {
             it.layoutManager = manager
