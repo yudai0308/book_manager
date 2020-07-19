@@ -49,7 +49,7 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
             null
         }
 
-        holder.binding.imageBookshelfItem.apply {
+        holder.binding.bookshelfItemImage.apply {
             setImageDrawable(image)
         }
     }

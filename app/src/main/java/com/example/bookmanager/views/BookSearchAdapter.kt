@@ -39,12 +39,12 @@ class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewH
         val resultBook = resultBooks[position]
         holder.binding.apply {
             lifecycleOwner = context as LifecycleOwner
-            titleBookSearchItem.text = resultBook.title
-            authorBookSearchItem.text = Libs.listToString(resultBook.authors)
+            bookSearchItemTitle.text = resultBook.title
+            bookSearchItemAuthor.text = Libs.listToString(resultBook.authors)
         }
         Glide.with(context)
             .load(resultBook.image)
-            .into(holder.binding.imageBookSearchItem)
+            .into(holder.binding.bookSearchItemImage)
     }
 
     override fun getItemCount(): Int {

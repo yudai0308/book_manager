@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
-import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.BookSearchResult
+import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.utils.Const
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -36,7 +36,7 @@ class BookResultViewModel : ViewModel() {
 
     private fun createUrl(binding: ActivityBookSearchBinding): String {
         val searchBar: MaterialSearchBar = binding.bookSearchBar
-        val spinner: Spinner = binding.spinnerBookSearchType
+        val spinner: Spinner = binding.bookSearchSpinner
         val keyword = searchBar.text
         val searchType = spinner.selectedItem.toString()
         val param = createUrlWithParameter(searchType, keyword)

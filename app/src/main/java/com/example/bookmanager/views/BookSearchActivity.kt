@@ -79,7 +79,7 @@ class BookSearchActivity : AppCompatActivity() {
         val adapter = BookSearchAdapter().apply {
             setListener(OnSearchResultClickListener())
         }
-        binding.bookSearchResults.also {
+        binding.bookSearchResultList.also {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(this)
             it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
@@ -101,7 +101,7 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun initSpinner() {
-        val spinner: Spinner = binding.spinnerBookSearchType
+        val spinner: Spinner = binding.bookSearchSpinner
         val items = listOf(Const.SEARCH_FREE_WORD, Const.SEARCH_TITLE, Const.SEARCH_AUTHOR)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -140,7 +140,7 @@ class BookSearchActivity : AppCompatActivity() {
     inner class OnSearchResultClickListener : View.OnClickListener {
         override fun onClick(v: View?) {
             v ?: return
-            val recyclerView: RecyclerView = binding.bookSearchResults
+            val recyclerView: RecyclerView = binding.bookSearchResultList
             val position = recyclerView.getChildAdapterPosition(v)
             // FIXME: resultBook が null だった場合の処理を検討。
             val resultBook = viewModel.resultBooks.value?.get(position)
