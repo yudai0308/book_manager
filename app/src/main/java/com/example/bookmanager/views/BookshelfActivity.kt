@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityMainBinding
+import com.example.bookmanager.utils.C
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -51,13 +52,24 @@ class BookshelfActivity : AppCompatActivity() {
         val spanCount = resources.getInteger(R.integer.bookshelf_grid_span_count)
         val spacing = resources.getInteger(R.integer.bookshelf_grid_spacing)
 
-        val intent = Intent(applicationContext, BookDetailActivity::class.java)
-        val listener = View.OnClickListener { startActivity(intent) }
+        val listener = View.OnClickListener {
+            val position = binding.bookshelfRoot.getChildAdapterPosition(it)
+            val book = viewModel.books.value?.get(position)
+            // TODO: book が null だった場合の処理。
+            book ?: return@OnClickListener
+            startActivity(
+                Intent(applicationContext, BookDetailActivity::class.java).apply {
+                    putExtra(C.BOOK_ID, book.id)
+                }
+            )
+        }
 
         val adapter = BookshelfAdapter().apply {
             setListener(listener)
         }
+
         val manager = GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
+
         binding.bookshelfRoot.also {
             it.layoutManager = manager
             it.adapter = adapter

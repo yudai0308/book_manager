@@ -8,7 +8,7 @@ import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
-import com.example.bookmanager.utils.Const
+import com.example.bookmanager.utils.C
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.squareup.moshi.Moshi
 import okhttp3.*
@@ -40,23 +40,23 @@ class BookResultViewModel : ViewModel() {
         val keyword = searchBar.text
         val searchType = spinner.selectedItem.toString()
         val param = createUrlWithParameter(searchType, keyword)
-        return Const.BOOK_SEARCH_API_URL + param
+        return C.BOOK_SEARCH_API_URL + param
     }
 
 
     private fun createUrlWithParameter(
         type: String,
         keyword: String,
-        max: Int = Const.MAX_RESULTS_COUNT,
+        max: Int = C.MAX_RESULTS_COUNT,
         index: Int = 0
     ): String {
-        var param = Const.ADD_QUERY
+        var param = C.ADD_QUERY
         param += when (type) {
-            Const.SEARCH_TITLE -> Const.PARAM_TITLE
-            Const.SEARCH_AUTHOR -> Const.PARAM_AUTHOR
+            C.SEARCH_TITLE -> C.PARAM_TITLE
+            C.SEARCH_AUTHOR -> C.PARAM_AUTHOR
             else -> ""
         }
-        return param + keyword + Const.PARAM_MAX + max + Const.PARAM_INDEX + index
+        return param + keyword + C.PARAM_MAX + max + C.PARAM_INDEX + index
     }
 
     private fun fetch(url: String) {
@@ -104,7 +104,13 @@ class BookResultViewModel : ViewModel() {
             val authors = if (info.authors != null) {
                 info.authors as List<String>
             } else {
-                listOf(Const.UNKNOWN)
+                listOf(C.UNKNOWN)
+            }
+
+            val description = if (info.description != null) {
+                info.description as String
+            } else {
+                ""
             }
 
             val image = if (info.imageLinks?.thumbnail != null) {
@@ -113,7 +119,7 @@ class BookResultViewModel : ViewModel() {
                 ""
             }
 
-            books.add(BookSearchResult(id, title, authors, image))
+            books.add(BookSearchResult(id, title, authors, description, image))
         }
         return books
     }

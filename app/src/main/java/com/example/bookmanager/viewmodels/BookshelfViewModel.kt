@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.utils.Const
+import com.example.bookmanager.utils.C
 import kotlinx.coroutines.runBlocking
 
 class BookshelfViewModel(application: Application) : AndroidViewModel(application) {
@@ -17,7 +17,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
     private val bookDao = Room.databaseBuilder(
         context,
         BookDatabase::class.java,
-        Const.DB_NAME
+        C.DB_NAME
     ).build().bookDao()
 
     private val _books: MutableLiveData<List<Book>> = MutableLiveData()

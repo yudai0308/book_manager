@@ -16,4 +16,6 @@
 
     <!-- 画像説明 -->
     <string name="description_book_image">Book Image</string>
+
+    <string name="no_book_description">あらすじが見つかりませんでした。</string>
 </resources>

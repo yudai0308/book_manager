@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ListItemBookshelfBinding
 import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.utils.Const
+import com.example.bookmanager.utils.C
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.IOException
@@ -43,11 +43,7 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
 
     override fun onBindViewHolder(holder: BookShelfHolder, position: Int) {
         val book = books[position]
-        val image = if (book.image != null) {
-            runBlocking { readFromInternalStorage(book.id) }
-        } else {
-            null
-        }
+        val image = runBlocking { readFromInternalStorage(book.id) }
 
         holder.binding.bookshelfItemImage.apply {
             setImageDrawable(image)
@@ -62,7 +58,7 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         return try {
             val contextWrapper = ContextWrapper(context)
             val directory = contextWrapper.getDir(
-                Const.DIRECTORY_NAME_BOOK_IMAGE,
+                C.DIRECTORY_NAME_BOOK_IMAGE,
                 Context.MODE_PRIVATE
             )
             val path = File(directory, fileName)

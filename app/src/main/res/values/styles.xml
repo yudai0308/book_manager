@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDefault</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/noto_serif_jp_medium</item>
+        <item name="android:fontFamily">@font/sawarabi_mincho_regular</item>
     </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light">

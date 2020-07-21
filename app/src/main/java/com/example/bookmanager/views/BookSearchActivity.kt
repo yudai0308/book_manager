@@ -20,11 +20,12 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
+import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.rooms.common.DaoController
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.utils.Const
+import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.Libs
 import com.example.bookmanager.viewmodels.BookResultViewModel
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -45,7 +46,7 @@ class BookSearchActivity : AppCompatActivity() {
     private val dao by lazy { DaoController(this) }
 
     private val db by lazy {
-        Room.databaseBuilder(this, BookDatabase::class.java, Const.DB_NAME).build()
+        Room.databaseBuilder(this, BookDatabase::class.java, C.DB_NAME).build()
     }
 
     private val bookDao by lazy { db.bookDao() }
@@ -102,7 +103,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun initSpinner() {
         val spinner: Spinner = binding.bookSearchSpinner
-        val items = listOf(Const.SEARCH_FREE_WORD, Const.SEARCH_TITLE, Const.SEARCH_AUTHOR)
+        val items = listOf(C.SEARCH_FREE_WORD, C.SEARCH_TITLE, C.SEARCH_AUTHOR)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -119,7 +120,7 @@ class BookSearchActivity : AppCompatActivity() {
                     showProgressBar()
                 }
 
-                override fun onSearchSucceeded(resultBooks: List<com.example.bookmanager.models.BookSearchResult>) {
+                override fun onSearchSucceeded(resultBooks: List<BookSearchResult>) {
                     hideProgressBar()
                     clearFocus()
                     if (resultBooks.isEmpty()) {
@@ -155,11 +156,11 @@ class BookSearchActivity : AppCompatActivity() {
                 )
                 setNegativeButton(activity.getString(R.string.button_no), null)
             }
-            dialog.show(supportFragmentManager, Const.ADD_BOOK_DIALOG_TAG)
+            dialog.show(supportFragmentManager, C.ADD_BOOK_DIALOG_TAG)
         }
     }
 
-    inner class OnOkButtonClickListener(private val resultBook: com.example.bookmanager.models.BookSearchResult) :
+    inner class OnOkButtonClickListener(private val resultBook: BookSearchResult) :
         DialogInterface.OnClickListener {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {
@@ -170,17 +171,21 @@ class BookSearchActivity : AppCompatActivity() {
             }
 
             val newBook = Book.create(
-                resultBook.id, resultBook.title, resultBook.image
+                resultBook.id,
+                resultBook.title,
+                resultBook.description,
+                resultBook.image
             )
+
             val authors = Author.createAll(resultBook.authors)
 
             GlobalScope.launch {
                 dao.insertBookWithAuthors(newBook, authors)
             }
-            if (!newBook.image.isNullOrBlank()) {
+            if (!newBook.image.isBlank()) {
                 saveImageToInternalStorage(newBook.image, newBook.id)
             }
-            Libs.showSnackBar(view, Const.ADD_BOOK)
+            Libs.showSnackBar(view, C.ADD_BOOK)
         }
     }
 
@@ -200,7 +205,7 @@ class BookSearchActivity : AppCompatActivity() {
         return try {
             val contextWrapper = ContextWrapper(this)
             val directory = contextWrapper.getDir(
-                Const.DIRECTORY_NAME_BOOK_IMAGE,
+                C.DIRECTORY_NAME_BOOK_IMAGE,
                 Context.MODE_PRIVATE
             )
             val path = File(directory, fileName)

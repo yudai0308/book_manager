@@ -7,7 +7,7 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.AuthorBook
 import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.utils.Const
+import com.example.bookmanager.utils.C
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,7 +17,7 @@ class DaoController(private val context: Context) {
         Room.databaseBuilder(
             context,
             BookDatabase::class.java,
-            Const.DB_NAME
+            C.DB_NAME
         ).build()
     }
 
@@ -33,14 +33,14 @@ class DaoController(private val context: Context) {
     suspend fun insertBookWithAuthors(book: Book, authors: List<Author>) {
         // TODO: 著者名が登録済みなら登録しない（登録しようとするとユニーク制約エラー発生）
         bookDao.insert(book)
-        val authorIds = insertOrGetIdAll(authors)
+        val authorIds = insertOrGetIds(authors)
         val authorBooks = authorIds.map {
             AuthorBook.create(it, book.id)
         }
         authorBookDao.insertAll(authorBooks)
     }
 
-    private suspend fun insertOrGetIdAll(authors: List<Author>): List<Long> {
+    private suspend fun insertOrGetIds(authors: List<Author>): List<Long> {
         return authors.map { insertOrGetId(it) }
     }
 
@@ -53,6 +53,5 @@ class DaoController(private val context: Context) {
         }
 
         return insertedAuthor?.id ?: authorDao.insert(author)
-
     }
 }
