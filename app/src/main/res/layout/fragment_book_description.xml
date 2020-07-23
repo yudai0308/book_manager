@@ -19,7 +19,7 @@
             <ImageView
                 android:id="@+id/book_review_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/bookshelf_image_height"
                 android:adjustViewBounds="true"
                 android:contentDescription="TODO"
                 android:src="@drawable/sample" />

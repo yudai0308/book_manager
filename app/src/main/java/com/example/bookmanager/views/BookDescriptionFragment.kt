@@ -12,6 +12,7 @@ import com.example.bookmanager.databinding.FragmentBookDescriptionBinding
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.BookInfo
 import com.example.bookmanager.utils.C
+import com.example.bookmanager.utils.ImageIO
 import com.example.bookmanager.utils.Libs
 import kotlinx.coroutines.runBlocking
 
@@ -59,10 +60,12 @@ class BookDescriptionFragment : Fragment() {
 
     private fun showBookInformation(bookInfo: BookInfo) {
         val authorList = bookInfo.authors.map { it.name }
+        val image = context?.let { ImageIO.readBookImage(it, bookInfo.book.id) }
         binding.apply {
             bookReviewTitle.text = bookInfo.book.title
             bookReviewAuthor.text = Libs.listToString(authorList)
             bookReviewSummary.text = bookInfo.book.description
+            bookReviewImage.setImageDrawable(image)
         }
     }
 

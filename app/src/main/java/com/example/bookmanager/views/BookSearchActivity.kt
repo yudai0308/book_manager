@@ -26,6 +26,7 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
+import com.example.bookmanager.utils.ImageIO
 import com.example.bookmanager.utils.Libs
 import com.example.bookmanager.viewmodels.BookResultViewModel
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -191,13 +192,15 @@ class BookSearchActivity : AppCompatActivity() {
 
     // TODO: 画像保存の処理はアクティビティから分離させたい。
     private fun saveImageToInternalStorage(url: String, fileName: String) {
+        val activity = this
         GlobalScope.launch(Dispatchers.IO) {
-            val bitmap = Glide.with(this@BookSearchActivity)
+            val bitmap = Glide.with(activity)
                 .asBitmap()
                 .load(url)
                 .submit()
                 .get()
-            saveToInternalStorage(bitmap, fileName)
+            ImageIO.saveBookImage(activity, bitmap, fileName)
+//            saveToInternalStorage(bitmap, fileName)
         }
     }
 
