@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bookmanager.R
-import com.example.bookmanager.databinding.ActivityMainBinding
+import com.example.bookmanager.databinding.ActivityBookshelfBinding
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +26,7 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private val binding by lazy {
-        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        DataBindingUtil.setContentView<ActivityBookshelfBinding>(this, R.layout.activity_bookshelf)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
