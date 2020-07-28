@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ListItemBookshelfBinding
 import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.utils.ImageIO
+import com.example.bookmanager.utils.FileIO
 import kotlinx.coroutines.runBlocking
 
 class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>() {
@@ -38,7 +38,7 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
 
     override fun onBindViewHolder(holder: BookShelfHolder, position: Int) {
         val book = books[position]
-        val image = runBlocking { ImageIO.readBookImage(context, book.id) }
+        val image = runBlocking { FileIO.readBookImage(context, book.id) }
 
         holder.binding.bookshelfItemImage.apply {
             setImageDrawable(image)

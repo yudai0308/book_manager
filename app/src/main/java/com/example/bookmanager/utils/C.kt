@@ -6,7 +6,9 @@ class C {
         const val BOOK_SEARCH_API_URL = "https://www.googleapis.com/books/v1/volumes"
         const val DB_NAME = "book_database"
         const val DIRECTORY_NAME_BOOK_IMAGE = "book_image"
+        const val DIRECTORY_NAME_BOOK_REVIEW = "book_review"
 
+        // FIXME: string.xml に移行。
         // 検索方法
         const val SEARCH_FREE_WORD = "フリーワード検索"
         const val SEARCH_TITLE = "タイトル検索"
@@ -20,6 +22,7 @@ class C {
         const val PARAM_INDEX = "&startIndex="
         const val MAX_RESULTS_COUNT = 30
 
+        // FIXME: string.xml に移行。
         // 本検索ページ関連
         const val UNKNOWN = "Unknown"
         const val ADD_BOOK = "本棚に追加しました。"
@@ -30,5 +33,6 @@ class C {
 
         // bundle キー
         const val BOOK_ID = "bookId"
+        const val BOOK_DESCRIPTION = "book_description"
     }
 }

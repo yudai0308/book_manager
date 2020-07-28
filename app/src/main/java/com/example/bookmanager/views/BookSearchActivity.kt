@@ -26,7 +26,7 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
-import com.example.bookmanager.utils.ImageIO
+import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.utils.Libs
 import com.example.bookmanager.viewmodels.BookResultViewModel
 import com.mancj.materialsearchbar.MaterialSearchBar
@@ -199,7 +199,7 @@ class BookSearchActivity : AppCompatActivity() {
                 .load(url)
                 .submit()
                 .get()
-            ImageIO.saveBookImage(activity, bitmap, fileName)
+            FileIO.saveBookImage(activity, bitmap, fileName)
 //            saveToInternalStorage(bitmap, fileName)
         }
     }

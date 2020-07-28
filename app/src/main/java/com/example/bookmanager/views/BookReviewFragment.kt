@@ -1,27 +1,30 @@
 package com.example.bookmanager.views
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.bookmanager.R
-import com.example.bookmanager.databinding.FragmentBookDescriptionBinding
+import com.example.bookmanager.databinding.FragmentBookReviewBinding
 import com.example.bookmanager.utils.C
+import com.example.bookmanager.utils.FileIO
 
-class BookDescriptionFragment : Fragment() {
 
-    private lateinit var bookDescription: String
+class BookReviewFragment : Fragment() {
 
-    private lateinit var binding: FragmentBookDescriptionBinding
+    private var bookId = ""
+
+    private lateinit var binding: FragmentBookReviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            if (it.getString(C.BOOK_DESCRIPTION) != null) {
-                bookDescription = it.getString(C.BOOK_DESCRIPTION) as String
+            if (it.getString(C.BOOK_ID) != null) {
+                bookId = it.getString(C.BOOK_ID) as String
             } else {
                 // TODO: パラメーターが null だった場合の処理。
                 activity?.finish()
@@ -35,21 +38,30 @@ class BookDescriptionFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_book_description,
+            R.layout.fragment_book_review,
             container,
             false
         )
 
-        binding.bookDescSummary.text = bookDescription
+        val review = context?.let {
+            FileIO.readReviewFile(it, bookId)
+        }
+
+        binding.bookReviewText.apply {
+            text = review ?: getString(R.string.memo_not_found_message)
+            if (review == null) {
+                gravity = Gravity.CENTER
+            }
+        }
 
         return binding.root
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(bookDescription: String) = BookDescriptionFragment().apply {
+        fun newInstance(bookId: String) = BookReviewFragment().apply {
             arguments = Bundle().apply {
-                putString(C.BOOK_DESCRIPTION, bookDescription)
+                putString(C.BOOK_ID, bookId)
             }
         }
     }

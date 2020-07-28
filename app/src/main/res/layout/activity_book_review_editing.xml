@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/book_review_memo_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_wide"
+            android:layout_marginTop="@dimen/space_wide"
+            android:text="感想"
+            android:textSize="@dimen/text_size_default"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/book_review_editor"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:layout_margin="@dimen/space_wide"
+            android:autofillHints="マークダウン形式で入力できます。"
+            android:background="@drawable/book_review_editor_bg"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/space_wide"
+            app:layout_constraintBottom_toTopOf="@+id/book_review_save_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_review_memo_label" />
+
+        <Button
+            android:id="@+id/book_review_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/match_constraint"
+            android:layout_margin="@dimen/space_wide"
+            android:background="@drawable/button_style_primary_color"
+            android:clickable="true"
+            android:includeFontPadding="false"
+            android:minHeight="0dp"
+            android:padding="@dimen/space_default"
+            android:text="保存"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

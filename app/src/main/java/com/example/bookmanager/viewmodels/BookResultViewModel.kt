@@ -43,7 +43,6 @@ class BookResultViewModel : ViewModel() {
         return C.BOOK_SEARCH_API_URL + param
     }
 
-
     private fun createUrlWithParameter(
         type: String,
         keyword: String,
@@ -104,6 +103,7 @@ class BookResultViewModel : ViewModel() {
             val authors = if (info.authors != null) {
                 info.authors as List<String>
             } else {
+                // FIXME: C クラスではなく strings.xml から文字列を取得。
                 listOf(C.UNKNOWN)
             }
 
