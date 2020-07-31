@@ -1,12 +1,8 @@
 package com.example.bookmanager.views
 
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.DialogInterface
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -34,9 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 class BookSearchActivity : AppCompatActivity() {
 
@@ -56,11 +49,15 @@ class BookSearchActivity : AppCompatActivity() {
         ViewModelProvider(this).get(BookResultViewModel::class.java)
     }
 
-    private lateinit var binding: ActivityBookSearchBinding
+    private val binding by lazy {
+        DataBindingUtil.setContentView<ActivityBookSearchBinding>(
+            this,
+            R.layout.activity_book_search
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_book_search)
 
         binding.also {
             it.viewModel = viewModel
@@ -200,25 +197,6 @@ class BookSearchActivity : AppCompatActivity() {
                 .submit()
                 .get()
             FileIO.saveBookImage(activity, bitmap, fileName)
-//            saveToInternalStorage(bitmap, fileName)
-        }
-    }
-
-    private fun saveToInternalStorage(bitmap: Bitmap, fileName: String): Boolean {
-        return try {
-            val contextWrapper = ContextWrapper(this)
-            val directory = contextWrapper.getDir(
-                C.DIRECTORY_NAME_BOOK_IMAGE,
-                Context.MODE_PRIVATE
-            )
-            val path = File(directory, fileName)
-            FileOutputStream(path).use {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-            }
-            true
-        } catch (e: IOException) {
-            Log.e(null, "画像の保存に失敗しました。")
-            false
         }
     }
 
