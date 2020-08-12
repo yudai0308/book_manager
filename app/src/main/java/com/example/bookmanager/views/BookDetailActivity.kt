@@ -1,5 +1,6 @@
 package com.example.bookmanager.views
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -16,14 +17,14 @@ import kotlinx.coroutines.runBlocking
 
 class BookDetailActivity : AppCompatActivity() {
 
-    private val binding: ActivityBookDetailBinding by lazy {
+    private val binding by lazy {
         DataBindingUtil.setContentView<ActivityBookDetailBinding>(
             this,
             R.layout.activity_book_detail
         )
     }
 
-    private val bookId: String by lazy { intent.getStringExtra(C.BOOK_ID) }
+    private val bookId by lazy { intent.getStringExtra(C.BOOK_ID) }
 
     private val bookInfo by lazy { loadBookInfo(bookId) }
 
@@ -60,6 +61,14 @@ class BookDetailActivity : AppCompatActivity() {
                 else -> throw IllegalArgumentException()
             }
         }.attach()
+
+        binding.bookDetailWriteMemoButton.setOnClickListener {
+            startActivity(
+                Intent(applicationContext, BookReviewEditingActivity::class.java).apply {
+                    putExtra(C.BOOK_ID, bookId)
+                }
+            )
+        }
     }
 
     override fun onResume() {

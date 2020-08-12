@@ -149,12 +149,12 @@ class BookSearchActivity : AppCompatActivity() {
                 setTitle(activity.getString(R.string.dialog_add_book_title))
                 setMessage(activity.getString(R.string.dialog_add_book_msg))
                 setPositiveButton(
-                    activity.getString(R.string.button_yes),
+                    activity.getString(R.string.yes),
                     OnOkButtonClickListener(resultBook)
                 )
-                setNegativeButton(activity.getString(R.string.button_no), null)
+                setNegativeButton(activity.getString(R.string.cancel), null)
             }
-            dialog.show(supportFragmentManager, C.ADD_BOOK_DIALOG_TAG)
+            dialog.show(supportFragmentManager, C.DIALOG_TAG_ADD_BOOK)
         }
     }
 

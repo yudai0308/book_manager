@@ -1,7 +1,6 @@
 package com.example.bookmanager.views
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +20,7 @@ class BookshelfActivity : AppCompatActivity() {
     private val viewModel by lazy {
         ViewModelProvider(
             this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         ).get(BookshelfViewModel::class.java)
     }
 
@@ -87,10 +86,9 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private fun initToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar).apply {
+        val toolbar: Toolbar = binding.toolbar.apply {
             setTitle(R.string.toolbar_title)
-            setTitleTextColor(Color.WHITE)
-        }
+        } as Toolbar
         setSupportActionBar(toolbar)
     }
 }

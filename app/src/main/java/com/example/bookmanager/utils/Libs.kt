@@ -1,6 +1,8 @@
 package com.example.bookmanager.utils
 
+import android.content.Context
 import android.view.View
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
 class Libs {
@@ -23,19 +25,8 @@ class Libs {
             ).show()
         }
 
-//        fun readBookImage(context: Context, fileName: String): Drawable? {
-//            return try {
-//                val contextWrapper = ContextWrapper(context)
-//                val directory = contextWrapper.getDir(
-//                    C.DIRECTORY_NAME_BOOK_IMAGE,
-//                    Context.MODE_PRIVATE
-//                )
-//                val path = File(directory, fileName)
-//                Drawable.createFromPath(path.toString())
-//            } catch (e: IOException) {
-//                Log.e(null, "画像の読み込みに失敗しました。")
-//                null
-//            }
-//        }
+        fun showToastLong(context: Context, text: String) {
+            Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+        }
     }
 }

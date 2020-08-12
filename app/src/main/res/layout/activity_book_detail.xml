@@ -63,6 +63,18 @@
             app:layout_constraintStart_toEndOf="@+id/book_detail_image_card"
             app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
 
+        <Button
+            android:id="@+id/book_detail_write_memo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/match_constraint"
+            android:layout_margin="@dimen/space_wide"
+            android:layout_marginEnd="@dimen/space_wide"
+            android:clickable="true"
+            android:padding="@dimen/space_default"
+            android:text="@string/button_text_write_memo"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/book_detail_rating_bar" />
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/book_detail_tab_layout"
             android:layout_width="@dimen/match_constraint"

@@ -29,7 +29,8 @@ class C {
         const val CONNECTION_FAILURE_MSG = "通信に失敗しました。\n検索をやり直してください。"
 
         // DialogFragment タグ
-        const val ADD_BOOK_DIALOG_TAG = "add_book_dialog"
+        const val DIALOG_TAG_ADD_BOOK = "add_book_dialog"
+        const val DIALOG_TAG_CANCEL_EDITING = "cancel_editing_dialog"
 
         // bundle キー
         const val BOOK_ID = "bookId"

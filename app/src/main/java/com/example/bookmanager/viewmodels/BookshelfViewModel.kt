@@ -12,7 +12,7 @@ import kotlinx.coroutines.runBlocking
 
 class BookshelfViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val context = getApplication<Application>().applicationContext
+    private val context = application.applicationContext
 
     private val bookDao = Room.databaseBuilder(
         context,

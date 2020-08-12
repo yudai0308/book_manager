@@ -40,9 +40,13 @@ class BookDescriptionFragment : Fragment() {
             false
         )
 
-        binding.bookDescSummary.text = bookDescription
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.bookDescSummary.text = bookDescription
     }
 
     companion object {

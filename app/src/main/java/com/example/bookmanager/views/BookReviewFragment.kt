@@ -43,6 +43,12 @@ class BookReviewFragment : Fragment() {
             false
         )
 
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         val review = context?.let {
             FileIO.readReviewFile(it, bookId)
         }
@@ -53,8 +59,6 @@ class BookReviewFragment : Fragment() {
                 gravity = Gravity.CENTER
             }
         }
-
-        return binding.root
     }
 
     companion object {
