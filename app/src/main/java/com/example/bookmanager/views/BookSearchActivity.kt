@@ -31,6 +31,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+/**
+ * 本検索ページのアクティビティ。
+ */
 class BookSearchActivity : AppCompatActivity() {
 
     private lateinit var view: View

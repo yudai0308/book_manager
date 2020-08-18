@@ -21,7 +21,7 @@ import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
 
 /**
- * レビュー入力画面のアクティビティ。
+ * レビュー入力ページのアクティビティ。
  */
 class BookReviewEditingActivity : AppCompatActivity() {
 

@@ -10,6 +10,9 @@ import com.example.bookmanager.R
 import com.example.bookmanager.databinding.FragmentBookDescriptionBinding
 import com.example.bookmanager.utils.C
 
+/**
+ * 本詳細ページ内、詳細タブのフラグメント。
+ */
 class BookDescriptionFragment : Fragment() {
 
     private lateinit var bookDescription: String

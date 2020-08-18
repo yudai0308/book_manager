@@ -12,6 +12,9 @@ import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.FileIO
 import kotlinx.coroutines.runBlocking
 
+/**
+ * 本棚ページでリスト表示するためのアダプター。
+ */
 class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>() {
 
     lateinit var context: Context

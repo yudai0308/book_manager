@@ -15,6 +15,9 @@ import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * 本棚ページのアクティビティ。
+ */
 class BookshelfActivity : AppCompatActivity() {
 
     private val viewModel by lazy {

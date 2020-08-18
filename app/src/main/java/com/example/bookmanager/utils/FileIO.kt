@@ -9,6 +9,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+/**
+ * ファイルの読み込み、書き込みを実行するためのクラス。
+ */
 class FileIO {
 
     companion object {

@@ -13,6 +13,9 @@ import com.example.bookmanager.databinding.ListItemBookSearchBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.utils.Libs
 
+/**
+ * 本の検索結果をリスト表示するためのアダプター。
+ */
 class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewHolder>() {
 
     private lateinit var context: Context
@@ -55,8 +58,6 @@ class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewH
         this.resultBooks = resultBooks
         notifyDataSetChanged()
     }
-
-    // TODO: 本棚に登録 -> DB に保存 -> Glide を使って Bitmap 形式で画像を取得 -> 内部ストレージに保存
 
     inner class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
         RecyclerView.ViewHolder(binding.root)

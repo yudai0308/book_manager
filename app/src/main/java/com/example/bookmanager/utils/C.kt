@@ -1,5 +1,8 @@
 package com.example.bookmanager.utils
 
+/**
+ * 定数を管理するクラス。
+ */
 class C {
     companion object {
 

@@ -14,6 +14,9 @@ import com.squareup.moshi.Moshi
 import okhttp3.*
 import java.io.IOException
 
+/**
+ * 本の検索結果を保持するための ViewModel。
+ */
 class BookResultViewModel : ViewModel() {
 
     private val _resultBooks: MutableLiveData<List<BookSearchResult>> = MutableLiveData()

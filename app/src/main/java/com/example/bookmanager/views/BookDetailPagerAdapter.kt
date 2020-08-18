@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
+/**
+ * 本詳細ページのタブを作成するためのアダプター。
+ */
 class BookDetailPagerAdapter(
     activity: AppCompatActivity,
     private val bookDescriptionFragment: BookDescriptionFragment,

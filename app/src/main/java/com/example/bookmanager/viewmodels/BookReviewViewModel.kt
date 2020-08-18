@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.example.bookmanager.utils.FileIO
 
+/**
+ * 本のレビュー内容を保持するための ViewModel。
+ */
 class BookReviewViewModel(application: Application) : AndroidViewModel(application) {
 
     private val context = application.applicationContext

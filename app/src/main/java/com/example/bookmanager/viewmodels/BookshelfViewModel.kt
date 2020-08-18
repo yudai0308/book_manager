@@ -10,6 +10,9 @@ import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import kotlinx.coroutines.runBlocking
 
+/**
+ * 本棚に保存されている本を保持するための ViewModel。
+ */
 class BookshelfViewModel(application: Application) : AndroidViewModel(application) {
 
     private val context = application.applicationContext

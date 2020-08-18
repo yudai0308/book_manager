@@ -13,7 +13,9 @@ import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
 import io.noties.markwon.Markwon
 
-
+/**
+ * 本詳細ページ内、感想タブのフラグメント。
+ */
 class BookReviewFragment : Fragment() {
 
     private var bookId = ""

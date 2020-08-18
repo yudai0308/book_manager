@@ -15,6 +15,9 @@ import com.example.bookmanager.utils.Libs
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.runBlocking
 
+/**
+ * 本詳細ページのアクティビティ。
+ */
 class BookDetailActivity : AppCompatActivity() {
 
     private val binding by lazy {
