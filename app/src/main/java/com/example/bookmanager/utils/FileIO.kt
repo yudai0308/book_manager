@@ -42,7 +42,11 @@ class FileIO {
             }
 
             val builder = StringBuilder()
-            file.forEachLine { builder.append(it) }
+            file.forEachLine {
+                if (it.isNotEmpty()) {
+                    builder.append(it + "\n\n")
+                }
+            }
 
             return builder.toString()
         }

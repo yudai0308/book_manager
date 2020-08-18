@@ -10,7 +10,7 @@
     <string name="dialog_add_book_title">本棚に追加</string>
     <string name="dialog_add_book_msg">本棚に追加しますか？</string>
     <string name="exists_in_my_shelf">すでに本棚に追加されています。</string>
-    <string name="dialog_discard_input_content">入力中の内容を破棄してもよろしいでしょうか？</string>
+    <string name="dialog_discard_input_content">入力中の内容は保存されませんがよろしいでしょうか？</string>
     <string name="saved">保存しました。</string>
 
     <!-- ボタン表示項目 -->

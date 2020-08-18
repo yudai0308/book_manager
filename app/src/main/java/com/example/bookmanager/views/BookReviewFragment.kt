@@ -11,6 +11,7 @@ import com.example.bookmanager.R
 import com.example.bookmanager.databinding.FragmentBookReviewBinding
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
+import io.noties.markwon.Markwon
 
 
 class BookReviewFragment : Fragment() {
@@ -49,14 +50,20 @@ class BookReviewFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        val markwon = context?.let { Markwon.create(it) }
+
         val review = context?.let {
             FileIO.readReviewFile(it, bookId)
         }
 
-        binding.bookReviewText.apply {
-            text = review ?: getString(R.string.memo_not_found_message)
+        binding.bookReviewText.also {
+            if (markwon != null && review != null) {
+                markwon.setMarkdown(it, review)
+            } else {
+                it.text = review ?: getString(R.string.memo_not_found_message)
+            }
             if (review == null) {
-                gravity = Gravity.CENTER
+                it.gravity = Gravity.CENTER
             }
         }
     }

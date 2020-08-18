@@ -10,7 +10,7 @@ class BookReviewViewModel(application: Application) : AndroidViewModel(applicati
 
     var reviewContent: String = ""
 
-    fun updateReviewContent(bookId: String) {
+    fun readReviewContent(bookId: String) {
         reviewContent = FileIO.readReviewFile(context, bookId) ?: return
     }
 }

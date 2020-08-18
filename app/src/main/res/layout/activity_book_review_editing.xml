@@ -15,24 +15,23 @@
 
         <include
             android:id="@+id/toolbar"
-            layout="@layout/toolbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            layout="@layout/toolbar" />
 
         <EditText
-            android:hint="@string/markdown_supported"
-            android:text="@{viewModel.reviewContent}"
             android:id="@+id/book_review_editor"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="@dimen/match_constraint"
-            android:layout_margin="@dimen/space_wide"
+            android:layout_margin="@dimen/space_default"
             android:autofillHints="マークダウン形式で入力できます。"
             android:background="@drawable/book_review_editor_bg"
             android:gravity="top|start"
+            android:hint="@string/markdown_supported"
             android:inputType="textMultiLine"
             android:padding="@dimen/space_wide"
-            android:textSize="@dimen/text_size_small"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:text="@{viewModel.reviewContent}"
+            android:textSize="@dimen/text_size_default"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -2,6 +2,8 @@ package com.example.bookmanager.views
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +16,13 @@ import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.utils.Libs
 import com.example.bookmanager.viewmodels.BookReviewViewModel
+import io.noties.markwon.Markwon
+import io.noties.markwon.editor.MarkwonEditor
+import io.noties.markwon.editor.MarkwonEditorTextWatcher
 
+/**
+ * レビュー入力画面のアクティビティ。
+ */
 class BookReviewEditingActivity : AppCompatActivity() {
 
     private val binding by lazy {
@@ -33,21 +41,28 @@ class BookReviewEditingActivity : AppCompatActivity() {
 
     private val bookId by lazy { intent.getStringExtra(C.BOOK_ID) }
 
+    /**
+     * レビューの初期値。
+     * 保存せずに戻ろうとしたときに、アラートを出すか判断するために使う。
+     */
+    private lateinit var initialContent: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_review_editing)
 
         initToolbar()
+        initEditor()
 
         binding.also {
             it.viewModel = viewModel.apply {
-                updateReviewContent(bookId)
+                readReviewContent(bookId)
             }
             it.lifecycleOwner = this
         }
 
-        // TODO: テキストの初期値を取得しておき、戻るボタン押下時のテキストと差分があればダイアログを表示。
-
+        // レビュー内容の初期値を保存。
+        initialContent = viewModel.reviewContent
     }
 
     private fun initToolbar() {
@@ -58,8 +73,19 @@ class BookReviewEditingActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    private fun initEditor() {
+        val markwon = Markwon.create(this)
+        val editor = MarkwonEditor.create(markwon)
+        binding.bookReviewEditor.apply {
+            // マークダウン用の TextWatcher。
+            addTextChangedListener(MarkwonEditorTextWatcher.withProcess(editor))
+            // ViewModel の値をリアルタイムで変更するための TextWatcher。
+            addTextChangedListener(ReviewTextWatcher())
+        }
+    }
+
     private fun saveReviewContent() {
-        val text = binding.bookReviewEditor.text.toString()
+        val text = viewModel.reviewContent
         FileIO.saveReviewFile(this, bookId, text)
     }
 
@@ -80,15 +106,22 @@ class BookReviewEditingActivity : AppCompatActivity() {
      * バックボタンが押されたとき、変更内容が破棄される旨をアラート表示する。
      */
     override fun onBackPressed() {
-        createCancelAlertFragment().show(supportFragmentManager, C.DIALOG_TAG_CANCEL_EDITING)
-        super.onBackPressed()
+        if (contentChanged()) {
+            createCancelAlertFragment().show(supportFragmentManager, C.DIALOG_TAG_CANCEL_EDITING)
+        } else {
+            finish()
+        }
     }
 
     /**
      * ツールバーの戻るボタンが押されたとき、変更内容が破棄される旨をアラート表示する。
      */
     override fun onSupportNavigateUp(): Boolean {
-        createCancelAlertFragment().show(supportFragmentManager, C.DIALOG_TAG_CANCEL_EDITING)
+        if (contentChanged()) {
+            createCancelAlertFragment().show(supportFragmentManager, C.DIALOG_TAG_CANCEL_EDITING)
+        } else {
+            finish()
+        }
         return super.onSupportNavigateUp()
     }
 
@@ -112,5 +145,26 @@ class BookReviewEditingActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.editor_menu, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    /**
+     * レビューが編集されたかどうかを確認する。
+     * 画面を閉じるときにアラートを表示するか判断するために使う。
+     */
+    private fun contentChanged(): Boolean {
+        return initialContent != viewModel.reviewContent
+    }
+
+    /**
+     * ユーザーの入力値をリアルタイムで ViewModel に保存するための TextWatcher。
+     */
+    inner class ReviewTextWatcher : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            viewModel.reviewContent = s.toString()
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
 }
