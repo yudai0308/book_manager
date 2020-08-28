@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">本棚アプリ</string>
-    <string name="toolbar_title">本棚</string>
+    <string name="toolbar_title_bookshelf">本棚</string>
+    <string name="toolbar_title_book_detail">本の詳細</string>
+    <string name="toolbar_title_edit_review">感想を書く</string>
 
     <!-- エラーメッセージ -->
     <string name="search_error">エラーが発生しました。再度お試しください。</string>
@@ -23,13 +25,13 @@
 
     <!-- 本詳細ページ タブタイトル -->
     <string name="book_detail_tab_description">詳細</string>
-    <string name="book_detail_tab_memo">感想</string>
+    <string name="book_detail_tab_review">感想</string>
 
     <string name="description">説明</string>
 
     <string name="book_description_not_found">説明が見つかりませんでした。</string>
-    <string name="memo_not_found_message">「感想を書く」ボタンで感想を追加できます。</string>
-    <string name="button_text_write_memo">感想を書く</string>
+    <string name="review_not_found_message">「感想を書く」ボタンで感想を追加できます。</string>
+    <string name="edit_review">感想を書く</string>
     <string name="markdown_supported">マークダウンでの記入も可能です。</string>
 
     <string name="unknown_author">著者不明</string>

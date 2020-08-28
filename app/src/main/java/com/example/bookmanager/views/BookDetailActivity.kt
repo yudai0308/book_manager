@@ -2,9 +2,13 @@ package com.example.bookmanager.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.room.Room
+import androidx.viewpager2.widget.ViewPager2
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookDetailBinding
 import com.example.bookmanager.rooms.database.BookDatabase
@@ -41,37 +45,8 @@ class BookDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_detail)
 
-        val description = getBookDescriptionFromBookInfo(bookInfo)
-        val bookDescriptionFragment = BookDescriptionFragment.newInstance(description)
-        val bookReviewFragment = BookReviewFragment.newInstance(bookId)
-        val viewPager = binding.bookDetailViewPager.apply {
-            adapter = BookDetailPagerAdapter(
-                this@BookDetailActivity,
-                bookDescriptionFragment,
-                bookReviewFragment
-            )
-        }
-
-        val tabLayout = binding.bookDetailTabLayout
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = when (position) {
-                BookDetailPagerAdapter.BookDetailPage.BOOK_DESCRIPTION.position -> {
-                    getString(R.string.book_detail_tab_description)
-                }
-                BookDetailPagerAdapter.BookDetailPage.BOOK_REVIEW.position -> {
-                    getString(R.string.book_detail_tab_memo)
-                }
-                else -> throw IllegalArgumentException()
-            }
-        }.attach()
-
-        binding.bookDetailWriteMemoButton.setOnClickListener {
-            startActivity(
-                Intent(applicationContext, BookReviewEditingActivity::class.java).apply {
-                    putExtra(C.BOOK_ID, bookId)
-                }
-            )
-        }
+        initToolbar()
+        createMainContents()
     }
 
     override fun onResume() {
@@ -88,19 +63,112 @@ class BookDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun initToolbar() {
+        // as Toolbar がないとエラーになる。
+        setSupportActionBar(binding.toolbar as Toolbar)
+
+        supportActionBar?.apply {
+            title = getString(R.string.toolbar_title_book_detail)
+            // ツールバーに戻るボタンを表示。
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    /**
+     * メインコンテンツの「詳細」と「感想」を作成する。
+     */
+    private fun createMainContents() {
+        val viewPager = createViewPager()
+        val mediator = createTabLayoutMediator(viewPager)
+        mediator.attach()
+    }
+
+    /**
+     * 「詳細」と「感想」画面で構成される [ViewPager2] を作成する。
+     *
+     * @return [ViewPager2] オブジェクト
+     */
+    private fun createViewPager(): ViewPager2 {
+        val description = getBookDescription(bookInfo)
+        val bookDescriptionFragment = BookDescriptionFragment.newInstance(description)
+        val bookReviewFragment = BookReviewFragment.newInstance(bookId)
+        return binding.bookDetailViewPager.apply {
+            adapter = BookDetailPagerAdapter(
+                this@BookDetailActivity, bookDescriptionFragment, bookReviewFragment
+            )
+        }
+    }
+
+    /**
+     * 「詳細」と「感想」タブを生成するための [TabLayoutMediator] を作成する。
+     *
+     * @param viewPager 「詳細」と「感想」画面で構成された [ViewPager2]
+     * @return [TabLayoutMediator] オブジェクト
+     */
+    private fun createTabLayoutMediator(viewPager: ViewPager2): TabLayoutMediator {
+        val tabLayout = binding.bookDetailTabLayout
+        return TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = when (position) {
+                BookDetailPagerAdapter.BookDetailPage.BOOK_DESCRIPTION.position -> {
+                    getString(R.string.book_detail_tab_description)
+                }
+                BookDetailPagerAdapter.BookDetailPage.BOOK_REVIEW.position -> {
+                    getString(R.string.book_detail_tab_review)
+                }
+                else -> throw IllegalArgumentException()
+            }
+        }
+    }
+
+    /**
+     * ローカルデータベースから本の情報を取得する。
+     *
+     * @param bookId 本のID
+     * @return [BookInfo] オブジェクト
+     */
     private fun loadBookInfo(bookId: String): BookInfo? {
         val db = Room.databaseBuilder(this, BookDatabase::class.java, C.DB_NAME).build()
-
         val bookDao = db.bookDao()
         return runBlocking { bookDao.loadBookInfoById(bookId) }
     }
 
-    private fun getBookDescriptionFromBookInfo(bookInfo: BookInfo?): String {
+    /**
+     * [BookInfo] から本の説明を取得する。
+     *
+     * @param bookInfo [BookInfo] オブジェクト
+     * @return 本の説明
+     */
+    private fun getBookDescription(bookInfo: BookInfo?): String {
         val description = bookInfo?.book?.description
         return if (description.isNullOrBlank()) {
             getString(R.string.book_description_not_found)
         } else {
             description
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // ツールバーに「感想を書く」ボタンを追加。
+        menuInflater.inflate(R.menu.book_detail_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            // 「感想を書く」をタップで画面遷移。
+            R.id.toolbar_edit_review -> {
+                startActivity(Intent(
+                    applicationContext, BookReviewEditingActivity::class.java
+                ).apply {
+                    putExtra(C.BOOK_ID, bookId)
+                })
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 }

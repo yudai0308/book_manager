@@ -62,7 +62,7 @@ class BookReviewFragment : Fragment() {
             if (markwon != null && review != null) {
                 markwon.setMarkdown(it, review)
             } else {
-                it.text = review ?: getString(R.string.memo_not_found_message)
+                it.text = review ?: getString(R.string.review_not_found_message)
             }
             if (review == null) {
                 it.gravity = Gravity.CENTER

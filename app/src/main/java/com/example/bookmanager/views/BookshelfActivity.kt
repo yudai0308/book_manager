@@ -59,11 +59,9 @@ class BookshelfActivity : AppCompatActivity() {
             val book = viewModel.books.value?.get(position)
             // TODO: book が null だった場合の処理。
             book ?: return@OnClickListener
-            startActivity(
-                Intent(applicationContext, BookDetailActivity::class.java).apply {
-                    putExtra(C.BOOK_ID, book.id)
-                }
-            )
+            startActivity(Intent(applicationContext, BookDetailActivity::class.java).apply {
+                putExtra(C.BOOK_ID, book.id)
+            })
         }
 
         val adapter = BookshelfAdapter().apply {
@@ -75,9 +73,7 @@ class BookshelfActivity : AppCompatActivity() {
         binding.bookshelfRoot.also {
             it.layoutManager = manager
             it.adapter = adapter
-            it.addItemDecoration(
-                GridSpacingItemDecoration(spanCount, spacing, true)
-            )
+            it.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, true))
         }
     }
 
@@ -90,7 +86,7 @@ class BookshelfActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         val toolbar: Toolbar = binding.toolbar.apply {
-            setTitle(R.string.toolbar_title)
+            setTitle(R.string.toolbar_title_bookshelf)
         } as Toolbar
         setSupportActionBar(toolbar)
     }

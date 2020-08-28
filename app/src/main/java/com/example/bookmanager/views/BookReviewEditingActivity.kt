@@ -27,15 +27,13 @@ class BookReviewEditingActivity : AppCompatActivity() {
 
     private val binding by lazy {
         DataBindingUtil.setContentView<ActivityBookReviewEditingBinding>(
-            this,
-            R.layout.activity_book_review_editing
+            this, R.layout.activity_book_review_editing
         )
     }
 
     private val viewModel by lazy {
         ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+            this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         ).get(BookReviewViewModel::class.java)
     }
 
@@ -69,8 +67,11 @@ class BookReviewEditingActivity : AppCompatActivity() {
         // as Toolbar がないとエラーになる。
         setSupportActionBar(binding.toolbar as Toolbar)
 
-        // ツールバーに戻るボタンを表示。
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            title = getString(R.string.toolbar_title_edit_review)
+            // ツールバーに戻るボタンを表示。
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     private fun initEditor() {
@@ -84,20 +85,26 @@ class BookReviewEditingActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 感想を内部ストレージに保存する。
+     */
     private fun saveReviewContent() {
         val text = viewModel.reviewContent
         FileIO.saveReviewFile(this, bookId, text)
     }
 
+    /**
+     * 画面を戻ろうとした際のアラートダイアログを作成する。
+     *
+     * @return [SimpleDialogFragment] オブジェクト
+     */
     private fun createCancelAlertFragment(): SimpleDialogFragment {
         return SimpleDialogFragment().apply {
             val activity = this@BookReviewEditingActivity
             setTitle(activity.getString(R.string.cancel))
             setMessage(activity.getString(R.string.dialog_discard_input_content))
-            setPositiveButton(
-                activity.getString(R.string.yes),
-                DialogInterface.OnClickListener { _, _ -> finish() }
-            )
+            setPositiveButton(activity.getString(R.string.yes),
+                DialogInterface.OnClickListener { _, _ -> finish() })
             setNegativeButton(activity.getString(R.string.cancel), null)
         }
     }
@@ -125,11 +132,9 @@ class BookReviewEditingActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    /**
-     * レビュー内容を保存する。
-     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            // 「保存」ボタンタップで感想を保存する。
             R.id.toolbar_save -> {
                 saveReviewContent()
                 finish()
@@ -139,11 +144,9 @@ class BookReviewEditingActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /**
-     * ツールバーに保存ボタンを追加する。
-     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.editor_menu, menu)
+        // ツールバーに保存ボタンを追加する。
+        menuInflater.inflate(R.menu.book_editor_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -156,7 +159,7 @@ class BookReviewEditingActivity : AppCompatActivity() {
     }
 
     /**
-     * ユーザーの入力値をリアルタイムで ViewModel に保存するための TextWatcher。
+     * ユーザーの入力値をリアルタイムで ViewModel に保存するための [TextWatcher]。
      */
     inner class ReviewTextWatcher : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
