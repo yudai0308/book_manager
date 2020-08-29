@@ -30,7 +30,7 @@
     <string name="description">説明</string>
 
     <string name="book_description_not_found">説明が見つかりませんでした。</string>
-    <string name="review_not_found_message">「感想を書く」ボタンで感想を追加できます。</string>
+    <string name="review_not_found_message">まだ感想はありません。</string>
     <string name="edit_review">感想を書く</string>
     <string name="markdown_supported">マークダウンでの記入も可能です。</string>
 

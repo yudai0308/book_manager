@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/toolbar_edit_review"
+        android:icon="@drawable/ic_baseline_edit_24"
         android:title="@string/edit_review"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>
