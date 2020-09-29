@@ -3,10 +3,13 @@ package com.example.bookmanager.views
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
+import android.view.Menu
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.SearchView
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,7 +28,6 @@ import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.utils.Libs
 import com.example.bookmanager.viewmodels.BookResultViewModel
-import com.mancj.materialsearchbar.MaterialSearchBar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -54,10 +56,11 @@ class BookSearchActivity : AppCompatActivity() {
 
     private val binding by lazy {
         DataBindingUtil.setContentView<ActivityBookSearchBinding>(
-            this,
-            R.layout.activity_book_search
+            this, R.layout.activity_book_search
         )
     }
+
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +71,15 @@ class BookSearchActivity : AppCompatActivity() {
         }
 
         view = binding.root
+
+        // as Toolbar がないとエラーになる。
+        setSupportActionBar(binding.toolbar as Toolbar)
+
+        supportActionBar?.apply {
+            title = ""
+            // ツールバーに戻るボタンを表示。
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     override fun onResume() {
@@ -75,7 +87,6 @@ class BookSearchActivity : AppCompatActivity() {
 
         // TODO: onCreate() に移動するべき？
         initMessageView()
-        initSearchBar()
         initSpinner()
 
         val adapter = BookSearchAdapter().apply {
@@ -95,48 +106,12 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun initSearchBar() {
-        binding.bookSearchBar.apply {
-            setOnSearchActionListener(SearchActionListener())
-            openSearch()
-        }
-    }
-
     private fun initSpinner() {
         val spinner: Spinner = binding.bookSearchSpinner
         val items = listOf(C.SEARCH_FREE_WORD, C.SEARCH_TITLE, C.SEARCH_AUTHOR)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
-    }
-
-    private inner class SearchActionListener : MaterialSearchBar.OnSearchActionListener {
-        override fun onButtonClicked(buttonCode: Int) {}
-
-        override fun onSearchStateChanged(enabled: Boolean) {}
-
-        override fun onSearchConfirmed(text: CharSequence?) {
-            viewModel.searchBook(binding, object : BookResultViewModel.SearchCallback {
-                override fun onSearchStart() {
-                    showProgressBar()
-                }
-
-                override fun onSearchSucceeded(resultBooks: List<BookSearchResult>) {
-                    hideProgressBar()
-                    clearFocus()
-                    if (resultBooks.isEmpty()) {
-                        showMessage(getString(R.string.item_not_fount))
-                    } else {
-                        hideMessage()
-                    }
-                }
-
-                override fun onSearchFailed() {
-                    hideMessage()
-                    showMessage(getString(R.string.search_error))
-                }
-            })
-        }
     }
 
     inner class OnSearchResultClickListener : View.OnClickListener {
@@ -152,8 +127,7 @@ class BookSearchActivity : AppCompatActivity() {
                 setTitle(activity.getString(R.string.dialog_add_book_title))
                 setMessage(activity.getString(R.string.dialog_add_book_msg))
                 setPositiveButton(
-                    activity.getString(R.string.yes),
-                    OnOkButtonClickListener(resultBook)
+                    activity.getString(R.string.yes), OnOkButtonClickListener(resultBook)
                 )
                 setNegativeButton(activity.getString(R.string.cancel), null)
             }
@@ -172,10 +146,7 @@ class BookSearchActivity : AppCompatActivity() {
             }
 
             val newBook = Book.create(
-                resultBook.id,
-                resultBook.title,
-                resultBook.description,
-                resultBook.image
+                resultBook.id, resultBook.title, resultBook.description, resultBook.image
             )
 
             val authors = Author.createAll(resultBook.authors)
@@ -194,11 +165,7 @@ class BookSearchActivity : AppCompatActivity() {
     private fun saveImageToInternalStorage(url: String, fileName: String) {
         val activity = this
         GlobalScope.launch(Dispatchers.IO) {
-            val bitmap = Glide.with(activity)
-                .asBitmap()
-                .load(url)
-                .submit()
-                .get()
+            val bitmap = Glide.with(activity).asBitmap().load(url).submit().get()
             FileIO.saveBookImage(activity, bitmap, fileName)
         }
     }
@@ -240,8 +207,55 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun clearFocus() {
         handler.post {
-            binding.bookSearchBar.clearFocus()
+            searchView.clearFocus()
         }
     }
 
+    inner class SearchCallback : BookResultViewModel.SearchCallback {
+        override fun onSearchStart() {
+            showProgressBar()
+        }
+
+        override fun onSearchSucceeded(resultBooks: List<BookSearchResult>) {
+            hideProgressBar()
+            clearFocus()
+            if (resultBooks.isEmpty()) {
+                showMessage(getString(R.string.item_not_fount))
+            } else {
+                hideMessage()
+            }
+        }
+
+        override fun onSearchFailed() {
+            hideMessage()
+            showMessage(getString(R.string.search_error))
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.book_search_menu, menu)
+
+        searchView = menu?.findItem(R.id.toolbar_search_book)?.actionView as SearchView
+        searchView.apply {
+            isIconified = false
+            queryHint = getString(R.string.query_hint_book_search)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (query == null || query == "") {
+                        return true
+                    }
+                    val searchType = binding.bookSearchSpinner.selectedItem.toString()
+                    viewModel.searchBook(query, searchType, SearchCallback())
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+        }
+
+        return super.onCreateOptionsMenu(menu)
+    }
 }

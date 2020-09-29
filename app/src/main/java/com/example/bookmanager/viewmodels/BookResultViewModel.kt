@@ -1,15 +1,12 @@
 package com.example.bookmanager.viewmodels
 
-import android.widget.Spinner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.utils.C
-import com.mancj.materialsearchbar.MaterialSearchBar
 import com.squareup.moshi.Moshi
 import okhttp3.*
 import java.io.IOException
@@ -30,20 +27,12 @@ class BookResultViewModel : ViewModel() {
         fun onSearchFailed()
     }
 
-    fun searchBook(binding: ActivityBookSearchBinding, callback: SearchCallback) {
+    fun searchBook(query: String, searchType: String, callback: SearchCallback) {
         searchCallback = callback
         searchCallback?.onSearchStart()
-        val url = createUrl(binding)
+        val param = createUrlWithParameter(searchType, query)
+        val url = C.BOOK_SEARCH_API_URL + param
         fetch(url)
-    }
-
-    private fun createUrl(binding: ActivityBookSearchBinding): String {
-        val searchBar: MaterialSearchBar = binding.bookSearchBar
-        val spinner: Spinner = binding.bookSearchSpinner
-        val keyword = searchBar.text
-        val searchType = spinner.selectedItem.toString()
-        val param = createUrlWithParameter(searchType, keyword)
-        return C.BOOK_SEARCH_API_URL + param
     }
 
     private fun createUrlWithParameter(

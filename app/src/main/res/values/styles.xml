@@ -9,11 +9,4 @@
         <item name="android:fontFamily">@font/sawarabi_mincho_regular</item>
     </style>
 
-    <style name="ToolbarTheme" parent="Theme.AppCompat.Light">
-        <item name="android:background">@color/colorPrimaryLight</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white</item>
-        <item name="actionMenuTextColor">@color/white</item>
-    </style>
-
 </resources>

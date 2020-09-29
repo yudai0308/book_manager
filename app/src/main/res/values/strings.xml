@@ -36,4 +36,6 @@
 
     <string name="unknown_author">著者不明</string>
     <string name="unknown_title">タイトル不明</string>
+
+    <string name="query_hint_book_search">タイトル、著者名など</string>
 </resources>
