@@ -239,7 +239,9 @@ class BookSearchActivity : AppCompatActivity() {
         searchView.apply {
             isIconified = false
             queryHint = getString(R.string.query_hint_book_search)
+            // SearchView の挙動を定義
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                // 検索ボタンが押されたときの処理
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (query == null || query == "") {
                         return true
@@ -249,13 +251,17 @@ class BookSearchActivity : AppCompatActivity() {
                     return true
                 }
 
+                // テキストが変更されたときの処理（なにもしない）
                 override fun onQueryTextChange(newText: String?): Boolean {
                     return false
                 }
-
             })
         }
-
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
     }
 }
