@@ -1,19 +1,19 @@
 package com.example.bookmanager.viewmodels
 
-import android.widget.Spinner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.bookmanager.databinding.ActivityBookSearchBinding
-import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.BookSearchResult
+import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
-import com.example.bookmanager.utils.Const
-import com.mancj.materialsearchbar.MaterialSearchBar
+import com.example.bookmanager.utils.C
 import com.squareup.moshi.Moshi
 import okhttp3.*
 import java.io.IOException
 
+/**
+ * 本の検索結果を保持するための ViewModel。
+ */
 class BookResultViewModel : ViewModel() {
 
     private val _resultBooks: MutableLiveData<List<BookSearchResult>> = MutableLiveData()
@@ -27,36 +27,27 @@ class BookResultViewModel : ViewModel() {
         fun onSearchFailed()
     }
 
-    fun searchBook(binding: ActivityBookSearchBinding, callback: SearchCallback) {
+    fun searchBook(query: String, searchType: String, callback: SearchCallback) {
         searchCallback = callback
         searchCallback?.onSearchStart()
-        val url = createUrl(binding)
+        val param = createUrlWithParameter(searchType, query)
+        val url = C.BOOK_SEARCH_API_URL + param
         fetch(url)
     }
-
-    private fun createUrl(binding: ActivityBookSearchBinding): String {
-        val searchBar: MaterialSearchBar = binding.bookSearchBar
-        val spinner: Spinner = binding.spinnerBookSearchType
-        val keyword = searchBar.text
-        val searchType = spinner.selectedItem.toString()
-        val param = createUrlWithParameter(searchType, keyword)
-        return Const.BOOK_SEARCH_API_URL + param
-    }
-
 
     private fun createUrlWithParameter(
         type: String,
         keyword: String,
-        max: Int = Const.MAX_RESULTS_COUNT,
+        max: Int = C.MAX_RESULTS_COUNT,
         index: Int = 0
     ): String {
-        var param = Const.ADD_QUERY
+        var param = C.ADD_QUERY
         param += when (type) {
-            Const.SEARCH_TITLE -> Const.PARAM_TITLE
-            Const.SEARCH_AUTHOR -> Const.PARAM_AUTHOR
+            C.SEARCH_TITLE -> C.PARAM_TITLE
+            C.SEARCH_AUTHOR -> C.PARAM_AUTHOR
             else -> ""
         }
-        return param + keyword + Const.PARAM_MAX + max + Const.PARAM_INDEX + index
+        return param + keyword + C.PARAM_MAX + max + C.PARAM_INDEX + index
     }
 
     private fun fetch(url: String) {
@@ -104,7 +95,14 @@ class BookResultViewModel : ViewModel() {
             val authors = if (info.authors != null) {
                 info.authors as List<String>
             } else {
-                listOf(Const.UNKNOWN)
+                // FIXME: C クラスではなく strings.xml から文字列を取得。
+                listOf(C.UNKNOWN)
+            }
+
+            val description = if (info.description != null) {
+                info.description as String
+            } else {
+                ""
             }
 
             val image = if (info.imageLinks?.thumbnail != null) {
@@ -113,7 +111,7 @@ class BookResultViewModel : ViewModel() {
                 ""
             }
 
-            books.add(BookSearchResult(id, title, authors, image))
+            books.add(BookSearchResult(id, title, authors, description, image))
         }
         return books
     }

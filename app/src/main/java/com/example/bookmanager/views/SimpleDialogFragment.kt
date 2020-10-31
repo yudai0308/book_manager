@@ -5,8 +5,10 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import java.lang.IllegalStateException
 
+/**
+ * ネガティブ／ポジティブボタンを実装したシンプルなアラートを生成するためのフラグメント。
+ */
 class SimpleDialogFragment : DialogFragment() {
 
     private var title: String = ""

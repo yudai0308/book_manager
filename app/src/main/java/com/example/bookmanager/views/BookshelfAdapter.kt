@@ -1,9 +1,6 @@
 package com.example.bookmanager.views
 
 import android.content.Context
-import android.content.ContextWrapper
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ListItemBookshelfBinding
 import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.utils.Const
+import com.example.bookmanager.utils.FileIO
 import kotlinx.coroutines.runBlocking
-import java.io.File
-import java.io.IOException
 
+/**
+ * 本棚ページでリスト表示するためのアダプター。
+ */
 class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>() {
 
     lateinit var context: Context
@@ -43,13 +41,9 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
 
     override fun onBindViewHolder(holder: BookShelfHolder, position: Int) {
         val book = books[position]
-        val image = if (book.image != null) {
-            runBlocking { readFromInternalStorage(book.id) }
-        } else {
-            null
-        }
+        val image = runBlocking { FileIO.readBookImage(context, book.id) }
 
-        holder.binding.imageBookshelfItem.apply {
+        holder.binding.bookshelfItemImage.apply {
             setImageDrawable(image)
         }
     }
@@ -58,20 +52,20 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         return books.size
     }
 
-    private fun readFromInternalStorage(fileName: String): Drawable? {
-        return try {
-            val contextWrapper = ContextWrapper(context)
-            val directory = contextWrapper.getDir(
-                Const.DIRECTORY_NAME_BOOK_IMAGE,
-                Context.MODE_PRIVATE
-            )
-            val path = File(directory, fileName)
-            Drawable.createFromPath(path.toString())
-        } catch (e: IOException) {
-            Log.e(null, "画像の読み込みに失敗しました。")
-            null
-        }
-    }
+//    private fun readFromInternalStorage(fileName: String): Drawable? {
+//        return try {
+//            val contextWrapper = ContextWrapper(context)
+//            val directory = contextWrapper.getDir(
+//                C.DIRECTORY_NAME_BOOK_IMAGE,
+//                Context.MODE_PRIVATE
+//            )
+//            val path = File(directory, fileName)
+//            Drawable.createFromPath(path.toString())
+//        } catch (e: IOException) {
+//            Log.e(null, "画像の読み込みに失敗しました。")
+//            null
+//        }
+//    }
 
     fun update(books: List<Book>) {
         this.books = books

@@ -3,16 +3,10 @@
     <!-- Color information -->
     <!-- https://pigment.shapefactory.co/?d=1&a=243A60&b=DC9694 -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#182C52</item>
-        <item name="colorPrimaryDark">#243A60</item>
-        <item name="colorAccent">#DC9694</item>
-        <item name="android:fontFamily">@font/noto_serif_jp_medium</item>
-    </style>
-
-    <style name="ToolbarTheme" parent="Theme.AppCompat.Light">
-        <item name="android:background">#354F75</item>
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:textColorSecondary">#FFFFFF</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDefault</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/sawarabi_mincho_regular</item>
     </style>
 
 </resources>

@@ -1,30 +1,34 @@
 package com.example.bookmanager.views
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bookmanager.R
-import com.example.bookmanager.databinding.ActivityMainBinding
+import com.example.bookmanager.databinding.ActivityBookshelfBinding
+import com.example.bookmanager.utils.C
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * 本棚ページのアクティビティ。
+ */
 class BookshelfActivity : AppCompatActivity() {
 
     private val viewModel by lazy {
         ViewModelProvider(
             this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         ).get(BookshelfViewModel::class.java)
     }
 
     private val binding by lazy {
-        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        DataBindingUtil.setContentView<ActivityBookshelfBinding>(this, R.layout.activity_bookshelf)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,14 +53,27 @@ class BookshelfActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         val spanCount = resources.getInteger(R.integer.bookshelf_grid_span_count)
         val spacing = resources.getInteger(R.integer.bookshelf_grid_spacing)
-        val adapter = BookshelfAdapter()
+
+        val listener = View.OnClickListener {
+            val position = binding.bookshelfRoot.getChildAdapterPosition(it)
+            val book = viewModel.books.value?.get(position)
+            // TODO: book が null だった場合の処理。
+            book ?: return@OnClickListener
+            startActivity(Intent(applicationContext, BookDetailActivity::class.java).apply {
+                putExtra(C.BOOK_ID, book.id)
+            })
+        }
+
+        val adapter = BookshelfAdapter().apply {
+            setListener(listener)
+        }
+
         val manager = GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
+
         binding.bookshelfRoot.also {
             it.layoutManager = manager
             it.adapter = adapter
-            it.addItemDecoration(
-                GridSpacingItemDecoration(spanCount, spacing, true)
-            )
+            it.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, true))
         }
     }
 
@@ -68,10 +85,9 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private fun initToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar).apply {
-            setTitle(R.string.toolbar_title)
-            setTitleTextColor(Color.WHITE)
-        }
+        val toolbar: Toolbar = binding.toolbar.apply {
+            setTitle(R.string.toolbar_title_bookshelf)
+        } as Toolbar
         setSupportActionBar(toolbar)
     }
 }

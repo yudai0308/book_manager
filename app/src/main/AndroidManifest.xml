@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".views.BookReviewEditingActivity" />
+        <activity android:name=".views.BookDetailActivity" />
         <activity android:name=".views.BookSearchActivity" />
         <activity android:name=".views.BookshelfActivity">
             <intent-filter>

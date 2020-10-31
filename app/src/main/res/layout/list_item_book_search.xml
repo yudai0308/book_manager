@@ -9,34 +9,34 @@
         android:clickable="true">
 
         <ImageView
-            android:id="@+id/image_book_search_item"
+            android:id="@+id/book_search_item_image"
             android:layout_width="@dimen/book_row_image_width"
             android:layout_height="@dimen/book_row_image_height"
             android:layout_marginStart="@dimen/space_default"
-            android:layout_marginTop="@dimen/space_narrow"
-            android:layout_marginBottom="@dimen/space_narrow"
+            android:layout_marginTop="@dimen/space_default"
+            android:layout_marginBottom="@dimen/space_default"
             android:contentDescription="@string/description_book_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/title_book_search_item"
+            android:id="@+id/book_search_item_title"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_default"
-            android:layout_marginTop="@dimen/space_narrow"
+            android:layout_marginTop="@dimen/space_default"
             android:layout_marginEnd="@dimen/space_default"
             android:ellipsize="end"
             android:maxLines="2"
             android:textSize="@dimen/text_size_book_title"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/image_book_search_item"
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/author_book_search_item"
+            android:id="@+id/book_search_item_author"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_default"
@@ -45,8 +45,8 @@
             android:maxLines="1"
             android:textSize="@dimen/text_size_book_author"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/image_book_search_item"
-            app:layout_constraintTop_toBottomOf="@id/title_book_search_item" />
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image"
+            app:layout_constraintTop_toBottomOf="@id/book_search_item_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

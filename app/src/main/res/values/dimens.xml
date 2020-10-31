@@ -5,6 +5,12 @@
     <dimen name="space_default">8dp</dimen>
     <dimen name="space_wide">16dp</dimen>
 
+    <dimen name="text_size_tiny">11sp</dimen>
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="text_size_default">15sp</dimen>
+    <dimen name="text_size_big">18dp</dimen>
+    <dimen name="text_size_huge">20dp</dimen>
+
     <dimen name="book_row_image_width">64dp</dimen>
     <dimen name="book_row_image_height">80dp</dimen>
 
