@@ -153,6 +153,11 @@ class BookDetailActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * レビューのレートを表示させる。
+     *
+     * @param bookId 本 ID
+     */
     private fun showAverageRating(bookId: String) {
         val url = C.BOOK_SEARCH_API_URL + "/" + bookId
         val req = Request.Builder().url(url).build()
@@ -161,6 +166,9 @@ class BookDetailActivity : AppCompatActivity() {
         call.enqueue(FetchAverageRatingCallback())
     }
 
+    /**
+     * API から本の情報を取得してレートを表示させるコールバッククラス。
+     */
     inner class FetchAverageRatingCallback : Callback {
         override fun onFailure(call: Call, e: IOException) {}
 
