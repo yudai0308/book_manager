@@ -2,6 +2,7 @@ package com.example.bookmanager.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,9 @@ import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.utils.Libs
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.runBlocking
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
 
 /**
  * 本詳細ページのアクティビティ。
@@ -26,8 +30,7 @@ class BookDetailActivity : AppCompatActivity() {
 
     private val binding by lazy {
         DataBindingUtil.setContentView<ActivityBookDetailBinding>(
-            this,
-            R.layout.activity_book_detail
+            this, R.layout.activity_book_detail
         )
     }
 
@@ -41,12 +44,15 @@ class BookDetailActivity : AppCompatActivity() {
         }
     }
 
+    private val handler = Handler()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_detail)
 
         initToolbar()
         createMainContents()
+        showAverageRating(bookId)
     }
 
     override fun onResume() {
@@ -144,6 +150,37 @@ class BookDetailActivity : AppCompatActivity() {
             getString(R.string.book_description_not_found)
         } else {
             description
+        }
+    }
+
+    private fun showAverageRating(bookId: String) {
+        val url = C.BOOK_SEARCH_API_URL + "/" + bookId
+        val req = Request.Builder().url(url).build()
+        val client = OkHttpClient.Builder().build()
+        val call = client.newCall(req)
+        call.enqueue(FetchAverageRatingCallback())
+    }
+
+    inner class FetchAverageRatingCallback : Callback {
+        override fun onFailure(call: Call, e: IOException) {}
+
+        override fun onResponse(call: Call, response: Response) {
+            val body = response.body?.string()
+            body ?: return
+            val jsonObj = JSONObject(body)
+            val volumeInfo = jsonObj.getJSONObject("volumeInfo")
+            if (volumeInfo.has("averageRating")) {
+                val averageRating = volumeInfo.getString("averageRating")
+                handler.post {
+                    binding.bookDetailRatingBar.rating = averageRating.toFloat()
+                }
+            }
+            if (volumeInfo.has("ratingsCount")) {
+                val ratingsCount = volumeInfo.getString("ratingsCount")
+                handler.post {
+                    binding.bookDetailRatingsCount.text = ratingsCount
+                }
+            }
         }
     }
 

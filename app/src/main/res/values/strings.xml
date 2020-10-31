@@ -28,6 +28,7 @@
     <string name="book_detail_tab_review">感想</string>
 
     <string name="description">説明</string>
+    <string name="no_rating">-</string>
 
     <string name="book_description_not_found">説明が見つかりませんでした。</string>
     <string name="review_not_found_message">まだ感想はありません。</string>
