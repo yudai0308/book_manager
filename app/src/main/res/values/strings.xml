@@ -1,42 +1,37 @@
 <resources>
+    <!-- 共通 -->
     <string name="app_name">本棚アプリ</string>
-    <string name="toolbar_title_bookshelf">本棚</string>
-    <string name="toolbar_title_book_detail">本の詳細</string>
-    <string name="toolbar_title_edit_review">感想を書く</string>
-
-    <!-- エラーメッセージ -->
-    <string name="search_error">エラーが発生しました。再度お試しください。</string>
-    <string name="item_not_fount">お探しの本が見つかりませんでした。</string>
-
-    <!-- ダイアログメッセージ -->
-    <string name="dialog_add_book_title">本棚に追加</string>
-    <string name="dialog_add_book_msg">本棚に追加しますか？</string>
-    <string name="exists_in_my_shelf">すでに本棚に追加されています。</string>
-    <string name="dialog_discard_input_content">入力中の内容は保存されませんがよろしいでしょうか？</string>
-    <string name="saved">保存しました。</string>
-
-    <!-- ボタン表示項目 -->
     <string name="yes">はい</string>
     <string name="cancel">キャンセル</string>
     <string name="save">保存</string>
-
-    <!-- 画像説明 -->
+    <string name="hyphen">-</string>
     <string name="description_book_image">Book Image</string>
 
-    <!-- 本詳細ページ タブタイトル -->
+    <!-- 本棚ページ -->
+    <string name="toolbar_title_bookshelf">本棚</string>
+
+    <!-- 本検索ページ -->
+    <string name="search_error">エラーが発生しました。再度お試しください。</string>
+    <string name="item_not_fount">お探しの本が見つかりませんでした。</string>
+    <string name="dialog_add_book_title">本棚に追加</string>
+    <string name="dialog_add_book_msg">本棚に追加しますか？</string>
+    <string name="exists_in_my_shelf">すでに本棚に追加されています。</string>
+    <string name="query_hint_book_search">タイトル、著者名など</string>
+
+    <!-- 本詳細ページ -->
+    <string name="toolbar_title_book_detail">本の詳細</string>
     <string name="book_detail_tab_description">詳細</string>
     <string name="book_detail_tab_review">感想</string>
-
     <string name="description">説明</string>
-    <string name="no_rating">-</string>
-
     <string name="book_description_not_found">説明が見つかりませんでした。</string>
     <string name="review_not_found_message">まだ感想はありません。</string>
-    <string name="edit_review">感想を書く</string>
     <string name="markdown_supported">マークダウンでの記入も可能です。</string>
-
     <string name="unknown_author">著者不明</string>
     <string name="unknown_title">タイトル不明</string>
 
-    <string name="query_hint_book_search">タイトル、著者名など</string>
+    <!-- レビュー作成ページ -->
+    <string name="toolbar_title_edit_review">感想を書く</string>
+    <string name="dialog_discard_input_content">入力中の内容は保存されませんがよろしいでしょうか？</string>
+    <string name="saved">保存しました。</string>
+    <string name="edit_review">感想を書く</string>
 </resources>
