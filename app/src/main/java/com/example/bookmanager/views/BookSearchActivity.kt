@@ -213,6 +213,12 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun backToTop() {
+        handler.post {
+            binding.bookSearchResultList.scrollToPosition(0)
+        }
+    }
+
     inner class SearchCallback : BookResultViewModel.SearchCallback {
         override fun onSearchStart() {
             showProgressBar()
@@ -221,6 +227,7 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onSearchSucceeded(resultBooks: List<BookSearchResult>) {
             hideProgressBar()
             clearFocus()
+            backToTop()
             if (resultBooks.isEmpty()) {
                 showMessage(getString(R.string.item_not_fount))
             } else {
