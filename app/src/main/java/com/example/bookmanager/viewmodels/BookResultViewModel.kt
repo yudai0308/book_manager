@@ -1,8 +1,10 @@
 package com.example.bookmanager.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.bookmanager.R
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
@@ -14,10 +16,13 @@ import java.io.IOException
 /**
  * 本の検索結果を保持するための ViewModel。
  */
-class BookResultViewModel : ViewModel() {
+class BookResultViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _resultBooks: MutableLiveData<List<BookSearchResult>> = MutableLiveData()
+
     val resultBooks: LiveData<List<BookSearchResult>> = _resultBooks
+
+    private val context = application.applicationContext
 
     private var searchCallback: SearchCallback? = null
 
@@ -36,10 +41,7 @@ class BookResultViewModel : ViewModel() {
     }
 
     private fun createUrlWithParameter(
-        type: String,
-        keyword: String,
-        max: Int = C.MAX_RESULTS_COUNT,
-        index: Int = 0
+        type: String, keyword: String, max: Int = C.MAX_RESULTS_COUNT, index: Int = 0
     ): String {
         var param = C.ADD_QUERY
         param += when (type) {
@@ -85,33 +87,17 @@ class BookResultViewModel : ViewModel() {
         for (item in items) {
             val info = item.volumeInfo
             val id = item.id
-
-            val title = if (info?.title != null) {
-                info.title as String
-            } else {
-                continue
-            }
-
-            val authors = if (info.authors != null) {
-                info.authors as List<String>
-            } else {
-                // FIXME: C クラスではなく strings.xml から文字列を取得。
-                listOf(C.UNKNOWN)
-            }
-
-            val description = if (info.description != null) {
-                info.description as String
-            } else {
-                ""
-            }
-
-            val image = if (info.imageLinks?.thumbnail != null) {
-                info.imageLinks?.thumbnail as String
-            } else {
-                ""
-            }
-
-            books.add(BookSearchResult(id, title, authors, description, image))
+            val title = info?.title ?: continue
+            val authors = info.authors ?: listOf(context.getString(R.string.hyphen))
+            val averageRating = info.averageRating
+            val ratingsCount = info.ratingsCount ?: 0
+            val description = info.description ?: ""
+            val image = info.imageLinks?.thumbnail ?: ""
+            books.add(
+                BookSearchResult(
+                    id, title, authors, averageRating, ratingsCount, description, image
+                )
+            )
         }
         return books
     }

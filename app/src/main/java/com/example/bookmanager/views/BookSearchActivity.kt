@@ -51,7 +51,9 @@ class BookSearchActivity : AppCompatActivity() {
     private val bookDao by lazy { db.bookDao() }
 
     private val viewModel by lazy {
-        ViewModelProvider(this).get(BookResultViewModel::class.java)
+        ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        ).get(BookResultViewModel::class.java)
     }
 
     private val binding by lazy {
@@ -229,6 +231,7 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onSearchFailed() {
             hideMessage()
             showMessage(getString(R.string.search_error))
+            hideProgressBar()
         }
     }
 

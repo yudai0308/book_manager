@@ -19,7 +19,9 @@ import com.example.bookmanager.utils.Libs
 class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewHolder>() {
 
     private lateinit var context: Context
+
     private var resultBooks: List<BookSearchResult> = listOf()
+
     private var listener: View.OnClickListener? = null
 
     fun setListener(listener: View.OnClickListener) {
@@ -44,6 +46,12 @@ class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewH
             lifecycleOwner = context as LifecycleOwner
             bookSearchItemTitle.text = resultBook.title
             bookSearchItemAuthor.text = Libs.listToString(resultBook.authors)
+            bookSearchRating.rating = resultBook.averageRating ?: 0F
+            bookSearchRatingsCount.text = if (resultBook.ratingsCount > 0) {
+                resultBook.ratingsCount.toString()
+            } else {
+                context.getString(R.string.hyphen)
+            }
         }
         Glide.with(context)
             .load(resultBook.image)
@@ -59,6 +67,6 @@ class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewH
         notifyDataSetChanged()
     }
 
-    inner class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
+    class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
         RecyclerView.ViewHolder(binding.root)
 }
