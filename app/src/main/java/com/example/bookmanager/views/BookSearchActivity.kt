@@ -122,11 +122,10 @@ class BookSearchActivity : AppCompatActivity() {
             val recyclerView: RecyclerView = binding.bookSearchResultList
             val position = recyclerView.getChildAdapterPosition(v)
             // FIXME: resultBook が null だった場合の処理を検討。
-            val resultBook = viewModel.resultBooks.value?.get(position)
-            resultBook ?: return
+            val resultBook = viewModel.resultBooks.value?.get(position) ?: return
             val dialog = SimpleDialogFragment().apply {
                 val activity = this@BookSearchActivity
-                setTitle(activity.getString(R.string.dialog_add_book_title))
+                setTitle(resultBook.title)
                 setMessage(activity.getString(R.string.dialog_add_book_msg))
                 setPositiveButton(
                     activity.getString(R.string.yes), OnOkButtonClickListener(resultBook)
