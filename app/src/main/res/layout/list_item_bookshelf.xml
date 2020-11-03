@@ -24,6 +24,13 @@
             android:adjustViewBounds="true"
             android:contentDescription="TODO" />
 
+        <TextView
+            android:id="@+id/bookshelf_item_title"
+            android:layout_width="@dimen/bookshelf_title_text_width"
+            android:layout_height="@dimen/bookshelf_image_height"
+            android:padding="@dimen/space_default"
+            android:visibility="gone" />
+
     </androidx.cardview.widget.CardView>
 
 </layout>

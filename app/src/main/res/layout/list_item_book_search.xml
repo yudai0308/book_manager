@@ -48,6 +48,26 @@
             app:layout_constraintStart_toEndOf="@id/book_search_item_image"
             app:layout_constraintTop_toBottomOf="@id/book_search_item_title" />
 
+        <RatingBar
+            android:id="@+id/book_search_rating"
+            style="?android:ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginTop="@dimen/space_narrow"
+            app:layout_constraintStart_toEndOf="@+id/book_search_item_image"
+            app:layout_constraintTop_toBottomOf="@id/book_search_item_author" />
+
+        <TextView
+            android:id="@+id/book_search_ratings_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginTop="@dimen/space_narrow"
+            android:text="@string/hyphen"
+            app:layout_constraintStart_toEndOf="@+id/book_search_rating"
+            app:layout_constraintTop_toBottomOf="@id/book_search_item_author" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

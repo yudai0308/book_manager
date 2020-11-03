@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_default"
             android:layout_marginTop="@dimen/space_wide"
-            android:text="@string/no_rating"
+            android:text="@string/hyphen"
             app:layout_constraintStart_toEndOf="@+id/book_detail_rating_bar"
             app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
 

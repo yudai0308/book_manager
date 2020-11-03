@@ -44,7 +44,14 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         val image = runBlocking { FileIO.readBookImage(context, book.id) }
 
         holder.binding.bookshelfItemImage.apply {
-            setImageDrawable(image)
+            if (image != null) {
+                setImageDrawable(image)
+            } else {
+                holder.binding.bookshelfItemTitle.apply {
+                    visibility = View.VISIBLE
+                    text = book.title
+                }
+            }
         }
     }
 
@@ -52,26 +59,11 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         return books.size
     }
 
-//    private fun readFromInternalStorage(fileName: String): Drawable? {
-//        return try {
-//            val contextWrapper = ContextWrapper(context)
-//            val directory = contextWrapper.getDir(
-//                C.DIRECTORY_NAME_BOOK_IMAGE,
-//                Context.MODE_PRIVATE
-//            )
-//            val path = File(directory, fileName)
-//            Drawable.createFromPath(path.toString())
-//        } catch (e: IOException) {
-//            Log.e(null, "画像の読み込みに失敗しました。")
-//            null
-//        }
-//    }
-
     fun update(books: List<Book>) {
         this.books = books
         notifyDataSetChanged()
     }
 
-    inner class BookShelfHolder(val binding: ListItemBookshelfBinding) :
+    class BookShelfHolder(val binding: ListItemBookshelfBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

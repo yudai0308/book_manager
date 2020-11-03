@@ -51,7 +51,9 @@ class BookSearchActivity : AppCompatActivity() {
     private val bookDao by lazy { db.bookDao() }
 
     private val viewModel by lazy {
-        ViewModelProvider(this).get(BookResultViewModel::class.java)
+        ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        ).get(BookResultViewModel::class.java)
     }
 
     private val binding by lazy {
@@ -120,11 +122,10 @@ class BookSearchActivity : AppCompatActivity() {
             val recyclerView: RecyclerView = binding.bookSearchResultList
             val position = recyclerView.getChildAdapterPosition(v)
             // FIXME: resultBook が null だった場合の処理を検討。
-            val resultBook = viewModel.resultBooks.value?.get(position)
-            resultBook ?: return
+            val resultBook = viewModel.resultBooks.value?.get(position) ?: return
             val dialog = SimpleDialogFragment().apply {
                 val activity = this@BookSearchActivity
-                setTitle(activity.getString(R.string.dialog_add_book_title))
+                setTitle(resultBook.title)
                 setMessage(activity.getString(R.string.dialog_add_book_msg))
                 setPositiveButton(
                     activity.getString(R.string.yes), OnOkButtonClickListener(resultBook)
@@ -211,6 +212,12 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun backToTop() {
+        handler.post {
+            binding.bookSearchResultList.scrollToPosition(0)
+        }
+    }
+
     inner class SearchCallback : BookResultViewModel.SearchCallback {
         override fun onSearchStart() {
             showProgressBar()
@@ -219,6 +226,7 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onSearchSucceeded(resultBooks: List<BookSearchResult>) {
             hideProgressBar()
             clearFocus()
+            backToTop()
             if (resultBooks.isEmpty()) {
                 showMessage(getString(R.string.item_not_fount))
             } else {
@@ -229,6 +237,7 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onSearchFailed() {
             hideMessage()
             showMessage(getString(R.string.search_error))
+            hideProgressBar()
         }
     }
 
