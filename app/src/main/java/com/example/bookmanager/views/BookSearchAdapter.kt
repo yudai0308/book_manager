@@ -53,9 +53,14 @@ class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewH
                 context.getString(R.string.hyphen)
             }
         }
-        Glide.with(context)
-            .load(resultBook.image)
-            .into(holder.binding.bookSearchItemImage)
+        if (resultBook.image.isBlank()) {
+            holder.binding.bookSearchItemImage.setImageDrawable(
+                context.getDrawable(R.drawable.no_image)
+            )
+        } else {
+            Glide.with(context).load(resultBook.image).placeholder(R.drawable.now_loading)
+                .into(holder.binding.bookSearchItemImage)
+        }
     }
 
     override fun getItemCount(): Int {
