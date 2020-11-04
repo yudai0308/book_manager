@@ -63,9 +63,9 @@ class BookDetailActivity : AppCompatActivity() {
         val authorsString =
             authors?.let { Libs.listToString(it) } ?: getString(R.string.unknown_author)
         binding.apply {
-            bookDetailTitle.text = bookTitle
-            bookDetailAuthor.text = authorsString
-            bookDetailImage.setImageDrawable(bookImage)
+            bookBasicInfo.bookDetailTitle.text = bookTitle
+            bookBasicInfo.bookDetailAuthor.text = authorsString
+            bookBasicInfo.bookDetailImage.setImageDrawable(bookImage)
         }
     }
 
@@ -98,7 +98,8 @@ class BookDetailActivity : AppCompatActivity() {
         val description = getBookDescription(bookInfo)
         val bookDescriptionFragment = BookDescriptionFragment.newInstance(description)
         val bookReviewFragment = BookReviewFragment.newInstance(bookId)
-        return binding.bookDetailViewPager.apply {
+        return binding.bookAdditionalInfo.bookDetailViewPager.apply {
+            isUserInputEnabled = false
             adapter = BookDetailPagerAdapter(
                 this@BookDetailActivity, bookDescriptionFragment, bookReviewFragment
             )
@@ -112,7 +113,7 @@ class BookDetailActivity : AppCompatActivity() {
      * @return [TabLayoutMediator] オブジェクト
      */
     private fun createTabLayoutMediator(viewPager: ViewPager2): TabLayoutMediator {
-        val tabLayout = binding.bookDetailTabLayout
+        val tabLayout = binding.bookAdditionalInfo.bookDetailTabLayout
         return TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
                 BookDetailPagerAdapter.BookDetailPage.BOOK_DESCRIPTION.position -> {
@@ -180,13 +181,13 @@ class BookDetailActivity : AppCompatActivity() {
             if (volumeInfo.has("averageRating")) {
                 val averageRating = volumeInfo.getString("averageRating")
                 handler.post {
-                    binding.bookDetailRatingBar.rating = averageRating.toFloat()
+                    binding.bookBasicInfo.bookDetailRatingBar.rating = averageRating.toFloat()
                 }
             }
             if (volumeInfo.has("ratingsCount")) {
                 val ratingsCount = volumeInfo.getString("ratingsCount")
                 handler.post {
-                    binding.bookDetailRatingsCount.text = ratingsCount
+                    binding.bookBasicInfo.bookDetailRatingsCount.text = ratingsCount
                 }
             }
         }

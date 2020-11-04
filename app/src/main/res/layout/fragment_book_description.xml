@@ -32,6 +32,7 @@
                 android:paddingBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:text="a\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\n"
                 app:layout_constraintTop_toBottomOf="@+id/book_desc_summary_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
