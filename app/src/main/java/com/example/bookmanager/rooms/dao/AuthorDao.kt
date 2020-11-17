@@ -1,6 +1,7 @@
 package com.example.bookmanager.rooms.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.bookmanager.rooms.entities.Author
@@ -12,6 +13,12 @@ interface AuthorDao {
 
     @Insert
     suspend fun insertAll(authors: List<Author>): List<Long>
+
+    @Delete
+    suspend fun delete(author: Author)
+
+    @Query("SELECT * FROM authors WHERE id = :id LIMIT 1")
+    suspend fun loadById(id: Long): Author
 
     @Query("SELECT * FROM authors WHERE name = :name LIMIT 1")
     suspend fun loadByName(name: String): Author?

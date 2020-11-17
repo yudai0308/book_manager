@@ -15,9 +15,7 @@ class DaoController(private val context: Context) {
 
     private val db by lazy {
         Room.databaseBuilder(
-            context,
-            BookDatabase::class.java,
-            C.DB_NAME
+            context, BookDatabase::class.java, C.DB_NAME
         ).build()
     }
 
@@ -48,10 +46,30 @@ class DaoController(private val context: Context) {
      * DB にレコードが存在する場合は ID を返し、存在しない場合は保存したうえで ID を返す。
      */
     private suspend fun insertOrGetId(author: Author): Long {
-        val insertedAuthor = withContext(Dispatchers.Default) {
+        val insertedAuthor = withContext(Dispatchers.IO) {
             authorDao.loadByName(author.name)
         }
 
         return insertedAuthor?.id ?: authorDao.insert(author)
+    }
+
+    @Transaction
+    suspend fun deleteBook(book: Book) = withContext(Dispatchers.IO) {
+        // TODO: 著者が null の場合どうなる？
+        val authorBooks = authorBookDao.getRecordsByBookId(book.id)
+        val authorIds = authorBooks.map { it.authorId }
+        // 中間テーブルからレコードを削除。
+        for (data in authorBooks) {
+            authorBookDao.delete(data)
+        }
+        // 本のレコードを削除。
+        bookDao.deleteBooks(book)
+        // 中間テーブルで使用されていない著者レコードは削除。
+        for (id in authorIds) {
+            if (authorBookDao.existsAuthor(id) == 0) {
+                val author = authorDao.loadById(id)
+                authorDao.delete(author)
+            }
+        }
     }
 }

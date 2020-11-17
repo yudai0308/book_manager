@@ -34,6 +34,7 @@ class C {
         // DialogFragment タグ
         const val DIALOG_TAG_ADD_BOOK = "add_book_dialog"
         const val DIALOG_TAG_CANCEL_EDITING = "cancel_editing_dialog"
+        const val DIALOG_TAG_DELETE_BOOK = "delete_book_dialog"
 
         // bundle キー
         const val BOOK_ID = "bookId"

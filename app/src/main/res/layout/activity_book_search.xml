@@ -61,7 +61,7 @@
                 android:layout_marginStart="@dimen/space_default"
                 android:layout_marginTop="@dimen/space_default"
                 android:layout_marginEnd="@dimen/space_default"
-                app:resultBooks="@{viewModel.resultBooks}" />
+                app:result_books="@{viewModel.resultBooks}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

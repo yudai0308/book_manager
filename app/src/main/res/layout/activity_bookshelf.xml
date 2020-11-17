@@ -20,11 +20,11 @@
             layout="@layout/toolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/bookshelf_root"
+            android:id="@+id/bookshelf_book_list"
             android:layout_width="match_parent"
             android:layout_height="@dimen/match_constraint"
             android:scrollbars="vertical"
-            app:books="@{viewModel.books}"
+            app:my_books="@{viewModel.books}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

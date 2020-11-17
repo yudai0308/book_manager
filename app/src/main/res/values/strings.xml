@@ -9,6 +9,7 @@
 
     <!-- 本棚ページ -->
     <string name="toolbar_title_bookshelf">本棚</string>
+    <string name="delete_dialog_message">削除してもよろしいですか？</string>
 
     <!-- 本検索ページ -->
     <string name="search_error">エラーが発生しました。再度お試しください。</string>
