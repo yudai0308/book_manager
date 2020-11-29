@@ -1,5 +1,6 @@
 package com.example.bookmanager.views
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -12,7 +13,9 @@ import androidx.room.Room
 import androidx.viewpager2.widget.ViewPager2
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookDetailBinding
+import com.example.bookmanager.rooms.common.DaoController
 import com.example.bookmanager.rooms.database.BookDatabase
+import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.rooms.entities.BookInfo
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
@@ -36,12 +39,12 @@ class BookDetailActivity : AppCompatActivity() {
 
     private val bookId by lazy { intent.getStringExtra(C.BOOK_ID) }
 
-    private val bookInfo by lazy { loadBookInfo(bookId) }
+    private val bookDao by lazy {
+        Room.databaseBuilder(this, BookDatabase::class.java, C.DB_NAME).build().bookDao()
+    }
 
-    private val bookImage by lazy {
-        runBlocking {
-            FileIO.readBookImage(this@BookDetailActivity, bookId)
-        }
+    private val bookInfo by lazy {
+        runBlocking { bookDao.loadBookInfoById(bookId) }
     }
 
     private val handler = Handler()
@@ -58,10 +61,13 @@ class BookDetailActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val bookTitle = bookInfo?.book?.title ?: ""
-        val authors = bookInfo?.authors?.map { it.name }
-        val authorsString =
-            authors?.let { Libs.listToString(it) } ?: getString(R.string.unknown_author)
+        val bookTitle = bookInfo.book.title
+        val authors = bookInfo.authors.map { it.name }
+        val authorsString = Libs.listToString(authors)
+        val bookImage = runBlocking {
+            FileIO.readBookImage(this@BookDetailActivity, bookId)
+        }
+
         binding.apply {
             bookBasicInfo.bookDetailTitle.text = bookTitle
             bookBasicInfo.bookDetailAuthor.text = authorsString
@@ -128,18 +134,6 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * ローカルデータベースから本の情報を取得する。
-     *
-     * @param bookId 本のID
-     * @return [BookInfo] オブジェクト
-     */
-    private fun loadBookInfo(bookId: String): BookInfo? {
-        val db = Room.databaseBuilder(this, BookDatabase::class.java, C.DB_NAME).build()
-        val bookDao = db.bookDao()
-        return runBlocking { bookDao.loadBookInfoById(bookId) }
-    }
-
-    /**
      * [BookInfo] から本の説明を取得する。
      *
      * @param bookInfo [BookInfo] オブジェクト
@@ -201,7 +195,7 @@ class BookDetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            // 「感想を書く」をタップで画面遷移。
+            // 編集ボタンタップで画面遷移。
             R.id.toolbar_edit_review -> {
                 startActivity(Intent(
                     applicationContext, BookReviewEditingActivity::class.java
@@ -209,8 +203,29 @@ class BookDetailActivity : AppCompatActivity() {
                     putExtra(C.BOOK_ID, bookId)
                 })
             }
+            // 削除ボタンタップで本のデータを削除
+            R.id.toolbar_delete_book -> {
+                val book = runBlocking { bookDao.load(bookId) }
+                showDeleteConfirmationDialog(book)
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showDeleteConfirmationDialog(book: Book) {
+        SimpleDialogFragment().also {
+            it.setTitle(book.title)
+            it.setMessage(getString(R.string.delete_dialog_message))
+            it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
+                val daoController = DaoController(this)
+                runBlocking {
+                    daoController.deleteBook(book)
+                    FileIO.deleteBookImage(this@BookDetailActivity, book.id)
+                }
+                finish()
+            })
+            it.setNegativeButton(getString(R.string.cancel), null)
+        }.show(supportFragmentManager, C.DIALOG_TAG_DELETE_BOOK)
     }
 
     override fun onSupportNavigateUp(): Boolean {

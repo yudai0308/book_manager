@@ -18,6 +18,9 @@ interface BookDao {
     @Query("SELECT COUNT(id) FROM books WHERE id = :id LIMIT 1")
     suspend fun exists(id: String): Int
 
+    @Query("SELECT * FROM books WHERE id = :id LIMIT 1")
+    suspend fun load(id: String): Book
+
     @Query("SELECT * FROM books")
     suspend fun loadAll(): List<Book>
 
