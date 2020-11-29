@@ -13,26 +13,51 @@ import java.io.IOException
  * ファイルの読み込み、書き込みを実行するためのクラス。
  */
 class FileIO {
-
     companion object {
-        fun readBookImage(context: Context, fileName: String): Drawable? {
+        private val TAG = this::class.simpleName
+
+        fun readBookImage(context: Context, bookId: String): Drawable? {
             return try {
-                val file = getFile(context, C.DIRECTORY_NAME_BOOK_IMAGE, fileName)
-                Drawable.createFromPath(file.path)
+                val file = getFile(context, C.DIRECTORY_NAME_BOOK_IMAGE, bookId)
+                val image = Drawable.createFromPath(file.path)
+                Log.i(TAG, "本の画像を読み込みました / bookId: $bookId")
+                image
             } catch (e: IOException) {
-                Log.e(null, "画像の読み込みに失敗しました。")
+                Log.e(TAG, "本の画像の読み込みに失敗しました / bookId: $bookId")
                 null
             }
         }
 
-        fun saveBookImage(context: Context, bitmap: Bitmap, fileName: String): Boolean {
+        fun saveBookImage(context: Context, bitmap: Bitmap, bookId: String): Boolean {
             return try {
-                val file = getFile(context, C.DIRECTORY_NAME_BOOK_IMAGE, fileName)
+                val file = getFile(context, C.DIRECTORY_NAME_BOOK_IMAGE, bookId)
                 FileOutputStream(file).use {
-                    return bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+                    if (bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) {
+                        Log.i(TAG, "本の画像を保存しました / bookId: $bookId")
+                        true
+                    } else {
+                        Log.e(TAG, "本の画像の保存に失敗しました / bookId: $bookId")
+                        false
+                    }
                 }
             } catch (e: IOException) {
-                Log.e(null, "画像の保存に失敗しました。")
+                Log.e(TAG, "画像の保存に失敗しました / bookId: $bookId")
+                false
+            }
+        }
+
+        fun deleteBookImage(context: Context, bookId: String): Boolean {
+            return try {
+                val file = getFile(context, C.DIRECTORY_NAME_BOOK_IMAGE, bookId)
+                if (file.delete()) {
+                    Log.i(TAG, "画像を削除しました / bookId: $bookId")
+                    true
+                } else {
+                    Log.e(TAG, "画像の削除に失敗しました / bookId: $bookId")
+                    false
+                }
+            } catch (e: IOException) {
+                Log.e(TAG, "画像の削除に失敗しました / bookId: $bookId")
                 false
             }
         }
@@ -54,16 +79,14 @@ class FileIO {
             return builder.toString()
         }
 
-        fun saveReviewFile(context: Context, fileName: String, text: String): Boolean {
+        fun saveReviewFile(context: Context, bookId: String, text: String): Boolean {
             return try {
-                val file = getFile(context, C.DIRECTORY_NAME_BOOK_REVIEW, fileName)
+                val file = getFile(context, C.DIRECTORY_NAME_BOOK_REVIEW, bookId)
                 file.writeText(text)
-//                FileOutputStream(file).use {
-//                    it.write(text.toByteArray())
-//                }
+                Log.i(TAG, "レビューファイルを保存しました / bookId: $bookId")
                 true
             } catch (e: IOException) {
-                Log.e(null, "テキストファイルの保存に失敗しました。")
+                Log.e(TAG, "レビューファイルの保存に失敗しました / bookId: $bookId")
                 false
             }
         }
@@ -77,5 +100,4 @@ class FileIO {
             return File(directory, fileName)
         }
     }
-
 }

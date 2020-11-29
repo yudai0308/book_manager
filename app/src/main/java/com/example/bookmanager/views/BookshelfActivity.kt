@@ -17,6 +17,7 @@ import com.example.bookmanager.databinding.ActivityBookshelfBinding
 import com.example.bookmanager.rooms.common.DaoController
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
+import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -156,8 +157,8 @@ class BookshelfActivity : AppCompatActivity() {
             it.setMessage(getString(R.string.delete_dialog_message))
             it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
                 runBlocking {
-                    // todo: 画像の削除
                     daoController.deleteBook(book)
+                    FileIO.deleteBookImage(this@BookshelfActivity, book.id)
                     viewModel.reload()
                 }
             })
