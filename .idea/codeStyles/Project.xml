@@ -20,7 +20,10 @@
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
     <codeStyleSettings language="JAVA">
-      <option name="RIGHT_MARGIN" value="120" />
+      <option name="RIGHT_MARGIN" value="100" />
+      <option name="KEEP_LINE_BREAKS" value="false" />
+      <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
+      <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
       <indentOptions>
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
       </indentOptions>
@@ -139,10 +142,11 @@
     </codeStyleSettings>
     <codeStyleSettings language="kotlin">
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
-      <option name="RIGHT_MARGIN" value="120" />
+      <option name="RIGHT_MARGIN" value="100" />
       <option name="KEEP_LINE_BREAKS" value="false" />
       <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
-      <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
+      <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+      <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
       <option name="ENUM_CONSTANTS_WRAP" value="2" />
       <option name="WRAP_ON_TYPING" value="0" />
       <indentOptions>

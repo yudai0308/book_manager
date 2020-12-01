@@ -36,14 +36,10 @@ class BookReviewFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            layoutInflater,
-            R.layout.fragment_book_review,
-            container,
-            false
+            layoutInflater, R.layout.fragment_book_review, container, false
         )
 
         return binding.root
@@ -53,7 +49,6 @@ class BookReviewFragment : Fragment() {
         super.onStart()
 
         val markwon = context?.let { Markwon.create(it) }
-
         val review = context?.let {
             FileIO.readReviewFile(it, bookId)
         }

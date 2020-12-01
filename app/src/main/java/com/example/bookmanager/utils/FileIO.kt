@@ -93,10 +93,7 @@ class FileIO {
 
         private fun getFile(context: Context, directoryName: String, fileName: String): File {
             val contextWrapper = ContextWrapper(context)
-            val directory = contextWrapper.getDir(
-                directoryName,
-                Context.MODE_PRIVATE
-            )
+            val directory = contextWrapper.getDir(directoryName, Context.MODE_PRIVATE)
             return File(directory, fileName)
         }
     }

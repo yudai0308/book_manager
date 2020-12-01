@@ -33,14 +33,10 @@ class BookDescriptionFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            layoutInflater,
-            R.layout.fragment_book_description,
-            container,
-            false
+            layoutInflater, R.layout.fragment_book_description, container, false
         )
 
         return binding.root

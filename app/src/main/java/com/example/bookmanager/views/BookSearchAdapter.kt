@@ -59,7 +59,9 @@ class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewH
                 ContextCompat.getDrawable(context, R.drawable.no_image)
             )
         } else {
-            Glide.with(context).load(resultBook.image).placeholder(R.drawable.now_loading)
+            Glide.with(context)
+                .load(resultBook.image)
+                .placeholder(R.drawable.now_loading)
                 .into(holder.binding.bookSearchItemImage)
         }
     }
