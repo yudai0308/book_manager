@@ -24,7 +24,6 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#EEEEEE"
                 android:fitsSystemWindows="true"
                 android:theme="@style/Theme.AppCompat.Light">
 
@@ -33,7 +32,6 @@
                     android:layout_height="match_parent"
                     android:background="#FAFAFA"
                     android:fitsSystemWindows="true"
-                    app:contentScrim="?attr/colorPrimary"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                     <include

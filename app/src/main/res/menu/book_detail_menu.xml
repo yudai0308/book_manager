@@ -8,4 +8,10 @@
         android:title="@string/edit_review"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/toolbar_delete_book"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title="@string/delete_book"
+        app:showAsAction="ifRoom" />
+
 </menu>

@@ -6,6 +6,6 @@
     <color name="colorAccent">#DC9694</color>
 
     <color name="search_bar_background">#F5F5F5</color>
-
+    <color name="default_background">#FAFAFA</color>
     <color name="white">#FFFFFF</color>
 </resources>

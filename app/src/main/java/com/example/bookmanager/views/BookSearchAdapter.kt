@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
@@ -55,10 +56,12 @@ class BookSearchAdapter : RecyclerView.Adapter<BookSearchAdapter.BookSearchViewH
         }
         if (resultBook.image.isBlank()) {
             holder.binding.bookSearchItemImage.setImageDrawable(
-                context.getDrawable(R.drawable.no_image)
+                ContextCompat.getDrawable(context, R.drawable.no_image)
             )
         } else {
-            Glide.with(context).load(resultBook.image).placeholder(R.drawable.now_loading)
+            Glide.with(context)
+                .load(resultBook.image)
+                .placeholder(R.drawable.now_loading)
                 .into(holder.binding.bookSearchItemImage)
         }
     }

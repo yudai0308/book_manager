@@ -6,16 +6,9 @@ import androidx.room.Relation
 
 
 data class BookInfo(
-    @Embedded val book: Book,
-    @Relation(
-        entity = Author::class,
-        parentColumn = "id",
-        entityColumn = "id",
-        associateBy = Junction(
-            value = AuthorBook::class,
-            parentColumn = "book_id",
-            entityColumn = "author_id"
+    @Embedded val book: Book, @Relation(
+        entity = Author::class, parentColumn = "id", entityColumn = "id", associateBy = Junction(
+            value = AuthorBook::class, parentColumn = "book_id", entityColumn = "author_id"
         )
-    )
-    val authors: List<Author>
+    ) val authors: List<Author>
 )

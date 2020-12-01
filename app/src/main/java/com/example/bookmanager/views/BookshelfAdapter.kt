@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.R
@@ -23,17 +24,24 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
 
     private var listener: View.OnClickListener? = null
 
+    private var callback: Callback? = null
+
+    interface Callback {
+        fun onBindViewHolder(view: View)
+    }
+
     fun setListener(listener: View.OnClickListener) {
         this.listener = listener
+    }
+
+    fun setCallback(callback: Callback) {
+        this.callback = callback
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookShelfHolder {
         context = parent.context
         val binding: ListItemBookshelfBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            R.layout.list_item_bookshelf,
-            parent,
-            false
+            LayoutInflater.from(context), R.layout.list_item_bookshelf, parent, false
         )
         binding.root.setOnClickListener(listener)
         return BookShelfHolder(binding)
@@ -43,16 +51,18 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         val book = books[position]
         val image = runBlocking { FileIO.readBookImage(context, book.id) }
 
-        holder.binding.bookshelfItemImage.apply {
+        holder.binding.bookshelfItemTitle.apply {
             if (image != null) {
-                setImageDrawable(image)
+                background = image
+                text = ""
             } else {
-                holder.binding.bookshelfItemTitle.apply {
-                    visibility = View.VISIBLE
-                    text = book.title
-                }
+                background =
+                    ResourcesCompat.getDrawable(context.resources, R.drawable.white_680x800, null)
+                text = book.title
             }
         }
+
+        callback?.onBindViewHolder(holder.binding.root)
     }
 
     override fun getItemCount(): Int {

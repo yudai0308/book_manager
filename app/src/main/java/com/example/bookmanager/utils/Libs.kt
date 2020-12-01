@@ -18,11 +18,7 @@ class Libs {
         }
 
         fun showSnackBar(view: View, msg: String) {
-            Snackbar.make(
-                view,
-                msg,
-                Snackbar.LENGTH_LONG
-            ).show()
+            Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show()
         }
 
         fun showToastLong(context: Context, text: String) {
