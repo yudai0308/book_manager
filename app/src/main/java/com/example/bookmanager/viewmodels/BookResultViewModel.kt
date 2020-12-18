@@ -26,22 +26,33 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
 
     private var searchCallback: SearchCallback? = null
 
+    enum class SearchType {
+        NEW,
+        ADDITIONAL,
+    }
+
     interface SearchCallback {
         fun onSearchStart()
         fun onSearchSucceeded(resultBooks: List<BookSearchResult>)
         fun onSearchFailed()
     }
 
-    fun searchBook(query: String, searchType: String, callback: SearchCallback) {
+    fun searchBooks(
+        query: String, searchWith: String, searchType: SearchType, callback: SearchCallback? = null
+    ) {
         searchCallback = callback
         searchCallback?.onSearchStart()
-        val param = createUrlWithParameter(searchType, query)
+        val index = when (searchType) {
+            SearchType.NEW -> 0
+            SearchType.ADDITIONAL -> _resultBooks.value?.size ?: 0
+        }
+        val param = createUrlWithParameter(searchWith, query, C.MAX_RESULTS_COUNT, index)
         val url = C.BOOK_SEARCH_API_URL + param
-        fetch(url)
+        fetch(url, searchType)
     }
 
     private fun createUrlWithParameter(
-        type: String, keyword: String, max: Int = C.MAX_RESULTS_COUNT, index: Int = 0
+        type: String, keyword: String, max: Int, index: Int = 0
     ): String {
         var param = C.ADD_QUERY
         param += when (type) {
@@ -52,14 +63,14 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
         return param + keyword + C.PARAM_MAX + max + C.PARAM_INDEX + index
     }
 
-    private fun fetch(url: String) {
+    private fun fetch(url: String, searchType: SearchType) {
         val req = Request.Builder().url(url).build()
         val client = OkHttpClient.Builder().build()
         val call = client.newCall(req)
-        call.enqueue(BookSearchCallback())
+        call.enqueue(BookSearchCallback(searchType))
     }
 
-    inner class BookSearchCallback : Callback {
+    inner class BookSearchCallback(private val searchType: SearchType) : Callback {
         override fun onFailure(call: Call, e: IOException) {
             // TODO: 検索失敗時の処理
             searchCallback?.onSearchFailed()
@@ -72,10 +83,14 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             }
             val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
             val result = adapter.fromJson(resBody) ?: return
-            val resultBooks = if (result.items == null) {
+            var resultBooks = if (result.items == null) {
                 listOf()
             } else {
                 createResultBooks(result.items as List<Item>)
+            }
+            if (searchType == SearchType.ADDITIONAL) {
+                val currentBooks = _resultBooks.value ?: return
+                resultBooks = currentBooks.plus(resultBooks)
             }
             _resultBooks.postValue(resultBooks)
             searchCallback?.onSearchSucceeded(resultBooks)

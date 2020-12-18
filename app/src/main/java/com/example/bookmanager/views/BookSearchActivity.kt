@@ -64,6 +64,10 @@ class BookSearchActivity : AppCompatActivity() {
 
     private lateinit var searchView: SearchView
 
+    private var searchWith = ""
+
+    private var searchQuery = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -97,6 +101,7 @@ class BookSearchActivity : AppCompatActivity() {
         binding.bookSearchResultList.also {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(this)
+            it.addOnScrollListener(AdditionalSearchListener())
             it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         }
     }
@@ -218,7 +223,7 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    inner class SearchCallback : BookResultViewModel.SearchCallback {
+    inner class NewSearchCallback : BookResultViewModel.SearchCallback {
         override fun onSearchStart() {
             showProgressBar()
         }
@@ -241,6 +246,43 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
+    inner class AdditionalSearchListener : RecyclerView.OnScrollListener() {
+
+        var nowLoading = false
+        var previousItemCount = 0
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val totalCount = recyclerView.adapter?.itemCount ?: 0
+            val childCount = recyclerView.childCount
+            val manager = recyclerView.layoutManager as LinearLayoutManager
+            val firstPosition = manager.findFirstVisibleItemPosition()
+
+            // 下端から１つ上に戻ったらもう１度実行できるようにする。
+            if (totalCount == childCount + firstPosition + 1) {
+                nowLoading = false
+            }
+
+            // 何度もリクエストしないようにロード中は何もしない。
+            if (nowLoading) {
+                // ロードが終わったら（totalCount が前回より増えていたら）nowLoading を false にする。
+                if (totalCount > previousItemCount) {
+                    nowLoading = false
+                }
+                return
+            }
+
+            if (totalCount == childCount + firstPosition) {
+                nowLoading = true
+                previousItemCount = totalCount
+                viewModel.searchBooks(
+                    searchQuery, searchWith, BookResultViewModel.SearchType.ADDITIONAL
+                )
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.book_search_menu, menu)
 
@@ -255,8 +297,14 @@ class BookSearchActivity : AppCompatActivity() {
                     if (query == null || query == "") {
                         return true
                     }
-                    val searchType = binding.bookSearchSpinner.selectedItem.toString()
-                    viewModel.searchBook(query, searchType, SearchCallback())
+                    searchQuery = query
+                    searchWith = binding.bookSearchSpinner.selectedItem.toString()
+                    viewModel.searchBooks(
+                        searchQuery,
+                        searchWith,
+                        BookResultViewModel.SearchType.NEW,
+                        NewSearchCallback()
+                    )
                     return true
                 }
 
