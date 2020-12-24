@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.Menu
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.models.BookSearchResult
+import com.example.bookmanager.models.BookSearchResultItem
 import com.example.bookmanager.rooms.common.DaoController
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Author
@@ -64,9 +66,20 @@ class BookSearchActivity : AppCompatActivity() {
 
     private lateinit var searchView: SearchView
 
-    private var searchWith = ""
+    /**
+     * 検索方法（フリーワード/タイトル/著者名）
+     */
+    private var searchMethod = ""
 
+    /**
+     * ユーザーが入力した検索文字列
+     */
     private var searchQuery = ""
+
+    /**
+     * 追加検索のロード中であれば true。
+     */
+    private var nowLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +128,11 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun initSpinner() {
         val spinner: Spinner = binding.bookSearchSpinner
-        val items = listOf(C.SEARCH_FREE_WORD, C.SEARCH_TITLE, C.SEARCH_AUTHOR)
+        val items = listOf(
+            getString(R.string.search_with_free_word),
+            getString(R.string.search_with_title),
+            getString(R.string.search_with_author)
+        )
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
@@ -127,13 +144,13 @@ class BookSearchActivity : AppCompatActivity() {
             val recyclerView: RecyclerView = binding.bookSearchResultList
             val position = recyclerView.getChildAdapterPosition(v)
             // FIXME: resultBook が null だった場合の処理を検討。
-            val resultBook = viewModel.resultBooks.value?.get(position) ?: return
+            val resultItem = viewModel.bookSearchResult.value?.items?.get(position) ?: return
             val dialog = SimpleDialogFragment().apply {
                 val activity = this@BookSearchActivity
-                setTitle(resultBook.title)
+                setTitle(resultItem.title)
                 setMessage(activity.getString(R.string.dialog_add_book_msg))
                 setPositiveButton(
-                    activity.getString(R.string.yes), OnOkButtonClickListener(resultBook)
+                    activity.getString(R.string.yes), OnOkButtonClickListener(resultItem)
                 )
                 setNegativeButton(activity.getString(R.string.cancel), null)
             }
@@ -141,21 +158,21 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    inner class OnOkButtonClickListener(private val resultBook: BookSearchResult) :
+    inner class OnOkButtonClickListener(private val resultItem: BookSearchResultItem) :
         DialogInterface.OnClickListener {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {
             // 本棚に存在するか確認。
-            if (haveBook(resultBook.id)) {
+            if (haveBook(resultItem.id)) {
                 Libs.showSnackBar(view, getString(R.string.exists_in_my_shelf))
                 return
             }
 
             val newBook = Book.create(
-                resultBook.id, resultBook.title, resultBook.description, resultBook.image
+                resultItem.id, resultItem.title, resultItem.description, resultItem.image
             )
 
-            val authors = Author.createAll(resultBook.authors)
+            val authors = Author.createAll(resultItem.authors)
 
             GlobalScope.launch {
                 dao.insertBookWithAuthors(newBook, authors)
@@ -183,20 +200,37 @@ class BookSearchActivity : AppCompatActivity() {
         return flag > 0
     }
 
-    private fun hideProgressBar() {
-        binding.bookSearchProgressBar.apply {
+    private fun hideCenterProgressBar() {
+        binding.bookSearchProgressBarCenter.apply {
             visibility = View.INVISIBLE
         }
     }
 
-    private fun showProgressBar() {
-        binding.bookSearchProgressBar.apply {
+    private fun showCenterProgressBar() {
+        binding.bookSearchProgressBarCenter.apply {
             visibility = View.VISIBLE
             bringToFront()
         }
     }
 
-    private fun showMessage(msg: String) {
+    private fun hideBottomProgressBar() {
+        val progressBar =
+            binding.root.findViewById<ProgressBar>(R.id.book_search_progress_bar_bottom)
+        progressBar?.apply {
+            visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showBottomProgressBar() {
+        val progressBar =
+            binding.root.findViewById<ProgressBar>(R.id.book_search_progress_bar_bottom)
+        progressBar?.apply {
+            visibility = View.VISIBLE
+            bringToFront()
+        }
+    }
+
+    private fun showCenterMessage(msg: String) {
         handler.post {
             binding.bookSearchMessage.apply {
                 this.text = msg
@@ -205,7 +239,7 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideMessage() {
+    private fun hideCenterMessage() {
         binding.bookSearchMessage.apply {
             visibility = View.INVISIBLE
         }
@@ -225,32 +259,44 @@ class BookSearchActivity : AppCompatActivity() {
 
     inner class NewSearchCallback : BookResultViewModel.SearchCallback {
         override fun onSearchStart() {
-            showProgressBar()
+            showCenterProgressBar()
         }
 
-        override fun onSearchSucceeded(resultBooks: List<BookSearchResult>) {
-            hideProgressBar()
+        override fun onSearchSucceeded(result: BookSearchResult) {
+            hideCenterProgressBar()
             clearFocus()
             backToTop()
-            if (resultBooks.isEmpty()) {
-                showMessage(getString(R.string.item_not_fount))
+            if (result.itemCount == 0) {
+                showCenterMessage(getString(R.string.item_not_fount))
             } else {
-                hideMessage()
+                hideCenterMessage()
             }
         }
 
         override fun onSearchFailed() {
-            hideMessage()
-            showMessage(getString(R.string.search_error))
-            hideProgressBar()
+            hideCenterMessage()
+            showCenterMessage(getString(R.string.search_error))
+            hideCenterProgressBar()
+        }
+    }
+
+    inner class AdditionalSearchCallback : BookResultViewModel.SearchCallback {
+        override fun onSearchStart() {
+            showBottomProgressBar()
+        }
+
+        override fun onSearchSucceeded(result: BookSearchResult) {
+            hideBottomProgressBar()
+            nowLoading = false
+        }
+
+        override fun onSearchFailed() {
+            hideBottomProgressBar()
+            nowLoading = false
         }
     }
 
     inner class AdditionalSearchListener : RecyclerView.OnScrollListener() {
-
-        var nowLoading = false
-        var previousItemCount = 0
-
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
@@ -259,25 +305,18 @@ class BookSearchActivity : AppCompatActivity() {
             val manager = recyclerView.layoutManager as LinearLayoutManager
             val firstPosition = manager.findFirstVisibleItemPosition()
 
-            // 下端から１つ上に戻ったらもう１度実行できるようにする。
-            if (totalCount == childCount + firstPosition + 1) {
-                nowLoading = false
-            }
-
             // 何度もリクエストしないようにロード中は何もしない。
             if (nowLoading) {
-                // ロードが終わったら（totalCount が前回より増えていたら）nowLoading を false にする。
-                if (totalCount > previousItemCount) {
-                    nowLoading = false
-                }
                 return
             }
 
             if (totalCount == childCount + firstPosition) {
                 nowLoading = true
-                previousItemCount = totalCount
                 viewModel.searchBooks(
-                    searchQuery, searchWith, BookResultViewModel.SearchType.ADDITIONAL
+                    searchQuery,
+                    searchMethod,
+                    BookResultViewModel.SearchType.ADDITIONAL,
+                    AdditionalSearchCallback()
                 )
             }
         }
@@ -298,10 +337,10 @@ class BookSearchActivity : AppCompatActivity() {
                         return true
                     }
                     searchQuery = query
-                    searchWith = binding.bookSearchSpinner.selectedItem.toString()
+                    searchMethod = binding.bookSearchSpinner.selectedItem.toString()
                     viewModel.searchBooks(
                         searchQuery,
-                        searchWith,
+                        searchMethod,
                         BookResultViewModel.SearchType.NEW,
                         NewSearchCallback()
                     )

@@ -12,6 +12,9 @@
     <string name="delete_dialog_message">削除してもよろしいですか？</string>
 
     <!-- 本検索ページ -->
+    <string name="search_with_free_word">フリーワード検索</string>
+    <string name="search_with_title">タイトル検索</string>
+    <string name="search_with_author">著者名検索</string>
     <string name="search_error">エラーが発生しました。再度お試しください。</string>
     <string name="item_not_fount">お探しの本が見つかりませんでした。</string>
     <string name="dialog_add_book_title">本棚に追加</string>

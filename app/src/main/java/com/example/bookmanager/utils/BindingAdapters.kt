@@ -9,13 +9,13 @@ import com.example.bookmanager.views.BookshelfAdapter
 
 object BindingAdapters {
     @JvmStatic
-    @BindingAdapter("result_books")
-    fun RecyclerView.bindResultBooks(resultBooks: List<BookSearchResult>?) {
-        if (resultBooks == null || adapter == null) {
+    @BindingAdapter("search_result")
+    fun RecyclerView.bindResult(result: BookSearchResult?) {
+        if (result == null || adapter == null) {
             return
         }
 
-        (adapter as BookSearchAdapter).update(resultBooks)
+        (adapter as BookSearchAdapter).update(result)
     }
 
     @JvmStatic

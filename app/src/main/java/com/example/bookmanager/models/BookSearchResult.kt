@@ -1,11 +1,5 @@
 package com.example.bookmanager.models
 
 data class BookSearchResult(
-    val id: String,
-    val title: String,
-    val authors: List<String>,
-    val averageRating: Float?,
-    val ratingsCount: Int,
-    val description: String,
-    val image: String
+    val itemCount: Int, val items: List<BookSearchResultItem>
 )
