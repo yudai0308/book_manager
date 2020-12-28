@@ -14,8 +14,8 @@
     <dimen name="book_row_image_width">64dp</dimen>
     <dimen name="book_row_image_height">80dp</dimen>
 
-    <dimen name="text_size_book_title">18sp</dimen>
-    <dimen name="text_size_book_author">16sp</dimen>
+    <dimen name="text_size_book_title">16sp</dimen>
+    <dimen name="text_size_book_author">14sp</dimen>
 
     <dimen name="bookshelf_image_elevation">16dp</dimen>
     <dimen name="bookshelf_image_height">150dp</dimen>
