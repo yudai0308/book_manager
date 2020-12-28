@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bookmanager.R
 import com.example.bookmanager.models.BookSearchResult
+import com.example.bookmanager.models.BookSearchResultItem
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.utils.C
@@ -18,48 +19,68 @@ import java.io.IOException
  */
 class BookResultViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _resultBooks: MutableLiveData<List<BookSearchResult>> = MutableLiveData()
+    private val _bookSearchResult: MutableLiveData<BookSearchResult> = MutableLiveData()
 
-    val resultBooks: LiveData<List<BookSearchResult>> = _resultBooks
+    val bookSearchResult: LiveData<BookSearchResult> = _bookSearchResult
 
     private val context = application.applicationContext
 
     private var searchCallback: SearchCallback? = null
 
+    companion object {
+        const val ADD_QUERY = "?q="
+        const val PARAM_TITLE = "intitle:"
+        const val PARAM_AUTHOR = "inauthor:"
+        const val PARAM_MAX = "&maxResults="
+        const val PARAM_INDEX = "&startIndex="
+        const val MAX_RESULTS_COUNT = 20
+    }
+
+    enum class SearchType {
+        NEW,
+        ADDITIONAL,
+    }
+
     interface SearchCallback {
         fun onSearchStart()
-        fun onSearchSucceeded(resultBooks: List<BookSearchResult>)
+        fun onSearchSucceeded(result: BookSearchResult)
         fun onSearchFailed()
     }
 
-    fun searchBook(query: String, searchType: String, callback: SearchCallback) {
+    fun searchBooks(
+        query: String, searchWith: String, searchType: SearchType, callback: SearchCallback? = null
+    ) {
         searchCallback = callback
         searchCallback?.onSearchStart()
-        val param = createUrlWithParameter(searchType, query)
+        val index = when (searchType) {
+            SearchType.NEW -> 0
+            SearchType.ADDITIONAL -> _bookSearchResult.value?.items?.size ?: 0
+        }
+        val param = createUrlWithParameter(searchWith, query, MAX_RESULTS_COUNT, index)
         val url = C.BOOK_SEARCH_API_URL + param
-        fetch(url)
+        fetch(url, searchType)
     }
 
     private fun createUrlWithParameter(
-        type: String, keyword: String, max: Int = C.MAX_RESULTS_COUNT, index: Int = 0
+        type: String, keyword: String, max: Int, index: Int = 0
     ): String {
-        var param = C.ADD_QUERY
+        var param = ADD_QUERY
         param += when (type) {
-            C.SEARCH_TITLE -> C.PARAM_TITLE
-            C.SEARCH_AUTHOR -> C.PARAM_AUTHOR
+            context.getString(R.string.search_with_title) -> PARAM_TITLE
+            context.getString(R.string.search_with_author) -> PARAM_AUTHOR
             else -> ""
         }
-        return param + keyword + C.PARAM_MAX + max + C.PARAM_INDEX + index
+        return param + keyword + PARAM_MAX + max + PARAM_INDEX + index
     }
 
-    private fun fetch(url: String) {
+    private fun fetch(url: String, searchType: SearchType) {
         val req = Request.Builder().url(url).build()
         val client = OkHttpClient.Builder().build()
         val call = client.newCall(req)
-        call.enqueue(BookSearchCallback())
+        call.enqueue(BookSearchCallback(searchType))
     }
 
-    inner class BookSearchCallback : Callback {
+    inner class BookSearchCallback(private val searchType: SearchType) : Callback {
         override fun onFailure(call: Call, e: IOException) {
             // TODO: 検索失敗時の処理
             searchCallback?.onSearchFailed()
@@ -71,19 +92,24 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
                 return
             }
             val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
-            val result = adapter.fromJson(resBody) ?: return
-            val resultBooks = if (result.items == null) {
+            val originalResult = adapter.fromJson(resBody) ?: return
+            var resultItems = if (originalResult.items == null) {
                 listOf()
             } else {
-                createResultBooks(result.items as List<Item>)
+                createResultItems(originalResult.items as List<Item>)
             }
-            _resultBooks.postValue(resultBooks)
-            searchCallback?.onSearchSucceeded(resultBooks)
+            if (searchType == SearchType.ADDITIONAL) {
+                val currentItems = _bookSearchResult.value?.items ?: return
+                resultItems = currentItems + resultItems
+            }
+            val bookSearchResult = BookSearchResult(originalResult.totalItems, resultItems)
+            _bookSearchResult.postValue(bookSearchResult)
+            searchCallback?.onSearchSucceeded(bookSearchResult)
         }
     }
 
-    private fun createResultBooks(items: List<Item>): List<BookSearchResult> {
-        val books = mutableListOf<BookSearchResult>()
+    private fun createResultItems(items: List<Item>): List<BookSearchResultItem> {
+        val books = mutableListOf<BookSearchResultItem>()
         for (item in items) {
             val info = item.volumeInfo
             val id = item.id
@@ -94,7 +120,7 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             val description = info.description ?: ""
             val image = info.imageLinks?.thumbnail ?: ""
             books.add(
-                BookSearchResult(
+                BookSearchResultItem(
                     id, title, authors, averageRating, ratingsCount, description, image
                 )
             )

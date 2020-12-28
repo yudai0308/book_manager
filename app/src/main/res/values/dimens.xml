@@ -20,4 +20,6 @@
     <dimen name="bookshelf_image_elevation">16dp</dimen>
     <dimen name="bookshelf_image_height">150dp</dimen>
     <dimen name="bookshelf_title_text_width">100dp</dimen>
+
+    <dimen name="item_list_bottom_height">60dp</dimen>
 </resources>
