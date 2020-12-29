@@ -6,6 +6,7 @@
     <string name="save">保存</string>
     <string name="hyphen">-</string>
     <string name="description_book_image">Book Image</string>
+    <string name="description_bookmark_image">Bookmark Image</string>
 
     <!-- 本棚ページ -->
     <string name="toolbar_title_bookshelf">本棚</string>

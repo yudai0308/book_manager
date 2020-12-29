@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.SearchView
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -16,14 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
-import com.example.bookmanager.rooms.common.DaoController
-import com.example.bookmanager.rooms.database.BookDatabase
+import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
@@ -33,7 +28,6 @@ import com.example.bookmanager.viewmodels.BookResultViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /**
  * 本検索ページのアクティビティ。
@@ -44,13 +38,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private val handler = Handler()
 
-    private val dao by lazy { DaoController(this) }
-
-    private val db by lazy {
-        Room.databaseBuilder(this, BookDatabase::class.java, C.DB_NAME).build()
-    }
-
-    private val bookDao by lazy { db.bookDao() }
+    private val repository by lazy { BookRepository(this) }
 
     private val viewModel by lazy {
         ViewModelProvider(
@@ -91,7 +79,7 @@ class BookSearchActivity : AppCompatActivity() {
 
         view = binding.root
 
-        // as Toolbar がないとエラーになる。
+        // `as Toolbar` がないとエラーになる。
         setSupportActionBar(binding.toolbar as Toolbar)
 
         supportActionBar?.apply {
@@ -150,7 +138,7 @@ class BookSearchActivity : AppCompatActivity() {
                 setTitle(resultItem.title)
                 setMessage(activity.getString(R.string.dialog_add_book_msg))
                 setPositiveButton(
-                    activity.getString(R.string.yes), OnOkButtonClickListener(resultItem)
+                    activity.getString(R.string.yes), OnOkButtonClickListener(resultItem, v)
                 )
                 setNegativeButton(activity.getString(R.string.cancel), null)
             }
@@ -158,12 +146,13 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    inner class OnOkButtonClickListener(private val resultItem: BookSearchResultItem) :
-        DialogInterface.OnClickListener {
+    inner class OnOkButtonClickListener(
+        private val resultItem: BookSearchResultItem, private val view: View
+    ) : DialogInterface.OnClickListener {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {
             // 本棚に存在するか確認。
-            if (haveBook(resultItem.id)) {
+            if (repository.exist(resultItem.id)) {
                 Libs.showSnackBar(view, getString(R.string.exists_in_my_shelf))
                 return
             }
@@ -175,11 +164,12 @@ class BookSearchActivity : AppCompatActivity() {
             val authors = Author.createAll(resultItem.authors)
 
             GlobalScope.launch {
-                dao.insertBookWithAuthors(newBook, authors)
+                repository.insertBookWithAuthors(newBook, authors)
             }
-            if (!newBook.image.isBlank()) {
+            if (newBook.image.isNotBlank()) {
                 saveImageToInternalStorage(newBook.image, newBook.id)
             }
+            view.findViewById<ImageView>(R.id.book_search_bookmark).visibility = View.VISIBLE
             Libs.showSnackBar(view, C.ADD_BOOK)
         }
     }
@@ -191,13 +181,6 @@ class BookSearchActivity : AppCompatActivity() {
             val bitmap = Glide.with(activity).asBitmap().load(url).submit().get()
             FileIO.saveBookImage(activity, bitmap, fileName)
         }
-    }
-
-    private fun haveBook(id: String): Boolean {
-        val flag = runBlocking {
-            bookDao.exists(id)
-        }
-        return flag > 0
     }
 
     private fun hideCenterProgressBar() {

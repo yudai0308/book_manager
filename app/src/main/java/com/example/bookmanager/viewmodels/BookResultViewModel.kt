@@ -9,6 +9,7 @@ import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
+import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.utils.C
 import com.squareup.moshi.Moshi
 import okhttp3.*
@@ -26,6 +27,8 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
     private val context = application.applicationContext
 
     private var searchCallback: SearchCallback? = null
+
+    private val repository by lazy { BookRepository(context) }
 
     companion object {
         const val ADD_QUERY = "?q="
@@ -119,9 +122,10 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             val ratingsCount = info.ratingsCount ?: 0
             val description = info.description ?: ""
             val image = info.imageLinks?.thumbnail ?: ""
+            val exist = repository.exist(id)
             books.add(
                 BookSearchResultItem(
-                    id, title, authors, averageRating, ratingsCount, description, image
+                    id, title, authors, averageRating, ratingsCount, description, image, exist
                 )
             )
         }

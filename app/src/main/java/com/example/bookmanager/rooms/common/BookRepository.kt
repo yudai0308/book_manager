@@ -9,9 +9,10 @@ import com.example.bookmanager.rooms.entities.AuthorBook
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-class DaoController(private val context: Context) {
+class BookRepository(private val context: Context) {
 
     private val db by lazy {
         Room.databaseBuilder(
@@ -71,5 +72,9 @@ class DaoController(private val context: Context) {
                 authorDao.delete(author)
             }
         }
+    }
+
+    fun exist(id: String): Boolean {
+        return runBlocking { bookDao.exists(id) } > 0
     }
 }

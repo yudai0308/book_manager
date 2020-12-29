@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookshelfBinding
-import com.example.bookmanager.rooms.common.DaoController
+import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
@@ -38,7 +38,7 @@ class BookshelfActivity : AppCompatActivity() {
         DataBindingUtil.setContentView<ActivityBookshelfBinding>(this, R.layout.activity_bookshelf)
     }
 
-    private val daoController by lazy { DaoController(this) }
+    private val daoController by lazy { BookRepository(this) }
 
     private lateinit var adapter: BookshelfAdapter
 
