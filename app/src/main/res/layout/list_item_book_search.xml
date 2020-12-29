@@ -69,6 +69,7 @@
             app:layout_constraintTop_toBottomOf="@id/book_search_item_author" />
 
         <ImageView
+            android:id="@+id/book_search_bookmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/space_narrow"

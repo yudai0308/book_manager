@@ -13,7 +13,7 @@ import androidx.room.Room
 import androidx.viewpager2.widget.ViewPager2
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookDetailBinding
-import com.example.bookmanager.rooms.common.DaoController
+import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.rooms.entities.BookInfo
@@ -217,7 +217,7 @@ class BookDetailActivity : AppCompatActivity() {
             it.setTitle(book.title)
             it.setMessage(getString(R.string.delete_dialog_message))
             it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
-                val daoController = DaoController(this)
+                val daoController = BookRepository(this)
                 runBlocking {
                     daoController.deleteBook(book)
                     FileIO.deleteBookImage(this@BookDetailActivity, book.id)

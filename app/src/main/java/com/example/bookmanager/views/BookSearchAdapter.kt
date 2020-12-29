@@ -110,6 +110,11 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             } else {
                 context.getString(R.string.hyphen)
             }
+            bookSearchBookmark.visibility = if (resultItem.exist) {
+                View.VISIBLE
+            } else {
+                View.INVISIBLE
+            }
         }
         if (resultItem.image.isBlank()) {
             holder.binding.bookSearchItemImage.setImageDrawable(
