@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.bookmanager.viewmodels.BookReviewViewModel" />
+            type="com.example.bookmanager.viewmodels.BookInfoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +29,7 @@
             android:paddingEnd="@dimen/space_wide"
             android:scrollbarStyle="outsideInset"
             android:scrollbars="vertical"
-            android:text="@{viewModel.reviewContent}"
+            android:text="@{viewModel.review}"
             android:textSize="@dimen/text_size_default"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -33,6 +33,13 @@
     <string name="markdown_supported">マークダウンでの記入も可能です。</string>
     <string name="unknown_author">著者不明</string>
     <string name="unknown_title">タイトル不明</string>
+    <string name="status_label">ステータス:</string>
+    <string name="start_date_label">読書開始日:</string>
+    <string name="finish_date_label">読書終了日:</string>
+    <string name="book_status_planning">読む予定の本</string>
+    <string name="book_status_reading">読んでいる本</string>
+    <string name="book_status_finished">読み終わった本</string>
+    <string name="clear">クリア</string>
 
     <!-- レビュー作成ページ -->
     <string name="toolbar_title_edit_review">感想を書く</string>

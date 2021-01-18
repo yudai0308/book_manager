@@ -115,15 +115,15 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun initSpinner() {
-        val spinner: Spinner = binding.bookSearchSpinner
         val items = listOf(
             getString(R.string.search_with_free_word),
             getString(R.string.search_with_title),
             getString(R.string.search_with_author)
         )
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        binding.bookSearchSpinner.adapter = adapter
     }
 
     inner class OnSearchResultClickListener : View.OnClickListener {

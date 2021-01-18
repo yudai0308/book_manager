@@ -4,6 +4,7 @@
     <dimen name="space_narrow">4dp</dimen>
     <dimen name="space_default">8dp</dimen>
     <dimen name="space_wide">16dp</dimen>
+    <dimen name="space_super_wide">16dp</dimen>
 
     <dimen name="text_size_tiny">11sp</dimen>
     <dimen name="text_size_small">13sp</dimen>

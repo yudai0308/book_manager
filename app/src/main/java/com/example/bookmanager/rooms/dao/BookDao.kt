@@ -1,9 +1,6 @@
 package com.example.bookmanager.rooms.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.rooms.entities.BookInfo
 
@@ -27,6 +24,25 @@ interface BookDao {
     @Query("SELECT * FROM books WHERE id = :id")
     suspend fun loadById(id: String): Book
 
+    @Transaction
     @Query("SELECT * FROM books WHERE id = :id")
     suspend fun loadBookInfoById(id: String): BookInfo
+
+    @Query("SELECT status FROM books WHERE id = :id")
+    suspend fun loadStatus(id: String): Int
+
+    @Query("UPDATE books SET status = :status WHERE id = :id")
+    suspend fun updateStatus(id: String, status: Int)
+
+    @Query("UPDATE books SET startDate = :date WHERE id = :id")
+    suspend fun updateStartDate(id: String, date: Long)
+
+    @Query("UPDATE books SET startDate = 0 WHERE id = :id")
+    suspend fun clearStartDate(id: String)
+
+    @Query("UPDATE books SET finishDate = :date WHERE id = :id")
+    suspend fun updateFinishDate(id: String, date: Long)
+
+    @Query("UPDATE books SET startDate = 0 WHERE id = :id")
+    suspend fun clearFinishDate(id: String)
 }
