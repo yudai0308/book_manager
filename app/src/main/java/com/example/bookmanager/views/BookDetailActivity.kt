@@ -101,9 +101,8 @@ class BookDetailActivity : AppCompatActivity() {
      * @return [ViewPager2] オブジェクト
      */
     private fun createViewPager(): ViewPager2 {
-        val description = getBookDescription(bookInfo)
-        val bookDescriptionFragment = BookDescriptionFragment.newInstance(description)
-        val bookReviewFragment = BookReviewFragment.newInstance(bookId)
+        val bookDescriptionFragment = BookDescriptionFragment.getInstance(bookId)
+        val bookReviewFragment = BookReviewFragment.getInstance(bookId)
         return binding.bookAdditionalInfo.bookDetailViewPager.apply {
             isUserInputEnabled = false
             adapter = BookDetailPagerAdapter(

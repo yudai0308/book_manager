@@ -37,7 +37,7 @@ class BookReviewFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             layoutInflater, R.layout.fragment_book_review, container, false
         )
@@ -67,7 +67,7 @@ class BookReviewFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(bookId: String) = BookReviewFragment().apply {
+        fun getInstance(bookId: String) = BookReviewFragment().apply {
             arguments = Bundle().apply {
                 putString(C.BOOK_ID, bookId)
             }

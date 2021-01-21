@@ -15,7 +15,7 @@ import com.example.bookmanager.databinding.ActivityBookReviewEditingBinding
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.utils.Libs
-import com.example.bookmanager.viewmodels.BookReviewViewModel
+import com.example.bookmanager.viewmodels.BookInfoViewModel
 import io.noties.markwon.Markwon
 import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
@@ -33,8 +33,8 @@ class BookReviewEditingActivity : AppCompatActivity() {
 
     private val viewModel by lazy {
         ViewModelProvider(
-            this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        ).get(BookReviewViewModel::class.java)
+            this, BookInfoViewModel.Factory(application, bookId)
+        ).get(BookInfoViewModel::class.java)
     }
 
     private val bookId by lazy { intent.getStringExtra(C.BOOK_ID) }
@@ -60,7 +60,7 @@ class BookReviewEditingActivity : AppCompatActivity() {
         }
 
         // レビュー内容の初期値を保存。
-        initialContent = viewModel.reviewContent
+        initialContent = viewModel.review
     }
 
     private fun initToolbar() {
@@ -89,7 +89,7 @@ class BookReviewEditingActivity : AppCompatActivity() {
      * 感想を内部ストレージに保存する。
      */
     private fun saveReviewContent() {
-        val text = viewModel.reviewContent
+        val text = viewModel.review
         FileIO.saveReviewFile(this, bookId, text)
     }
 
@@ -155,7 +155,7 @@ class BookReviewEditingActivity : AppCompatActivity() {
      * 画面を閉じるときにアラートを表示するか判断するために使う。
      */
     private fun contentChanged(): Boolean {
-        return initialContent != viewModel.reviewContent
+        return initialContent != viewModel.review
     }
 
     /**
@@ -163,7 +163,7 @@ class BookReviewEditingActivity : AppCompatActivity() {
      */
     inner class ReviewTextWatcher : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            viewModel.reviewContent = s.toString()
+            viewModel.review = s.toString()
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

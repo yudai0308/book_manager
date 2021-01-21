@@ -14,8 +14,8 @@ import androidx.room.PrimaryKey
 )
 data class AuthorBook(
     @PrimaryKey(autoGenerate = true) val id: Long,
-    @ColumnInfo(name = "author_id") val authorId: Long,
-    @ColumnInfo(name = "book_id") val bookId: String
+    @ColumnInfo(name = "author_id", index = true) val authorId: Long,
+    @ColumnInfo(name = "book_id", index = true) val bookId: String
 ) {
     companion object {
         fun create(authorId: Long, bookId: String): AuthorBook {
