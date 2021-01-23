@@ -59,7 +59,6 @@ class BookDescriptionFragment : Fragment() {
         initSpinner()
         setDatePicker()
         setOnClearButtonClickListener()
-        binding.bookDescSummary.text = viewModel.getDescription()
     }
 
     private fun initSpinner() {
