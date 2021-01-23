@@ -82,10 +82,7 @@ class BookDescriptionFragment : Fragment() {
                     viewModel.updateStatus(position)
                 }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    TODO("Not yet implemented")
-                }
-
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
         }
     }
