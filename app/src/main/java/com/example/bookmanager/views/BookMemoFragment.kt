@@ -21,7 +21,7 @@ import java.util.*
 /**
  * 本詳細ページ内、メモタブのフラグメント。
  */
-class BookDescriptionFragment : Fragment() {
+class BookMemoFragment : Fragment() {
 
     private lateinit var bookId: String
 
@@ -158,7 +158,7 @@ class BookDescriptionFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun getInstance(bookId: String) = BookDescriptionFragment().apply {
+        fun getInstance(bookId: String) = BookMemoFragment().apply {
             arguments = Bundle().apply {
                 putString(C.BOOK_ID, bookId)
             }

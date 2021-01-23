@@ -9,7 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
  */
 class BookDetailPagerAdapter(
     activity: AppCompatActivity,
-    private val bookDescriptionFragment: BookDescriptionFragment,
+    private val bookMemoFragment: BookMemoFragment,
     private val bookReviewFragment: BookReviewFragment
 ) : FragmentStateAdapter(activity) {
 
@@ -17,7 +17,7 @@ class BookDetailPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            BookDetailPage.BOOK_DESCRIPTION.position -> bookDescriptionFragment
+            BookDetailPage.BOOK_DESCRIPTION.position -> bookMemoFragment
             BookDetailPage.BOOK_REVIEW.position -> bookReviewFragment
             else -> throw IllegalArgumentException()
         }
