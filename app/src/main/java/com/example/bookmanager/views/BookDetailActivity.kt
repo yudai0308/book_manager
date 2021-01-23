@@ -7,7 +7,6 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -19,7 +18,6 @@ import com.example.bookmanager.databinding.ActivityBookDetailBinding
 import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.rooms.entities.BookInfo
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.utils.Libs
@@ -28,7 +26,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.io.IOException
 
 /**
@@ -70,7 +67,7 @@ class BookDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_book_detail)
 
         initToolbar()
-        createMainContents()
+        createViewPagerContents()
         showAverageRating(bookId)
     }
 
@@ -125,9 +122,9 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * メインコンテンツの「詳細」と「感想」を作成する。
+     * ViewPager 内のコンテンツ「メモ」と「感想」を作成する。
      */
-    private fun createMainContents() {
+    private fun createViewPagerContents() {
         val viewPager = createViewPager()
         val mediator = createTabLayoutMediator(viewPager)
         mediator.attach()
