@@ -12,14 +12,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.bookmanager.R
-import com.example.bookmanager.databinding.FragmentBookDescriptionBinding
+import com.example.bookmanager.databinding.FragmentBookMemoBinding
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.viewmodels.BookInfoViewModel
 import java.text.DateFormat
 import java.util.*
 
 /**
- * 本詳細ページ内、詳細タブのフラグメント。
+ * 本詳細ページ内、メモタブのフラグメント。
  */
 class BookDescriptionFragment : Fragment() {
 
@@ -27,7 +27,7 @@ class BookDescriptionFragment : Fragment() {
 
     private lateinit var viewModel: BookInfoViewModel
 
-    private lateinit var binding: FragmentBookDescriptionBinding
+    private lateinit var binding: FragmentBookMemoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class BookDescriptionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            layoutInflater, R.layout.fragment_book_description, container, false
+            layoutInflater, R.layout.fragment_book_memo, container, false
         )
         binding.also {
             it.viewModel = viewModel
