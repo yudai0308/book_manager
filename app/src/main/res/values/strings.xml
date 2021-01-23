@@ -25,7 +25,7 @@
 
     <!-- 本詳細ページ -->
     <string name="toolbar_title_book_detail">本の詳細</string>
-    <string name="book_detail_tab_description">詳細</string>
+    <string name="book_detail_tab_memo">メモ</string>
     <string name="book_detail_tab_review">感想</string>
     <string name="description">説明</string>
     <string name="book_description_not_found">説明が見つかりませんでした。</string>

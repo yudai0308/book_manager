@@ -6,12 +6,12 @@
         android:id="@+id/toolbar_edit_review"
         android:icon="@drawable/ic_baseline_edit_24"
         android:title="@string/edit_review"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/toolbar_delete_book"
         android:icon="@drawable/ic_baseline_delete_24"
         android:title="@string/delete_book"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
 </menu>

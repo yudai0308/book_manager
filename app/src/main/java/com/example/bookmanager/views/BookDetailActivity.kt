@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import androidx.viewpager2.widget.ViewPager2
 import com.example.bookmanager.R
@@ -20,10 +23,12 @@ import com.example.bookmanager.rooms.entities.BookInfo
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.utils.Libs
+import com.example.bookmanager.viewmodels.BookInfoViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import org.json.JSONObject
+import org.w3c.dom.Text
 import java.io.IOException
 
 /**
@@ -37,6 +42,12 @@ class BookDetailActivity : AppCompatActivity() {
         )
     }
 
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this, BookInfoViewModel.Factory(application, bookId)
+        ).get(BookInfoViewModel::class.java)
+    }
+
     private val bookId by lazy { intent.getStringExtra(C.BOOK_ID) }
 
     private val bookDao by lazy {
@@ -48,6 +59,11 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     private val handler = Handler()
+
+    /**
+     * 本の紹介テキストを短く表示している場合は true。
+     */
+    private var isShortText = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,11 +84,13 @@ class BookDetailActivity : AppCompatActivity() {
             FileIO.readBookImage(this@BookDetailActivity, bookId)
         }
 
-        binding.apply {
-            bookBasicInfo.bookDetailTitle.text = bookTitle
-            bookBasicInfo.bookDetailAuthor.text = authorsString
-            bookBasicInfo.bookDetailImage.setImageDrawable(bookImage)
+        binding.bookBasicInfo.also { binding ->
+            binding.bookDetailTitle.text = bookTitle
+            binding.bookDetailAuthor.text = authorsString
+            binding.bookDetailImage.setImageDrawable(bookImage)
         }
+
+        initBookDescription()
     }
 
     private fun initToolbar() {
@@ -83,6 +101,26 @@ class BookDetailActivity : AppCompatActivity() {
             title = getString(R.string.toolbar_title_book_detail)
             // ツールバーに戻るボタンを表示。
             setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    private fun initBookDescription() {
+        val binding = binding.bookBasicInfo
+        binding.bookDescSummaryShort.also { shortText ->
+            shortText.text = viewModel.getDescription()
+            shortText.setOnClickListener {
+                isShortText = false
+                it.visibility = View.GONE
+                binding.bookDescSummaryAll.visibility = View.VISIBLE
+            }
+        }
+        binding.bookDescSummaryAll.also { allText ->
+            allText.text = viewModel.getDescription()
+            allText.setOnClickListener {
+                isShortText = true
+                it.visibility = View.GONE
+                binding.bookDescSummaryShort.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -122,28 +160,13 @@ class BookDetailActivity : AppCompatActivity() {
         return TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
                 BookDetailPagerAdapter.BookDetailPage.BOOK_DESCRIPTION.position -> {
-                    getString(R.string.book_detail_tab_description)
+                    getString(R.string.book_detail_tab_memo)
                 }
                 BookDetailPagerAdapter.BookDetailPage.BOOK_REVIEW.position -> {
                     getString(R.string.book_detail_tab_review)
                 }
                 else -> throw IllegalArgumentException()
             }
-        }
-    }
-
-    /**
-     * [BookInfo] から本の説明を取得する。
-     *
-     * @param bookInfo [BookInfo] オブジェクト
-     * @return 本の説明
-     */
-    private fun getBookDescription(bookInfo: BookInfo?): String {
-        val description = bookInfo?.book?.description
-        return if (description.isNullOrBlank()) {
-            getString(R.string.book_description_not_found)
-        } else {
-            description
         }
     }
 

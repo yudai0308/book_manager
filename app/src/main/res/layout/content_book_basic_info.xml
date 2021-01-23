@@ -73,6 +73,34 @@
             app:layout_constraintStart_toEndOf="@+id/book_detail_rating_bar"
             app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
 
+
+        <TextView
+            android:id="@+id/book_desc_summary_short"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_wide"
+            android:layout_marginTop="@dimen/space_wide"
+            android:layout_marginEnd="@dimen/space_wide"
+            android:paddingBottom="@dimen/space_default"
+            android:maxLines="3"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_detail_image_card" />
+
+        <TextView
+            android:id="@+id/book_desc_summary_all"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_wide"
+            android:layout_marginTop="@dimen/space_wide"
+            android:layout_marginEnd="@dimen/space_wide"
+            android:paddingBottom="@dimen/space_default"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/book_detail_image_card" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
