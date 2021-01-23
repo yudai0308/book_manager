@@ -60,6 +60,9 @@ class BookDetailActivity : AppCompatActivity() {
 
     private val handler = Handler()
 
+    /**
+     * 本の紹介テキストを短く表示している場合は true。
+     */
     private var isShortText = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -157,7 +160,7 @@ class BookDetailActivity : AppCompatActivity() {
         return TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
                 BookDetailPagerAdapter.BookDetailPage.BOOK_DESCRIPTION.position -> {
-                    getString(R.string.book_detail_tab_description)
+                    getString(R.string.book_detail_tab_memo)
                 }
                 BookDetailPagerAdapter.BookDetailPage.BOOK_REVIEW.position -> {
                     getString(R.string.book_detail_tab_review)
