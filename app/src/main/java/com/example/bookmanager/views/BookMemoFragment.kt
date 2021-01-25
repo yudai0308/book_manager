@@ -61,6 +61,12 @@ class BookMemoFragment : Fragment() {
         setOnClearButtonClickListener()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        binding.root.requestLayout()
+    }
+
     private fun initSpinner() {
         val adapter = context?.let {
             val items = listOf(

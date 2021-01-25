@@ -30,7 +30,7 @@
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#FAFAFA"
+                    android:background="@color/default_background"
                     android:fitsSystemWindows="true"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -42,6 +42,13 @@
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/book_detail_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/default_background"
+                    app:tabIndicatorColor="@color/colorAccent" />
+
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.core.widget.NestedScrollView
@@ -49,9 +56,8 @@
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <include
-                    android:id="@+id/book_additional_info"
-                    layout="@layout/content_book_additional_info"
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/book_detail_view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

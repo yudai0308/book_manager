@@ -1,7 +1,6 @@
 package com.example.bookmanager.views
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,8 @@ import io.noties.markwon.Markwon
 class BookReviewFragment : Fragment() {
 
     private var bookId = ""
+
+    private var review = ""
 
     private lateinit var binding: FragmentBookReviewBinding
 
@@ -49,20 +50,25 @@ class BookReviewFragment : Fragment() {
         super.onStart()
 
         val markwon = context?.let { Markwon.create(it) }
-        val review = context?.let {
+        review = context?.let {
             FileIO.readReviewFile(it, bookId)
-        }
+        } ?: ""
 
-        binding.bookReviewText.also {
-            if (markwon != null && review != null) {
-                markwon.setMarkdown(it, review)
-            } else {
-                it.text = review ?: getString(R.string.review_not_found_message)
-            }
-            if (review == null) {
-                it.gravity = Gravity.CENTER
-            }
+        if (markwon != null && review.isNotBlank()) {
+            markwon.setMarkdown(binding.bookReviewText, review)
+            binding.bookReviewText.visibility = View.VISIBLE
+            binding.noBookReview.visibility = View.INVISIBLE
+        } else {
+            binding.noBookReview.visibility = View.VISIBLE
+            binding.bookReviewText.visibility = View.INVISIBLE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        binding.root.requestLayout()
+        binding.root.visibility = View.VISIBLE
     }
 
     companion object {

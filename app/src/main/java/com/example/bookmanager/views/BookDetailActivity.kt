@@ -81,10 +81,10 @@ class BookDetailActivity : AppCompatActivity() {
             FileIO.readBookImage(this@BookDetailActivity, bookId)
         }
 
-        binding.bookBasicInfo.also { binding ->
-            binding.bookDetailTitle.text = bookTitle
-            binding.bookDetailAuthor.text = authorsString
-            binding.bookDetailImage.setImageDrawable(bookImage)
+        binding.bookBasicInfo.also {
+            it.bookDetailTitle.text = bookTitle
+            it.bookDetailAuthor.text = authorsString
+            it.bookDetailImage.setImageDrawable(bookImage)
         }
 
         initBookDescription()
@@ -138,10 +138,10 @@ class BookDetailActivity : AppCompatActivity() {
     private fun createViewPager(): ViewPager2 {
         val bookMemoFragment = BookMemoFragment.getInstance(bookId)
         val bookReviewFragment = BookReviewFragment.getInstance(bookId)
-        return binding.bookAdditionalInfo.bookDetailViewPager.apply {
-            isUserInputEnabled = false
-            adapter = BookDetailPagerAdapter(
-                this@BookDetailActivity, bookMemoFragment, bookReviewFragment
+        return binding.bookDetailViewPager.also {
+            it.isUserInputEnabled = false
+            it.adapter = BookDetailPagerAdapter(
+                this, bookMemoFragment, bookReviewFragment
             )
         }
     }
@@ -153,13 +153,13 @@ class BookDetailActivity : AppCompatActivity() {
      * @return [TabLayoutMediator] オブジェクト
      */
     private fun createTabLayoutMediator(viewPager: ViewPager2): TabLayoutMediator {
-        val tabLayout = binding.bookAdditionalInfo.bookDetailTabLayout
+        val tabLayout = binding.bookDetailTabLayout
         return TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
-                BookDetailPagerAdapter.BookDetailPage.BOOK_DESCRIPTION.position -> {
+                BookDetailPagerAdapter.Tab.BOOK_MEMO.position -> {
                     getString(R.string.book_detail_tab_memo)
                 }
-                BookDetailPagerAdapter.BookDetailPage.BOOK_REVIEW.position -> {
+                BookDetailPagerAdapter.Tab.BOOK_REVIEW.position -> {
                     getString(R.string.book_detail_tab_review)
                 }
                 else -> throw IllegalArgumentException()

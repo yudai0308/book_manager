@@ -13,18 +13,18 @@ class BookDetailPagerAdapter(
     private val bookReviewFragment: BookReviewFragment
 ) : FragmentStateAdapter(activity) {
 
-    override fun getItemCount(): Int = BookDetailPage.values().size
+    override fun getItemCount(): Int = Tab.values().size
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            BookDetailPage.BOOK_DESCRIPTION.position -> bookMemoFragment
-            BookDetailPage.BOOK_REVIEW.position -> bookReviewFragment
+            Tab.BOOK_MEMO.position -> bookMemoFragment
+            Tab.BOOK_REVIEW.position -> bookReviewFragment
             else -> throw IllegalArgumentException()
         }
     }
 
-    enum class BookDetailPage(val position: Int) {
-        BOOK_DESCRIPTION(0),
+    enum class Tab(val position: Int) {
+        BOOK_MEMO(0),
         BOOK_REVIEW(1)
     }
 }
