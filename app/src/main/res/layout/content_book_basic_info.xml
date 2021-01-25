@@ -4,7 +4,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/book_detail_image_card"
@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bookshelf_image_height"
                 android:adjustViewBounds="true"
-                android:contentDescription="TODO" />
+                android:contentDescription="@string/description_book_image" />
 
         </androidx.cardview.widget.CardView>
 
@@ -73,7 +73,6 @@
             app:layout_constraintStart_toEndOf="@+id/book_detail_rating_bar"
             app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
 
-
         <TextView
             android:id="@+id/book_desc_summary_short"
             android:layout_width="@dimen/match_constraint"
@@ -81,7 +80,6 @@
             android:layout_marginStart="@dimen/space_wide"
             android:layout_marginTop="@dimen/space_wide"
             android:layout_marginEnd="@dimen/space_wide"
-            android:paddingBottom="@dimen/space_default"
             android:maxLines="3"
             android:ellipsize="end"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +93,6 @@
             android:layout_marginStart="@dimen/space_wide"
             android:layout_marginTop="@dimen/space_wide"
             android:layout_marginEnd="@dimen/space_wide"
-            android:paddingBottom="@dimen/space_default"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

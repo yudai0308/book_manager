@@ -9,13 +9,10 @@
             type="com.example.bookmanager.viewmodels.BookInfoViewModel" />
     </data>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="invisible"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/book_status_label"
@@ -129,7 +126,5 @@
                 app:layout_constraintStart_toEndOf="@+id/finish_reading_book_date" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
 
 </layout>

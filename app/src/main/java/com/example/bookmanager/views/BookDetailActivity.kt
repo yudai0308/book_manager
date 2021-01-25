@@ -7,7 +7,6 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -19,7 +18,6 @@ import com.example.bookmanager.databinding.ActivityBookDetailBinding
 import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.rooms.entities.BookInfo
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.utils.Libs
@@ -28,7 +26,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import org.json.JSONObject
-import org.w3c.dom.Text
 import java.io.IOException
 
 /**
@@ -70,7 +67,7 @@ class BookDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_book_detail)
 
         initToolbar()
-        createMainContents()
+        createViewPagerContents()
         showAverageRating(bookId)
     }
 
@@ -84,10 +81,10 @@ class BookDetailActivity : AppCompatActivity() {
             FileIO.readBookImage(this@BookDetailActivity, bookId)
         }
 
-        binding.bookBasicInfo.also { binding ->
-            binding.bookDetailTitle.text = bookTitle
-            binding.bookDetailAuthor.text = authorsString
-            binding.bookDetailImage.setImageDrawable(bookImage)
+        binding.bookBasicInfo.also {
+            it.bookDetailTitle.text = bookTitle
+            it.bookDetailAuthor.text = authorsString
+            it.bookDetailImage.setImageDrawable(bookImage)
         }
 
         initBookDescription()
@@ -125,9 +122,9 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * メインコンテンツの「詳細」と「感想」を作成する。
+     * ViewPager 内のコンテンツ「メモ」と「感想」を作成する。
      */
-    private fun createMainContents() {
+    private fun createViewPagerContents() {
         val viewPager = createViewPager()
         val mediator = createTabLayoutMediator(viewPager)
         mediator.attach()
@@ -139,12 +136,12 @@ class BookDetailActivity : AppCompatActivity() {
      * @return [ViewPager2] オブジェクト
      */
     private fun createViewPager(): ViewPager2 {
-        val bookDescriptionFragment = BookDescriptionFragment.getInstance(bookId)
+        val bookMemoFragment = BookMemoFragment.getInstance(bookId)
         val bookReviewFragment = BookReviewFragment.getInstance(bookId)
-        return binding.bookAdditionalInfo.bookDetailViewPager.apply {
-            isUserInputEnabled = false
-            adapter = BookDetailPagerAdapter(
-                this@BookDetailActivity, bookDescriptionFragment, bookReviewFragment
+        return binding.bookDetailViewPager.also {
+            it.isUserInputEnabled = false
+            it.adapter = BookDetailPagerAdapter(
+                this, bookMemoFragment, bookReviewFragment
             )
         }
     }
@@ -156,13 +153,13 @@ class BookDetailActivity : AppCompatActivity() {
      * @return [TabLayoutMediator] オブジェクト
      */
     private fun createTabLayoutMediator(viewPager: ViewPager2): TabLayoutMediator {
-        val tabLayout = binding.bookAdditionalInfo.bookDetailTabLayout
+        val tabLayout = binding.bookDetailTabLayout
         return TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
-                BookDetailPagerAdapter.BookDetailPage.BOOK_DESCRIPTION.position -> {
+                BookDetailPagerAdapter.Tab.BOOK_MEMO.position -> {
                     getString(R.string.book_detail_tab_memo)
                 }
-                BookDetailPagerAdapter.BookDetailPage.BOOK_REVIEW.position -> {
+                BookDetailPagerAdapter.Tab.BOOK_REVIEW.position -> {
                     getString(R.string.book_detail_tab_review)
                 }
                 else -> throw IllegalArgumentException()
