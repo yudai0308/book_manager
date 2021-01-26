@@ -3,6 +3,9 @@
     package="com.example.bookmanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false" />
 
     <application
         android:allowBackup="false"
