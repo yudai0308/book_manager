@@ -46,5 +46,6 @@
     <string name="dialog_discard_input_content">入力中の内容は保存されませんがよろしいでしょうか？</string>
     <string name="saved">保存しました。</string>
     <string name="edit_review">感想を書く</string>
+    <string name="take_photo">本の表紙を撮影する</string>
     <string name="delete_book">本を削除する</string>
 </resources>
