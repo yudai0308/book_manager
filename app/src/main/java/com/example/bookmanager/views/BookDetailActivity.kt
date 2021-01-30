@@ -1,18 +1,24 @@
 package com.example.bookmanager.views
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookDetailBinding
 import com.example.bookmanager.rooms.common.BookRepository
@@ -57,6 +63,8 @@ class BookDetailActivity : AppCompatActivity() {
 
     private val handler = Handler()
 
+    private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
+
     /**
      * 本の紹介テキストを短く表示している場合は true。
      */
@@ -69,6 +77,8 @@ class BookDetailActivity : AppCompatActivity() {
         initToolbar()
         createViewPagerContents()
         showAverageRating(bookId)
+
+        takePhotoLauncher = createTakingPhotoLauncher()
     }
 
     override fun onResume() {
@@ -214,7 +224,7 @@ class BookDetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            // 編集ボタンタップで画面遷移。
+            // 感想を書く
             R.id.toolbar_edit_review -> {
                 startActivity(Intent(
                     applicationContext, BookReviewEditingActivity::class.java
@@ -222,10 +232,14 @@ class BookDetailActivity : AppCompatActivity() {
                     putExtra(C.BOOK_ID, bookId)
                 })
             }
-            // 削除ボタンタップで本のデータを削除
+            // 本を削除する
             R.id.toolbar_delete_book -> {
                 val book = runBlocking { bookDao.load(bookId) }
                 showDeleteConfirmationDialog(book)
+            }
+            // 本の表紙を撮影する
+            R.id.toolbar_take_photo -> {
+                takePhotoLauncher.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
             }
         }
         return super.onOptionsItemSelected(item)
@@ -250,5 +264,18 @@ class BookDetailActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return super.onSupportNavigateUp()
+    }
+
+    private fun createTakingPhotoLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it?.resultCode == Activity.RESULT_OK) {
+                it.data?.let { data: Intent ->
+                    val bitmap = data.extras?.get("data") as Bitmap
+                    Glide.with(this)
+                        .load(bitmap)
+                        .into(binding.bookBasicInfo.bookDetailImage)
+                }
+            }
+        }
     }
 }
