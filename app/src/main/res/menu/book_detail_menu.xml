@@ -9,8 +9,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/toolbar_change_book_image"
+        android:title="@string/change_book_image"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/toolbar_take_photo"
-        android:icon="@drawable/ic_baseline_delete_24"
         android:title="@string/take_photo"
         app:showAsAction="never" />
 

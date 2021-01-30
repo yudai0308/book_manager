@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -63,6 +66,8 @@ class BookDetailActivity : AppCompatActivity() {
 
     private val handler = Handler()
 
+    private lateinit var chooseImageLauncher: ActivityResultLauncher<String>
+
     private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
 
     /**
@@ -78,6 +83,7 @@ class BookDetailActivity : AppCompatActivity() {
         createViewPagerContents()
         showAverageRating(bookId)
 
+        chooseImageLauncher = createChooseImageLauncher()
         takePhotoLauncher = createTakingPhotoLauncher()
     }
 
@@ -232,14 +238,18 @@ class BookDetailActivity : AppCompatActivity() {
                     putExtra(C.BOOK_ID, bookId)
                 })
             }
-            // 本を削除する
-            R.id.toolbar_delete_book -> {
-                val book = runBlocking { bookDao.load(bookId) }
-                showDeleteConfirmationDialog(book)
+            // 本の画像を変更する
+            R.id.toolbar_change_book_image -> {
+                chooseImageLauncher.launch("image/*")
             }
             // 本の表紙を撮影する
             R.id.toolbar_take_photo -> {
                 takePhotoLauncher.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+            }
+            // 本を削除する
+            R.id.toolbar_delete_book -> {
+                val book = runBlocking { bookDao.load(bookId) }
+                showDeleteConfirmationDialog(book)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -276,6 +286,19 @@ class BookDetailActivity : AppCompatActivity() {
                         .into(binding.bookBasicInfo.bookDetailImage)
                 }
             }
+        }
+    }
+
+    private fun createChooseImageLauncher(): ActivityResultLauncher<String> {
+        return registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri ?: return@registerForActivityResult
+            val bitmap = if (Build.VERSION.SDK_INT < 28) {
+                MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            } else {
+                val source = ImageDecoder.createSource(contentResolver, uri)
+                ImageDecoder.decodeBitmap(source)
+            }
+            binding.bookBasicInfo.bookDetailImage.setImageURI(uri)
         }
     }
 }
