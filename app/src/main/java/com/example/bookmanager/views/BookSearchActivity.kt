@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -153,7 +156,7 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onClick(dialog: DialogInterface?, which: Int) {
             // 本棚に存在するか確認。
             if (repository.exist(resultItem.id)) {
-                Libs.showSnackBar(view, getString(R.string.exists_in_my_shelf))
+                Libs.showSnackBarLong(view, getString(R.string.exists_in_my_shelf))
                 return
             }
 
@@ -170,7 +173,7 @@ class BookSearchActivity : AppCompatActivity() {
                 saveImageToInternalStorage(newBook.image, newBook.id)
             }
             view.findViewById<ImageView>(R.id.book_search_bookmark).visibility = View.VISIBLE
-            Libs.showSnackBar(view, C.ADD_BOOK)
+            Libs.showSnackBarLong(view, C.ADD_BOOK)
         }
     }
 

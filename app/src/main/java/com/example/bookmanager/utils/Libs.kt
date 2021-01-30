@@ -17,7 +17,7 @@ class Libs {
             return returnVal
         }
 
-        fun showSnackBar(view: View, msg: String) {
+        fun showSnackBarLong(view: View, msg: String) {
             Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show()
         }
 

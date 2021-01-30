@@ -47,6 +47,6 @@
     <string name="saved">保存しました。</string>
     <string name="edit_review">感想を書く</string>
     <string name="take_photo">本の表紙を撮影する</string>
-    <string name="change_book_image">本の画像を変更する</string>
+    <string name="change_book_image">本の表紙を変更する</string>
     <string name="delete_book">本を削除する</string>
 </resources>

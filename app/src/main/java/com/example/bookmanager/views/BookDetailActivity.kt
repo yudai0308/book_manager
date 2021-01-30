@@ -236,7 +236,7 @@ class BookDetailActivity : AppCompatActivity() {
                     putExtra(C.BOOK_ID, bookId)
                 })
             }
-            // 本の画像を変更する
+            // 本の表紙を変更する
             R.id.toolbar_change_book_image -> {
                 chooseImageLauncher.launch("image/*")
             }
@@ -279,9 +279,11 @@ class BookDetailActivity : AppCompatActivity() {
             if (it?.resultCode == Activity.RESULT_OK) {
                 it.data?.let { data: Intent ->
                     val bitmap = data.extras?.get("data") as Bitmap
+                    FileIO.saveBookImage(this, bitmap, bookId)
                     Glide.with(this)
                         .load(bitmap)
                         .into(binding.bookBasicInfo.bookDetailImage)
+                    return@registerForActivityResult
                 }
             }
         }
@@ -289,14 +291,18 @@ class BookDetailActivity : AppCompatActivity() {
 
     private fun createChooseImageLauncher(): ActivityResultLauncher<String> {
         return registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri ?: return@registerForActivityResult
+            if (uri == null) {
+                return@registerForActivityResult
+            }
+
             val bitmap = if (Build.VERSION.SDK_INT < 28) {
                 MediaStore.Images.Media.getBitmap(contentResolver, uri)
             } else {
                 val source = ImageDecoder.createSource(contentResolver, uri)
                 ImageDecoder.decodeBitmap(source)
             }
-            binding.bookBasicInfo.bookDetailImage.setImageURI(uri)
+            FileIO.saveBookImage(this, bitmap, bookId)
+            binding.bookBasicInfo.bookDetailImage.setImageBitmap(bitmap)
         }
     }
 }
