@@ -232,9 +232,7 @@ class BookDetailActivity : AppCompatActivity() {
         when (item.itemId) {
             // 感想を書く
             R.id.toolbar_edit_review -> {
-                startActivity(Intent(
-                    applicationContext, BookReviewEditingActivity::class.java
-                ).apply {
+                startActivity(Intent(applicationContext, BookReviewEditingActivity::class.java).apply {
                     putExtra(C.BOOK_ID, bookId)
                 })
             }
