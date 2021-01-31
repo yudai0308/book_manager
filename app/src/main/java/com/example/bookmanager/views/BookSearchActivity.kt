@@ -26,7 +26,7 @@ import com.example.bookmanager.rooms.entities.Author
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
-import com.example.bookmanager.utils.Libs
+import com.example.bookmanager.utils.ViewUtil
 import com.example.bookmanager.viewmodels.BookResultViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -156,7 +156,7 @@ class BookSearchActivity : AppCompatActivity() {
         override fun onClick(dialog: DialogInterface?, which: Int) {
             // 本棚に存在するか確認。
             if (repository.exist(resultItem.id)) {
-                Libs.showSnackBarLong(view, getString(R.string.exists_in_my_shelf))
+                ViewUtil.showSnackBarLong(view, getString(R.string.exists_in_my_shelf))
                 return
             }
 
@@ -173,7 +173,7 @@ class BookSearchActivity : AppCompatActivity() {
                 saveImageToInternalStorage(newBook.image, newBook.id)
             }
             view.findViewById<ImageView>(R.id.book_search_bookmark).visibility = View.VISIBLE
-            Libs.showSnackBarLong(view, C.ADD_BOOK)
+            ViewUtil.showSnackBarLong(view, C.ADD_BOOK)
         }
     }
 

@@ -14,7 +14,7 @@ import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookReviewEditingBinding
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
-import com.example.bookmanager.utils.Libs
+import com.example.bookmanager.utils.ViewUtil
 import com.example.bookmanager.viewmodels.BookInfoViewModel
 import io.noties.markwon.Markwon
 import io.noties.markwon.editor.MarkwonEditor
@@ -138,7 +138,7 @@ class BookReviewEditingActivity : AppCompatActivity() {
             R.id.toolbar_save -> {
                 saveReviewContent()
                 finish()
-                Libs.showToastLong(this, getString(R.string.saved))
+                ViewUtil.showToastLong(this, getString(R.string.saved))
             }
         }
         return super.onOptionsItemSelected(item)

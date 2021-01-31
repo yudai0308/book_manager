@@ -29,7 +29,7 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
-import com.example.bookmanager.utils.Libs
+import com.example.bookmanager.utils.StringUtil
 import com.example.bookmanager.viewmodels.BookInfoViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.runBlocking
@@ -92,7 +92,7 @@ class BookDetailActivity : AppCompatActivity() {
 
         val bookTitle = bookInfo.book.title
         val authors = bookInfo.authors.map { it.name }
-        val authorsString = Libs.listToString(authors)
+        val authorsString = StringUtil.listToString(authors)
         val bookImage = runBlocking {
             FileIO.readBookImage(this@BookDetailActivity, bookId)
         }
