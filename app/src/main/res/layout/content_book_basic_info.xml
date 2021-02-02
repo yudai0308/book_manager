@@ -8,8 +8,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/book_detail_image_card"
-            android:layout_width="@dimen/match_constraint"
-            android:layout_height="@dimen/bookshelf_image_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_wide"
             android:layout_marginTop="@dimen/space_wide"
             app:cardElevation="@dimen/bookshelf_image_elevation"
@@ -18,8 +18,8 @@
 
             <ImageView
                 android:id="@+id/book_detail_image"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/bookshelf_image_height"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/description_book_image" />
 

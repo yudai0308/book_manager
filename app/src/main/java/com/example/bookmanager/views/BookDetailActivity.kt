@@ -3,18 +3,11 @@ package com.example.bookmanager.views
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -29,8 +22,10 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
+import com.example.bookmanager.utils.ImageUtil
 import com.example.bookmanager.utils.StringUtil
 import com.example.bookmanager.viewmodels.BookInfoViewModel
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
@@ -54,7 +49,9 @@ class BookDetailActivity : AppCompatActivity() {
         ).get(BookInfoViewModel::class.java)
     }
 
-    private val bookId by lazy { intent.getStringExtra(C.BOOK_ID) }
+    private val bookId by lazy {
+        intent.getStringExtra(C.BOOK_ID)
+    }
 
     private val bookDao by lazy {
         Room.databaseBuilder(this, BookDatabase::class.java, C.DB_NAME).build().bookDao()
@@ -65,10 +62,6 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     private val handler = Handler()
-
-    private lateinit var chooseImageLauncher: ActivityResultLauncher<String>
-
-    private lateinit var takePhotoLauncher: ActivityResultLauncher<Intent>
 
     /**
      * 本の紹介テキストを短く表示している場合は true。
@@ -82,9 +75,6 @@ class BookDetailActivity : AppCompatActivity() {
         initToolbar()
         createViewPagerContents()
         showAverageRating(bookId)
-
-        chooseImageLauncher = createChooseImageLauncher()
-        takePhotoLauncher = createTakingPhotoLauncher()
     }
 
     override fun onResume() {
@@ -193,13 +183,13 @@ class BookDetailActivity : AppCompatActivity() {
         val req = Request.Builder().url(url).build()
         val client = OkHttpClient.Builder().build()
         val call = client.newCall(req)
-        call.enqueue(FetchAverageRatingCallback())
+        call.enqueue(createFetchAverageRatingCallback())
     }
 
     /**
-     * API から本の情報を取得してレートを表示させるコールバッククラス。
+     * API から本の情報を取得してレートを表示させるコールバック。
      */
-    inner class FetchAverageRatingCallback : Callback {
+    private fun createFetchAverageRatingCallback() = object : Callback {
         override fun onFailure(call: Call, e: IOException) {}
 
         override fun onResponse(call: Call, response: Response) {
@@ -238,11 +228,7 @@ class BookDetailActivity : AppCompatActivity() {
             }
             // 本の表紙を変更する
             R.id.toolbar_change_book_image -> {
-                chooseImageLauncher.launch("image/*")
-            }
-            // 本の表紙を撮影する
-            R.id.toolbar_take_photo -> {
-                takePhotoLauncher.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+                pickImage()
             }
             // 本を削除する
             R.id.toolbar_delete_book -> {
@@ -251,6 +237,23 @@ class BookDetailActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun pickImage() {
+        ImagePicker.with(this)
+            .crop(100F, 150F)
+            .compress(C.IMAGE_MAX_SIZE)
+            .start { resultCode, data ->
+                if (resultCode != Activity.RESULT_OK) {
+                    return@start
+                }
+
+                val uri = data?.data ?: return@start
+                Glide.with(this).load(uri).into(binding.bookBasicInfo.bookDetailImage)
+                val bitmap = ImageUtil.getBitmapWithUri(this, uri)
+                FileIO.saveBookImage(this, bitmap, bookId)
+
+        }
     }
 
     private fun showDeleteConfirmationDialog(book: Book) {
@@ -272,37 +275,5 @@ class BookDetailActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return super.onSupportNavigateUp()
-    }
-
-    private fun createTakingPhotoLauncher(): ActivityResultLauncher<Intent> {
-        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it?.resultCode == Activity.RESULT_OK) {
-                it.data?.let { data: Intent ->
-                    val bitmap = data.extras?.get("data") as Bitmap
-                    FileIO.saveBookImage(this, bitmap, bookId)
-                    Glide.with(this)
-                        .load(bitmap)
-                        .into(binding.bookBasicInfo.bookDetailImage)
-                    return@registerForActivityResult
-                }
-            }
-        }
-    }
-
-    private fun createChooseImageLauncher(): ActivityResultLauncher<String> {
-        return registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            if (uri == null) {
-                return@registerForActivityResult
-            }
-
-            val bitmap = if (Build.VERSION.SDK_INT < 28) {
-                MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            } else {
-                val source = ImageDecoder.createSource(contentResolver, uri)
-                ImageDecoder.decodeBitmap(source)
-            }
-            FileIO.saveBookImage(this, bitmap, bookId)
-            binding.bookBasicInfo.bookDetailImage.setImageBitmap(bitmap)
-        }
     }
 }

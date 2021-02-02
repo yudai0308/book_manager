@@ -16,7 +16,7 @@
             android:id="@+id/no_book_review"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="64dp"
             android:padding="@dimen/space_wide"
             android:text="@string/review_not_found"
             android:textAlignment="center"
