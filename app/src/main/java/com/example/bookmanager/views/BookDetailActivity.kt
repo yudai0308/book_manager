@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
@@ -84,7 +85,9 @@ class BookDetailActivity : AppCompatActivity() {
         val authors = bookInfo.authors.map { it.name }
         val authorsString = StringUtil.listToString(authors)
         val bookImage = runBlocking {
-            FileIO.readBookImage(this@BookDetailActivity, bookId)
+            val context = this@BookDetailActivity
+            val image = FileIO.readBookImage(context, bookId)
+            image ?: ContextCompat.getDrawable(context, R.drawable.no_image)
         }
 
         binding.bookBasicInfo.also {
