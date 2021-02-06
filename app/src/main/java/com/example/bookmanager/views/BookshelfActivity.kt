@@ -18,6 +18,7 @@ import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
+import com.example.bookmanager.utils.ViewUtil
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -69,9 +70,6 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        val spanCount = resources.getInteger(R.integer.bookshelf_grid_span_count)
-        val spacing = resources.getInteger(R.integer.bookshelf_grid_spacing)
-
         val listener = View.OnClickListener {
             val position = binding.bookshelfBookList.getChildAdapterPosition(it)
             startBookDetailActivity(position)
@@ -86,12 +84,17 @@ class BookshelfActivity : AppCompatActivity() {
             })
         }
 
+        val spanCount = resources.getInteger(R.integer.bookshelf_grid_span_count)
         val manager = GridLayoutManager(this, spanCount, GridLayoutManager.VERTICAL, false)
 
         binding.bookshelfBookList.also {
             it.layoutManager = manager
             it.adapter = adapter
-            it.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, true))
+            it.setHasFixedSize(true)
+            it.addItemDecoration(GridSpacingItemDecoration(
+                this,
+                ViewUtil.dpToPx(this, 100F).toInt()
+            ))
         }
     }
 

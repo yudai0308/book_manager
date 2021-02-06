@@ -18,7 +18,7 @@
 
             <ImageView
                 android:id="@+id/book_detail_image"
-                android:layout_width="150dp"
+                android:layout_width="@dimen/bookshelf_image_width"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/description_book_image" />

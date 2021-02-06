@@ -1,7 +1,9 @@
 package com.example.bookmanager.utils
 
 import android.content.Context
+import android.graphics.Point
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 
@@ -13,6 +15,25 @@ class ViewUtil {
 
         fun showToastLong(context: Context, text: String) {
             Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+        }
+
+        fun getDisplayWidth(context: Context): Int {
+            val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val display = windowManager.defaultDisplay
+            val point = Point().also {
+                display.getRealSize(it)
+            }
+            return point.x
+        }
+
+        fun dpToPx(context: Context, dp: Float): Float {
+            val metrics = context.resources.displayMetrics
+            return dp * metrics.density
+        }
+
+        fun pxToDp(context: Context, px: Int): Float {
+            val metrics = context.resources.displayMetrics
+            return px / metrics.density
         }
     }
 }

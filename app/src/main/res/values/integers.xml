@@ -3,5 +3,4 @@
     <integer name="max_suggestions_count">30</integer>
 
     <integer name="bookshelf_grid_span_count">3</integer>
-    <integer name="bookshelf_grid_spacing">40</integer>
 </resources>

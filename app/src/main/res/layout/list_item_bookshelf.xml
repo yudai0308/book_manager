@@ -2,13 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.example.bookmanager.viewmodels.BookshelfViewModel" />
-    </data>
-
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +12,7 @@
 
         <TextView
             android:id="@+id/bookshelf_item_title"
-            android:layout_width="@dimen/bookshelf_title_text_width"
+            android:layout_width="@dimen/bookshelf_image_width"
             android:layout_height="@dimen/bookshelf_image_height"
             android:adjustViewBounds="true"
             android:padding="@dimen/space_default" />
