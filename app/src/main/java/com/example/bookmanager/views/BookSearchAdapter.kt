@@ -14,7 +14,7 @@ import com.example.bookmanager.databinding.ListItemBookSearchBinding
 import com.example.bookmanager.databinding.ListItemBookSearchBottomBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
-import com.example.bookmanager.utils.Libs
+import com.example.bookmanager.utils.StringUtil
 
 /**
  * 本の検索結果をリスト表示するためのアダプター。
@@ -103,7 +103,7 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         holder.binding.apply {
             lifecycleOwner = context as LifecycleOwner
             bookSearchItemTitle.text = resultItem.title
-            bookSearchItemAuthor.text = Libs.listToString(resultItem.authors)
+            bookSearchItemAuthor.text = StringUtil.listToString(resultItem.authors)
             bookSearchRating.rating = resultItem.averageRating ?: 0F
             bookSearchRatingsCount.text = if (resultItem.ratingsCount > 0) {
                 resultItem.ratingsCount.toString()

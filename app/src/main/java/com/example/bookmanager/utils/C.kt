@@ -13,7 +13,6 @@ class C {
 
         // FIXME: string.xml に移行。
         // 本検索ページ関連
-        const val UNKNOWN = "Unknown"
         const val ADD_BOOK = "本棚に追加しました。"
         const val CONNECTION_FAILURE_MSG = "通信に失敗しました。\n検索をやり直してください。"
 
@@ -25,5 +24,7 @@ class C {
         // bundle キー
         const val BOOK_ID = "bookId"
         const val BOOK_DESCRIPTION = "book_description"
+
+        const val IMAGE_MAX_SIZE = 128
     }
 }

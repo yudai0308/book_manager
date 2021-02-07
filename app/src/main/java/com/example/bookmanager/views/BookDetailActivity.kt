@@ -1,5 +1,6 @@
 package com.example.bookmanager.views
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -9,10 +10,12 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookDetailBinding
 import com.example.bookmanager.rooms.common.BookRepository
@@ -20,8 +23,10 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
-import com.example.bookmanager.utils.Libs
+import com.example.bookmanager.utils.ImageUtil
+import com.example.bookmanager.utils.StringUtil
 import com.example.bookmanager.viewmodels.BookInfoViewModel
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
@@ -45,7 +50,9 @@ class BookDetailActivity : AppCompatActivity() {
         ).get(BookInfoViewModel::class.java)
     }
 
-    private val bookId by lazy { intent.getStringExtra(C.BOOK_ID) }
+    private val bookId by lazy {
+        intent.getStringExtra(C.BOOK_ID)
+    }
 
     private val bookDao by lazy {
         Room.databaseBuilder(this, BookDatabase::class.java, C.DB_NAME).build().bookDao()
@@ -76,9 +83,11 @@ class BookDetailActivity : AppCompatActivity() {
 
         val bookTitle = bookInfo.book.title
         val authors = bookInfo.authors.map { it.name }
-        val authorsString = Libs.listToString(authors)
+        val authorsString = StringUtil.listToString(authors)
         val bookImage = runBlocking {
-            FileIO.readBookImage(this@BookDetailActivity, bookId)
+            val context = this@BookDetailActivity
+            val image = FileIO.readBookImage(context, bookId)
+            image ?: ContextCompat.getDrawable(context, R.drawable.no_image)
         }
 
         binding.bookBasicInfo.also {
@@ -177,13 +186,13 @@ class BookDetailActivity : AppCompatActivity() {
         val req = Request.Builder().url(url).build()
         val client = OkHttpClient.Builder().build()
         val call = client.newCall(req)
-        call.enqueue(FetchAverageRatingCallback())
+        call.enqueue(createFetchAverageRatingCallback())
     }
 
     /**
-     * API から本の情報を取得してレートを表示させるコールバッククラス。
+     * API から本の情報を取得してレートを表示させるコールバック。
      */
-    inner class FetchAverageRatingCallback : Callback {
+    private fun createFetchAverageRatingCallback() = object : Callback {
         override fun onFailure(call: Call, e: IOException) {}
 
         override fun onResponse(call: Call, response: Response) {
@@ -214,21 +223,40 @@ class BookDetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            // 編集ボタンタップで画面遷移。
+            // 感想を書く
             R.id.toolbar_edit_review -> {
-                startActivity(Intent(
-                    applicationContext, BookReviewEditingActivity::class.java
-                ).apply {
+                startActivity(Intent(applicationContext, BookReviewEditingActivity::class.java).apply {
                     putExtra(C.BOOK_ID, bookId)
                 })
             }
-            // 削除ボタンタップで本のデータを削除
+            // 本の表紙を変更する
+            R.id.toolbar_change_book_image -> {
+                pickImage()
+            }
+            // 本を削除する
             R.id.toolbar_delete_book -> {
                 val book = runBlocking { bookDao.load(bookId) }
                 showDeleteConfirmationDialog(book)
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun pickImage() {
+        ImagePicker.with(this)
+            .crop(100F, 150F)
+            .compress(C.IMAGE_MAX_SIZE)
+            .start { resultCode, data ->
+                if (resultCode != Activity.RESULT_OK) {
+                    return@start
+                }
+
+                val uri = data?.data ?: return@start
+                Glide.with(this).load(uri).into(binding.bookBasicInfo.bookDetailImage)
+                val bitmap = ImageUtil.getBitmapWithUri(this, uri)
+                FileIO.saveBookImage(this, bitmap, bookId)
+
+        }
     }
 
     private fun showDeleteConfirmationDialog(book: Book) {
