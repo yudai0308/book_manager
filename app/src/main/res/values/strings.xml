@@ -7,6 +7,10 @@
     <string name="hyphen">-</string>
     <string name="description_book_image">Book Image</string>
     <string name="description_bookmark_image">Bookmark Image</string>
+    <string name="all_books">すべての本</string>
+    <string name="book_status_want_to">読みたい本</string>
+    <string name="book_status_reading">読んでいる本</string>
+    <string name="book_status_finished">読み終わった本</string>
 
     <!-- 本棚ページ -->
     <string name="toolbar_title_bookshelf">本棚</string>
@@ -36,9 +40,6 @@
     <string name="status_label">ステータス:</string>
     <string name="start_date_label">読書開始日:</string>
     <string name="finish_date_label">読書終了日:</string>
-    <string name="book_status_planning">読む予定の本</string>
-    <string name="book_status_reading">読んでいる本</string>
-    <string name="book_status_finished">読み終わった本</string>
     <string name="clear">クリア</string>
 
     <!-- レビュー作成ページ -->

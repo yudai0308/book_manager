@@ -62,7 +62,7 @@ class BookInfoViewModel(application: Application, val bookId: String) :
 
     private fun getStatusString(statusCode: Int): String {
         return when (statusCode) {
-            Book.Status.PLANNING.code -> context.getString(R.string.book_status_planning)
+            Book.Status.PLANNING.code -> context.getString(R.string.book_status_want_to)
             Book.Status.READING.code -> context.getString(R.string.book_status_reading)
             Book.Status.FINISHED.code -> context.getString(R.string.book_status_finished)
             else -> ""
