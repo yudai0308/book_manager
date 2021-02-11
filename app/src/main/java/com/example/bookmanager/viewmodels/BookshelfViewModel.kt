@@ -24,7 +24,19 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
 
     val books: LiveData<List<Book>> = _books
 
-    suspend fun reload() {
+    suspend fun fetchAllBooks() {
         _books.postValue(bookDao.loadAll())
+    }
+
+    suspend fun fetchBooksWantToRead() {
+        _books.postValue(bookDao.loadBooksByStatus(0))
+    }
+
+    suspend fun fetchBooksReading() {
+        _books.postValue(bookDao.loadBooksByStatus(1))
+    }
+
+    suspend fun fetchBooksFinished() {
+        _books.postValue(bookDao.loadBooksByStatus(2))
     }
 }

@@ -7,8 +7,10 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -39,11 +41,11 @@ class BookshelfActivity : AppCompatActivity() {
         DataBindingUtil.setContentView<ActivityBookshelfBinding>(this, R.layout.activity_bookshelf)
     }
 
-    private val daoController by lazy { BookRepository(this) }
+    private val bookRepository by lazy { BookRepository(this) }
 
-    private lateinit var adapter: BookshelfAdapter
+    private var selectedBook: View? = null
 
-    private var selectedView: View? = null
+    private lateinit var selectedButton: Button
 
     companion object {
         const val MENU_DETAIL = 0
@@ -58,15 +60,24 @@ class BookshelfActivity : AppCompatActivity() {
             it.lifecycleOwner = this
         }
 
+        selectedButton = binding.filterButtons.filterButtonAll
         initToolbar()
         initRecyclerView()
         setFabClickListener()
+        setFilterButtonsClickListener()
     }
 
     override fun onStart() {
         super.onStart()
 
-        GlobalScope.launch { viewModel.reload() }
+        GlobalScope.launch { viewModel.fetchAllBooks() }
+    }
+
+    private fun initToolbar() {
+        val toolbar: Toolbar = binding.toolbar.apply {
+            setTitle(R.string.toolbar_title_bookshelf)
+        } as Toolbar
+        setSupportActionBar(toolbar)
     }
 
     private fun initRecyclerView() {
@@ -75,10 +86,10 @@ class BookshelfActivity : AppCompatActivity() {
             startBookDetailActivity(position)
         }
 
-        adapter = BookshelfAdapter().apply {
-            setListener(listener)
-            setCallback(object : BookshelfAdapter.Callback {
-                override fun onBindViewHolder(view: View) {
+        val adapter = BookshelfAdapter().apply {
+            setOnClickListener(listener)
+            setOnBindViewHolderListener(object : BookshelfAdapter.OnBindViewHolderListener {
+                override fun onBound(view: View) {
                     registerForContextMenu(view)
                 }
             })
@@ -105,11 +116,39 @@ class BookshelfActivity : AppCompatActivity() {
         }
     }
 
-    private fun initToolbar() {
-        val toolbar: Toolbar = binding.toolbar.apply {
-            setTitle(R.string.toolbar_title_bookshelf)
-        } as Toolbar
-        setSupportActionBar(toolbar)
+    private fun setFilterButtonsClickListener() {
+        val buttons = binding.filterButtons.run {
+            listOf(
+                filterButtonAll,
+                filterButtonWantToRead,
+                filterButtonReading,
+                filterButtonFinished
+            )
+        }
+        buttons.forEach { button ->
+            button.setOnClickListener {
+                showBooksAccordingToSelectedButton(it as Button)
+            }
+        }
+    }
+
+    private fun showBooksAccordingToSelectedButton(clickedButton: Button) {
+        if (clickedButton.id == selectedButton.id) {
+            return
+        }
+
+        val selectedBackground = ContextCompat.getDrawable(this, R.drawable.btn_filter_selected)
+        val selectableBackground = ContextCompat.getDrawable(this, R.drawable.btn_filter_selectable)
+        selectedButton.background = selectableBackground
+        selectedButton = clickedButton
+        clickedButton.background = selectedBackground
+
+        when (clickedButton.id) {
+            R.id.filter_button_all -> GlobalScope.launch { viewModel.fetchAllBooks() }
+            R.id.filter_button_want_to_read -> GlobalScope.launch { viewModel.fetchBooksWantToRead() }
+            R.id.filter_button_reading -> GlobalScope.launch { viewModel.fetchBooksReading() }
+            R.id.filter_button_finished -> GlobalScope.launch { viewModel.fetchBooksFinished() }
+        }
     }
 
     private fun startBookDetailActivity(position: Int) {
@@ -125,28 +164,27 @@ class BookshelfActivity : AppCompatActivity() {
         menu: ContextMenu?, view: View?, menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         menu?.let {
-            it.add(Menu.NONE, 0, Menu.NONE, "詳細")
-            it.add(Menu.NONE, 1, Menu.NONE, "削除")
+            it.add(Menu.NONE, 0, Menu.NONE, getString(R.string.detail))
+            it.add(Menu.NONE, 1, Menu.NONE, getString(R.string.delete))
         }
 
         view?.let {
-            selectedView = view
+            selectedBook = view
         }
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val position = selectedView?.let {
+        val position = selectedBook?.let {
             binding.bookshelfBookList.getChildAdapterPosition(it)
         }
         position ?: return super.onContextItemSelected(item)
 
         when (item.itemId) {
             MENU_DETAIL -> {
-                selectedView?.let { startBookDetailActivity(position) }
+                selectedBook?.let { startBookDetailActivity(position) }
             }
             MENU_DELETE -> {
-                val book =
-                    viewModel.books.value?.get(position) ?: return super.onContextItemSelected(item)
+                val book = viewModel.books.value?.get(position) ?: return super.onContextItemSelected(item)
                 val dialog = createDeleteConfirmationDialog(book)
                 dialog.show(supportFragmentManager, C.DIALOG_TAG_DELETE_BOOK)
             }
@@ -160,9 +198,9 @@ class BookshelfActivity : AppCompatActivity() {
             it.setMessage(getString(R.string.delete_dialog_message))
             it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
                 runBlocking {
-                    daoController.deleteBook(book)
+                    bookRepository.deleteBook(book)
                     FileIO.deleteBookImage(this@BookshelfActivity, book.id)
-                    viewModel.reload()
+                    viewModel.fetchAllBooks()
                 }
             })
             it.setNegativeButton(getString(R.string.cancel), null)

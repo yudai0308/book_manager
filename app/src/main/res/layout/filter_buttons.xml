@@ -13,6 +13,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/filter_button_all"
                 style="@style/FilterButton.Selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -22,6 +23,7 @@
                 android:text="@string/all_books" />
 
             <Button
+                android:id="@+id/filter_button_want_to_read"
                 style="@style/FilterButton.Selectable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,6 +32,7 @@
                 android:textColor="@color/white" />
 
             <Button
+                android:id="@+id/filter_button_reading"
                 style="@style/FilterButton.Selectable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,6 +41,7 @@
                 android:textColor="@color/white" />
 
             <Button
+                android:id="@+id/filter_button_finished"
                 style="@style/FilterButton.Selectable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
