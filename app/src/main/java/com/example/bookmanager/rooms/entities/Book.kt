@@ -25,7 +25,7 @@ data class Book(
     }
 
     enum class Status(val code: Int) {
-        PLANNING(0),
+        WANT_TO_READ(0),
         READING(1),
         FINISHED(2)
     }

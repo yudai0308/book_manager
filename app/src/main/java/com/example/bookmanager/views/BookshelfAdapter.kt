@@ -22,20 +22,20 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
 
     private var books: List<Book> = listOf()
 
-    private var listener: View.OnClickListener? = null
+    private var onClickListener: View.OnClickListener? = null
 
-    private var callback: Callback? = null
+    private var listener: OnBindViewHolderListener? = null
 
-    interface Callback {
-        fun onBindViewHolder(view: View)
+    interface OnBindViewHolderListener {
+        fun onBound(view: View)
     }
 
-    fun setListener(listener: View.OnClickListener) {
+    fun setOnClickListener(listener: View.OnClickListener) {
+        this.onClickListener = listener
+    }
+
+    fun setOnBindViewHolderListener(listener: OnBindViewHolderListener) {
         this.listener = listener
-    }
-
-    fun setCallback(callback: Callback) {
-        this.callback = callback
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookShelfHolder {
@@ -43,7 +43,7 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         val binding: ListItemBookshelfBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context), R.layout.list_item_bookshelf, parent, false
         )
-        binding.root.setOnClickListener(listener)
+        binding.root.setOnClickListener(onClickListener)
         return BookShelfHolder(binding)
     }
 
@@ -62,7 +62,7 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
             }
         }
 
-        callback?.onBindViewHolder(holder.binding.root)
+        listener?.onBound(holder.binding.root)
     }
 
     override fun getItemCount(): Int {

@@ -19,16 +19,25 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
+        <include
+            android:id="@+id/filter_buttons"
+            layout="@layout/filter_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bookshelf_book_list"
             android:layout_width="match_parent"
             android:layout_height="@dimen/match_constraint"
             android:scrollbars="vertical"
-            app:my_books="@{viewModel.books}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/filter_buttons"
+            app:my_books="@{viewModel.books}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_book"

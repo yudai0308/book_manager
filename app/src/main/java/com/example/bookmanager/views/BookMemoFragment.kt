@@ -70,7 +70,7 @@ class BookMemoFragment : Fragment() {
     private fun initSpinner() {
         val adapter = context?.let {
             val items = listOf(
-                getString(R.string.book_status_planning),
+                getString(R.string.book_status_want_to),
                 getString(R.string.book_status_reading),
                 getString(R.string.book_status_finished)
             )

@@ -9,4 +9,20 @@
         <item name="android:fontFamily">@font/sawarabi_mincho_regular</item>
     </style>
 
+    <style name="FilterButton">
+        <item name="android:padding">@dimen/space_default</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_tiny</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:minHeight">0dp</item>
+    </style>
+
+    <style name="FilterButton.Selected" parent="FilterButton">
+        <item name="android:background">@drawable/btn_filter_selected</item>
+    </style>
+
+    <style name="FilterButton.Selectable" parent="FilterButton">
+        <item name="android:background">@drawable/btn_filter_selectable</item>
+    </style>
+
 </resources>

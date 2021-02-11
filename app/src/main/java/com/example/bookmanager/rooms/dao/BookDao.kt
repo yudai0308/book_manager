@@ -21,6 +21,9 @@ interface BookDao {
     @Query("SELECT * FROM books")
     suspend fun loadAll(): List<Book>
 
+    @Query("SELECT * FROM books WHERE status = :status")
+    suspend fun loadBooksByStatus(status: Int): List<Book>
+
     @Query("SELECT * FROM books WHERE id = :id")
     suspend fun loadById(id: String): Book
 
