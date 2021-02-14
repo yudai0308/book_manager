@@ -6,6 +6,7 @@
     <string name="save">保存</string>
     <string name="detail">詳細</string>
     <string name="delete">削除</string>
+    <string name="sort">並べ替え</string>
     <string name="hyphen">-</string>
     <string name="description_book_image">Book Image</string>
     <string name="description_bookmark_image">Bookmark Image</string>

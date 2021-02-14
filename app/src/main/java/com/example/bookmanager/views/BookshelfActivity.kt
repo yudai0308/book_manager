@@ -206,4 +206,9 @@ class BookshelfActivity : AppCompatActivity() {
             it.setNegativeButton(getString(R.string.cancel), null)
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.bookshelf_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 }
