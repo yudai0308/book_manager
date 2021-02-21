@@ -1,5 +1,6 @@
 package com.example.bookmanager.views
 
+import android.animation.ObjectAnimator
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AlphaAnimation
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,6 +27,7 @@ import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+
 
 /**
  * 本棚ページのアクティビティ。
@@ -45,7 +48,9 @@ class BookshelfActivity : AppCompatActivity() {
 
     private var selectedBook: View? = null
 
-    private lateinit var selectedButton: Button
+    private lateinit var selectedFilterButton: Button
+
+    private var sortViewIsShown = false
 
     companion object {
         const val MENU_DETAIL = 0
@@ -60,11 +65,19 @@ class BookshelfActivity : AppCompatActivity() {
             it.lifecycleOwner = this
         }
 
-        selectedButton = binding.filterButtons.filterButtonAll
+        selectedFilterButton = binding.filterButtons.filterButtonAll
+
         initToolbar()
         initRecyclerView()
         setFabClickListener()
         setFilterButtonsClickListener()
+
+        binding.sortView.sortViewCloseButton.setOnClickListener {
+            closeSortView()
+        }
+        binding.surfaceView.setOnClickListener {
+            closeSortView()
+        }
     }
 
     override fun onStart() {
@@ -133,14 +146,14 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private fun showBooksAccordingToSelectedButton(clickedButton: Button) {
-        if (clickedButton.id == selectedButton.id) {
+        if (clickedButton.id == selectedFilterButton.id) {
             return
         }
 
-        val selectedBackground = ContextCompat.getDrawable(this, R.drawable.btn_filter_selected)
-        val selectableBackground = ContextCompat.getDrawable(this, R.drawable.btn_filter_selectable)
-        selectedButton.background = selectableBackground
-        selectedButton = clickedButton
+        val selectedBackground = ContextCompat.getDrawable(this, R.drawable.bg_filter_btn_selected)
+        val selectableBackground = ContextCompat.getDrawable(this, R.drawable.bg_filter_btn_selectable)
+        selectedFilterButton.background = selectableBackground
+        selectedFilterButton = clickedButton
         clickedButton.background = selectedBackground
 
         when (clickedButton.id) {
@@ -207,8 +220,61 @@ class BookshelfActivity : AppCompatActivity() {
         }
     }
 
+    private fun showSortViewWithSlideAnim() {
+        ObjectAnimator.ofFloat(binding.bookshelfSortView, "translationY", -700F).apply {
+            duration = 300
+            start()
+        }
+    }
+
+    private fun hideSortViewWithSlideAnim() {
+        ObjectAnimator.ofFloat(binding.bookshelfSortView, "translationY", 700F).apply {
+            duration = 300
+            start()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.bookshelf_menu, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.toolbar_sort -> {
+                binding.surfaceView.isClickable = true
+                sortViewIsShown = true
+                showSortViewWithSlideAnim()
+                fadeInSurfaceView()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun closeSortView() {
+        binding.surfaceView.isClickable = false
+        sortViewIsShown = false
+        hideSortViewWithSlideAnim()
+        fadeOutSurfaceView()
+    }
+
+    private fun fadeInSurfaceView() {
+        binding.surfaceView.apply {
+            visibility = View.VISIBLE
+            startAnimation(AlphaAnimation(0.0F, 0.7F).apply {
+                duration = 300
+                fillAfter = true
+            })
+        }
+    }
+
+    private fun fadeOutSurfaceView() {
+        binding.surfaceView.apply {
+            startAnimation(AlphaAnimation(0.7F, 0.0F).apply {
+                duration = 300
+                fillAfter = true
+            })
+            visibility = View.GONE
+        }
     }
 }

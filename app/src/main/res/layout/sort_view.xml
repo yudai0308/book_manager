@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/bookshelf_sort_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_sort_button_list"
+        android:clickable="true"
+        android:elevation="@dimen/elevation_default"
+        android:orientation="vertical"
+        android:padding="@dimen/space_wide">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/sort"
+                android:textSize="@dimen/text_size_huge" />
+
+            <ImageView
+                android:id="@+id/sort_view_close_button"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:src="@drawable/ic_baseline_close_24"
+                android:contentDescription="@string/close_button" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/space_narrow"
+            android:layout_marginBottom="@dimen/space_wide"
+            android:background="@color/light_gray" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sort_view_close_button">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="120dp" />
+
+                <TextView
+                    android:id="@+id/sort_view_order_by_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/order_by_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_title_asc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/asc"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_title"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_order_by_title" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_title_desc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/desc"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_title_asc_radio_button"
+                    app:layout_constraintStart_toEndOf="@id/sort_view_title_asc_radio_button"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_title_asc_radio_button" />
+
+                <TextView
+                    android:id="@+id/sort_view_order_by_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_wide"
+                    android:text="@string/order_by_author"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sort_view_order_by_title" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_author_asc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/asc"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_author"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_order_by_author" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_author_desc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/desc"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_author_asc_radio_button"
+                    app:layout_constraintStart_toEndOf="@id/sort_view_author_asc_radio_button"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_author_asc_radio_button" />
+
+                <TextView
+                    android:id="@+id/sort_view_order_by_created_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_wide"
+                    android:text="@string/order_by_date_added"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sort_view_order_by_author" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_created_at_asc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/new_to_old"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_created_at"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_order_by_created_at" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_created_at_desc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/old_to_new"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_created_at_asc_radio_button"
+                    app:layout_constraintStart_toEndOf="@id/sort_view_created_at_asc_radio_button"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_created_at_asc_radio_button" />
+
+                <TextView
+                    android:id="@+id/sort_view_order_by_started_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_wide"
+                    android:text="@string/order_by_date_started"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sort_view_order_by_created_at" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_started_at_asc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/new_to_old"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_started_at"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_order_by_started_at" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_started_at_desc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/old_to_new"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_started_at_asc_radio_button"
+                    app:layout_constraintStart_toEndOf="@id/sort_view_started_at_asc_radio_button"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_started_at_asc_radio_button" />
+
+                <TextView
+                    android:id="@+id/sort_view_order_by_finished_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_wide"
+                    android:text="@string/order_by_date_finished"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sort_view_order_by_started_at" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_finished_at_asc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/new_to_old"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_finished_at"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_order_by_finished_at" />
+
+                <RadioButton
+                    android:id="@+id/sort_view_finished_at_desc_radio_button"
+                    style="@style/SortRadioButton"
+                    android:text="@string/old_to_new"
+                    app:layout_constraintBottom_toBottomOf="@+id/sort_view_finished_at_asc_radio_button"
+                    app:layout_constraintStart_toEndOf="@id/sort_view_finished_at_asc_radio_button"
+                    app:layout_constraintTop_toTopOf="@+id/sort_view_finished_at_asc_radio_button" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+</layout>

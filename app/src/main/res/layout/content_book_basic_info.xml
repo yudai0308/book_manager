@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_wide"
             android:layout_marginTop="@dimen/space_wide"
-            app:cardElevation="@dimen/bookshelf_image_elevation"
+            app:cardElevation="@dimen/elevation_default"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 

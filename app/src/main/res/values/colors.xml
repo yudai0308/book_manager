@@ -4,11 +4,16 @@
     <color name="colorPrimaryDefault">#243A60</color>
     <color name="colorPrimaryLight">#354F75</color>
     <color name="colorAccent">#DC9694</color>
+    <color name="colorAccentRipple">#B07876</color>
 
     <color name="bg_search_bar">#F5F5F5</color>
+    <color name="bg_sort_view">#F2F2F2</color>
     <color name="bg_default">#FAFAFA</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="bg_selected_button">#696969</color>
     <color name="bg_selectable_button">#A9A9A9</color>
+
+    <color name="light_gray">#E5E5E5</color>
+    <color name="dark_gray">#696969</color>
 </resources>
