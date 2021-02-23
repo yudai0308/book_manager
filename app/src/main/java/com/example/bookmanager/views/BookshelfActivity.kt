@@ -4,12 +4,14 @@ import android.animation.ObjectAnimator
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.Button
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -50,6 +52,8 @@ class BookshelfActivity : AppCompatActivity() {
 
     private lateinit var selectedFilterButton: Button
 
+    private lateinit var selectedSortButton: RadioButton
+
     private var sortViewIsShown = false
 
     companion object {
@@ -66,11 +70,14 @@ class BookshelfActivity : AppCompatActivity() {
         }
 
         selectedFilterButton = binding.filterButtons.filterButtonAll
+        selectedSortButton = binding.sortView.sortViewAddedAtDescRadioButton
+        binding.sortView.sortViewAddedAtDescRadioButton.isChecked = true
 
         initToolbar()
         initRecyclerView()
         setFabClickListener()
         setFilterButtonsClickListener()
+        setSortButtonsClickListener()
 
         binding.sortView.sortViewCloseButton.setOnClickListener {
             closeSortView()
@@ -276,5 +283,32 @@ class BookshelfActivity : AppCompatActivity() {
             })
             visibility = View.GONE
         }
+    }
+
+    private fun setSortButtonsClickListener() {
+        getSortButtons().forEach { button ->
+            button.setOnCheckedChangeListener { compoundButton, _ ->
+                selectedSortButton.isChecked = false
+                selectedSortButton = compoundButton as RadioButton
+                Handler().postDelayed({
+                    closeSortView()
+                }, 500)
+            }
+        }
+    }
+
+    private fun getSortButtons(): List<RadioButton> {
+        return listOf(
+            binding.sortView.sortViewTitleAscRadioButton,
+            binding.sortView.sortViewTitleDescRadioButton,
+            binding.sortView.sortViewAuthorAscRadioButton,
+            binding.sortView.sortViewAuthorDescRadioButton,
+            binding.sortView.sortViewAddedAtAscRadioButton,
+            binding.sortView.sortViewAddedAtDescRadioButton,
+            binding.sortView.sortViewStartedAtAscRadioButton,
+            binding.sortView.sortViewStartedAtDescRadioButton,
+            binding.sortView.sortViewFinishedAtAscRadioButton,
+            binding.sortView.sortViewFinishedAtDescRadioButton
+        )
     }
 }
