@@ -46,14 +46,14 @@ class BookInfoViewModel(application: Application, val bookId: String) :
 
     init {
         statusStr.value = getStatusString(bookInfo.book.status)
-        startDateStr.value = if (bookInfo.book.startDate > 0) {
-            val date = Date(bookInfo.book.startDate * 1000)
+        startDateStr.value = if (bookInfo.book.startedAt > 0) {
+            val date = Date(bookInfo.book.startedAt * 1000)
             DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.JAPAN).format(date)
         } else {
             ""
         }
-        finishDateStr.value = if (bookInfo.book.finishDate > 0) {
-            val date = Date(bookInfo.book.finishDate * 1000)
+        finishDateStr.value = if (bookInfo.book.finishedAt > 0) {
+            val date = Date(bookInfo.book.finishedAt * 1000)
             DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.JAPAN).format(date)
         } else {
             ""

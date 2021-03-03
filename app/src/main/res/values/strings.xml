@@ -18,11 +18,9 @@
     <!-- 本棚ページ -->
     <string name="toolbar_title_bookshelf">本棚</string>
     <string name="delete_dialog_message">削除してもよろしいですか？</string>
-    <string name="order_by_title">タイトル順</string>
-    <string name="order_by_author">著者順</string>
-    <string name="order_by_date_added">本棚に追加した順</string>
-    <string name="order_by_date_started">読み始めた順</string>
-    <string name="order_by_date_finished">読み終わった順</string>
+    <string name="order_by_title">タイトル</string>
+    <string name="order_by_author">著者名</string>
+    <string name="order_by_date_added">追加日</string>
     <string name="asc">昇順</string>
     <string name="desc">降順</string>
     <string name="new_to_old">新しい順</string>

@@ -5,12 +5,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import com.example.bookmanager.models.BookSortCondition
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
+import kotlinx.coroutines.runBlocking
 
 /**
- * 本棚に保存されている本を保持するための ViewModel。
+ * 本棚に保存されている本の情報を保持するための ViewModel。
  */
 class BookshelfViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -24,19 +26,49 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
 
     val books: LiveData<List<Book>> = _books
 
-    suspend fun fetchAllBooks() {
-        _books.postValue(bookDao.loadAll())
+    suspend fun fetchBooks(status: Book.Status?, condition: BookSortCondition) {
+        val books = if (status == null) {
+            bookDao.loadAll()
+        } else {
+            bookDao.loadBooksByStatus(status.code)
+        }
+        val sortedBooks = getSortedBooks(books, condition)
+        _books.postValue(sortedBooks)
     }
 
-    suspend fun fetchBooksWantToRead() {
-        _books.postValue(bookDao.loadBooksByStatus(0))
+    private fun getSortedBooks(books: List<Book>, condition: BookSortCondition): List<Book> {
+        return when (condition.column) {
+            Book.Column.TITLE -> sortByTitle(books, condition.isAsc)
+            Book.Column.AUTHOR -> sortBooksByAuthor(books, condition.isAsc)
+            Book.Column.CREATED_AT -> sortByDateAdded(books, condition.isAsc)
+            else -> return books
+        }
     }
 
-    suspend fun fetchBooksReading() {
-        _books.postValue(bookDao.loadBooksByStatus(1))
+    private fun sortByTitle(books: List<Book>, isAsc: Boolean): List<Book> {
+        return if (isAsc) {
+            books.sortedBy { it.title }
+        } else {
+            books.sortedByDescending { it.title }
+        }
     }
 
-    suspend fun fetchBooksFinished() {
-        _books.postValue(bookDao.loadBooksByStatus(2))
+    private fun sortBooksByAuthor(books: List<Book>, isAsc: Boolean): List<Book> {
+        val ids = books.map { it.id }
+        val bookInfoList = runBlocking { bookDao.loadBookInfosByIds(ids) }
+        val sortedBookInfoList = if (isAsc) {
+            bookInfoList.sortedBy { it.authors.first().name }
+        } else {
+            bookInfoList.sortedByDescending { it.authors.first().name }
+        }
+        return sortedBookInfoList.map { it.book }
+    }
+
+    private fun sortByDateAdded(books: List<Book>, newToOld: Boolean): List<Book> {
+        return if (newToOld) {
+            books.sortedByDescending { it.createdAt }
+        } else {
+            books.sortedBy { it.createdAt }
+        }
     }
 }
