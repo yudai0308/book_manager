@@ -12,8 +12,8 @@ data class Book(
     val image: String,
     val status: Int,
     val comment: String,
-    val startDate: Long,
-    val finishDate: Long,
+    @ColumnInfo(name = "started_at") val startedAt: Long,
+    @ColumnInfo(name = "finished_at") val finishedAt: Long,
     @ColumnInfo(name = "created_at") val createdAt: Long,
     @ColumnInfo(name = "updated_at") val updatedAt: Long
 ) {
@@ -28,5 +28,13 @@ data class Book(
         WANT_TO_READ(0),
         READING(1),
         FINISHED(2)
+    }
+
+    enum class Column {
+        TITLE,
+        AUTHOR,
+        CREATED_AT,
+        STARTED_AT,
+        FINISHED_AT
     }
 }

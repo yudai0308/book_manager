@@ -6,11 +6,13 @@
     <dimen name="space_wide">16dp</dimen>
     <dimen name="space_super_wide">16dp</dimen>
 
+    <dimen name="elevation_default">15dp</dimen>
+
     <dimen name="text_size_tiny">11sp</dimen>
     <dimen name="text_size_small">13sp</dimen>
     <dimen name="text_size_default">15sp</dimen>
-    <dimen name="text_size_big">18dp</dimen>
-    <dimen name="text_size_huge">20dp</dimen>
+    <dimen name="text_size_big">18sp</dimen>
+    <dimen name="text_size_huge">20sp</dimen>
 
     <dimen name="book_row_image_width">64dp</dimen>
     <dimen name="book_row_image_height">80dp</dimen>
@@ -18,9 +20,9 @@
     <dimen name="text_size_book_title">16sp</dimen>
     <dimen name="text_size_book_author">14sp</dimen>
 
-    <dimen name="bookshelf_image_elevation">16dp</dimen>
     <dimen name="bookshelf_image_height">150dp</dimen>
     <dimen name="bookshelf_image_width">100dp</dimen>
+    <dimen name="bookshelf_fab_size">48dp</dimen>
 
     <dimen name="item_list_bottom_height">60dp</dimen>
 </resources>

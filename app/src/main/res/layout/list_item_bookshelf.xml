@@ -8,10 +8,10 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        app:cardElevation="@dimen/bookshelf_image_elevation">
+        app:cardElevation="@dimen/elevation_default">
 
         <TextView
-            android:id="@+id/bookshelf_item_title"
+            android:id="@+id/bookshelf_item_cover"
             android:layout_width="@dimen/bookshelf_image_width"
             android:layout_height="@dimen/bookshelf_image_height"
             android:adjustViewBounds="true"

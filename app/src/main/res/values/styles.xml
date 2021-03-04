@@ -18,11 +18,20 @@
     </style>
 
     <style name="FilterButton.Selected" parent="FilterButton">
-        <item name="android:background">@drawable/btn_filter_selected</item>
+        <item name="android:background">@drawable/bg_filter_btn_selected</item>
     </style>
 
     <style name="FilterButton.Selectable" parent="FilterButton">
-        <item name="android:background">@drawable/btn_filter_selectable</item>
+        <item name="android:background">@drawable/bg_filter_btn_selectable</item>
+    </style>
+
+    <style name="SortRadioButton">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
+        <item name="color">@android:color/tab_indicator_text</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
     </style>
 
 </resources>

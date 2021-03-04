@@ -51,13 +51,16 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         val book = books[position]
         val image = runBlocking { FileIO.readBookImage(context, book.id) }
 
-        holder.binding.bookshelfItemTitle.apply {
+        holder.binding.bookshelfItemCover.apply {
             if (image != null) {
                 background = image
                 text = ""
             } else {
-                background =
-                    ResourcesCompat.getDrawable(context.resources, R.drawable.white_680x800, null)
+                background = ResourcesCompat.getDrawable(
+                    context.resources,
+                    R.drawable.white_680x800,
+                    null
+                )
                 text = book.title
             }
         }

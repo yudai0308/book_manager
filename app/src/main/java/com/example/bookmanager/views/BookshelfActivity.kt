@@ -1,13 +1,17 @@
 package com.example.bookmanager.views
 
+import android.animation.ObjectAnimator
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AlphaAnimation
 import android.widget.Button
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -16,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookshelfBinding
+import com.example.bookmanager.models.BookSortCondition
 import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
@@ -25,6 +30,7 @@ import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+
 
 /**
  * 本棚ページのアクティビティ。
@@ -45,7 +51,15 @@ class BookshelfActivity : AppCompatActivity() {
 
     private var selectedBook: View? = null
 
-    private lateinit var selectedButton: Button
+    private lateinit var selectedFilterButton: Button
+
+    private lateinit var selectedSortButton: RadioButton
+
+    private var sortViewIsShown = false
+
+    private var selectedFilter: Book.Status? = null
+
+    private var selectedSort: BookSortCondition = BookSortCondition(Book.Column.CREATED_AT, false)
 
     companion object {
         const val MENU_DETAIL = 0
@@ -60,17 +74,28 @@ class BookshelfActivity : AppCompatActivity() {
             it.lifecycleOwner = this
         }
 
-        selectedButton = binding.filterButtons.filterButtonAll
+        selectedFilterButton = binding.filterButtons.filterButtonAll
+        selectedSortButton = binding.sortView.sortViewAddedAtDescRadioButton
+        binding.sortView.sortViewAddedAtDescRadioButton.isChecked = true
+
         initToolbar()
         initRecyclerView()
         setFabClickListener()
         setFilterButtonsClickListener()
+        setSortButtonsClickListener()
+
+        binding.sortView.sortViewCloseButton.setOnClickListener {
+            closeSortView()
+        }
+        binding.surfaceView.setOnClickListener {
+            closeSortView()
+        }
     }
 
     override fun onStart() {
         super.onStart()
 
-        GlobalScope.launch { viewModel.fetchAllBooks() }
+        GlobalScope.launch { viewModel.fetchBooks(selectedFilter, selectedSort) }
     }
 
     private fun initToolbar() {
@@ -133,22 +158,24 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private fun showBooksAccordingToSelectedButton(clickedButton: Button) {
-        if (clickedButton.id == selectedButton.id) {
+        if (clickedButton.id == selectedFilterButton.id) {
             return
         }
 
-        val selectedBackground = ContextCompat.getDrawable(this, R.drawable.btn_filter_selected)
-        val selectableBackground = ContextCompat.getDrawable(this, R.drawable.btn_filter_selectable)
-        selectedButton.background = selectableBackground
-        selectedButton = clickedButton
+        val selectedBackground = ContextCompat.getDrawable(this, R.drawable.bg_filter_btn_selected)
+        val selectableBackground = ContextCompat.getDrawable(this, R.drawable.bg_filter_btn_selectable)
+        selectedFilterButton.background = selectableBackground
+        selectedFilterButton = clickedButton
         clickedButton.background = selectedBackground
 
         when (clickedButton.id) {
-            R.id.filter_button_all -> GlobalScope.launch { viewModel.fetchAllBooks() }
-            R.id.filter_button_want_to_read -> GlobalScope.launch { viewModel.fetchBooksWantToRead() }
-            R.id.filter_button_reading -> GlobalScope.launch { viewModel.fetchBooksReading() }
-            R.id.filter_button_finished -> GlobalScope.launch { viewModel.fetchBooksFinished() }
+            R.id.filter_button_all -> selectedFilter = null
+            R.id.filter_button_want_to_read -> selectedFilter = Book.Status.WANT_TO_READ
+            R.id.filter_button_reading -> selectedFilter = Book.Status.READING
+            R.id.filter_button_finished -> selectedFilter = Book.Status.FINISHED
         }
+
+        GlobalScope.launch { viewModel.fetchBooks(selectedFilter, selectedSort) }
     }
 
     private fun startBookDetailActivity(position: Int) {
@@ -200,10 +227,134 @@ class BookshelfActivity : AppCompatActivity() {
                 runBlocking {
                     bookRepository.deleteBook(book)
                     FileIO.deleteBookImage(this@BookshelfActivity, book.id)
-                    viewModel.fetchAllBooks()
+                    viewModel.fetchBooks(selectedFilter, selectedSort)
                 }
             })
             it.setNegativeButton(getString(R.string.cancel), null)
+        }
+    }
+
+    private fun showSortViewWithSlideAnim() {
+        ObjectAnimator.ofFloat(binding.bookshelfSortView, "translationY", -700F).apply {
+            duration = 300
+            start()
+        }
+    }
+
+    private fun hideSortViewWithSlideAnim() {
+        ObjectAnimator.ofFloat(binding.bookshelfSortView, "translationY", 700F).apply {
+            duration = 300
+            start()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.bookshelf_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.toolbar_sort -> {
+                binding.surfaceView.isClickable = true
+                sortViewIsShown = true
+                showSortViewWithSlideAnim()
+                fadeInSurfaceView()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun closeSortView() {
+        binding.surfaceView.isClickable = false
+        sortViewIsShown = false
+        hideSortViewWithSlideAnim()
+        fadeOutSurfaceView()
+    }
+
+    private fun fadeInSurfaceView() {
+        binding.surfaceView.apply {
+            visibility = View.VISIBLE
+            startAnimation(AlphaAnimation(0.0F, 0.7F).apply {
+                duration = 300
+                fillAfter = true
+            })
+        }
+    }
+
+    private fun fadeOutSurfaceView() {
+        binding.surfaceView.apply {
+            startAnimation(AlphaAnimation(0.7F, 0.0F).apply {
+                duration = 300
+                fillAfter = true
+            })
+            visibility = View.GONE
+        }
+    }
+
+    private fun setSortButtonsClickListener() {
+        getSortButtons().forEach { button ->
+            button.setOnCheckedChangeListener { compoundButton, _ ->
+                if (compoundButton.id == selectedSortButton.id) {
+                    return@setOnCheckedChangeListener
+                }
+                selectedSortButton.isChecked = false
+                selectedSortButton = compoundButton as RadioButton
+                sortBooks(selectedSortButton.id)
+                Handler().postDelayed({
+                    closeSortView()
+                }, 500)
+            }
+        }
+    }
+
+    private fun sortBooks(radioButtonId: Int) {
+        when (radioButtonId) {
+            binding.sortView.sortViewTitleAscRadioButton.id -> {
+                selectedSort.column = Book.Column.TITLE
+                selectedSort.isAsc = true
+            }
+            binding.sortView.sortViewTitleDescRadioButton.id -> {
+                selectedSort.column = Book.Column.TITLE
+                selectedSort.isAsc = false
+            }
+            binding.sortView.sortViewAuthorAscRadioButton.id -> {
+                selectedSort.column = Book.Column.AUTHOR
+                selectedSort.isAsc = true
+            }
+            binding.sortView.sortViewAuthorDescRadioButton.id -> {
+                selectedSort.column = Book.Column.AUTHOR
+                selectedSort.isAsc = false
+            }
+            binding.sortView.sortViewAddedAtAscRadioButton.id -> {
+                selectedSort.column = Book.Column.CREATED_AT
+                selectedSort.isAsc = true
+            }
+            binding.sortView.sortViewAddedAtDescRadioButton.id -> {
+                selectedSort.column = Book.Column.CREATED_AT
+                selectedSort.isAsc = false
+            }
+        }
+
+        GlobalScope.launch { viewModel.fetchBooks(selectedFilter, selectedSort) }
+    }
+
+    private fun getSortButtons(): List<RadioButton> {
+        return listOf(
+            binding.sortView.sortViewTitleAscRadioButton,
+            binding.sortView.sortViewTitleDescRadioButton,
+            binding.sortView.sortViewAuthorAscRadioButton,
+            binding.sortView.sortViewAuthorDescRadioButton,
+            binding.sortView.sortViewAddedAtAscRadioButton,
+            binding.sortView.sortViewAddedAtDescRadioButton
+        )
+    }
+
+    override fun onBackPressed() {
+        if (sortViewIsShown) {
+            closeSortView()
+        } else {
+            super.onBackPressed()
         }
     }
 }

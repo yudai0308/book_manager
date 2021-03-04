@@ -31,21 +31,25 @@ interface BookDao {
     @Query("SELECT * FROM books WHERE id = :id")
     suspend fun loadBookInfoById(id: String): BookInfo
 
+    @Transaction
+    @Query("SELECT * FROM books WHERE id IN (:ids)")
+    suspend fun loadBookInfosByIds(ids: List<String>): List<BookInfo>
+
     @Query("SELECT status FROM books WHERE id = :id")
     suspend fun loadStatus(id: String): Int
 
     @Query("UPDATE books SET status = :status WHERE id = :id")
     suspend fun updateStatus(id: String, status: Int)
 
-    @Query("UPDATE books SET startDate = :date WHERE id = :id")
+    @Query("UPDATE books SET started_at = :date WHERE id = :id")
     suspend fun updateStartDate(id: String, date: Long)
 
-    @Query("UPDATE books SET startDate = 0 WHERE id = :id")
+    @Query("UPDATE books SET started_at = 0 WHERE id = :id")
     suspend fun clearStartDate(id: String)
 
-    @Query("UPDATE books SET finishDate = :date WHERE id = :id")
+    @Query("UPDATE books SET finished_at = :date WHERE id = :id")
     suspend fun updateFinishDate(id: String, date: Long)
 
-    @Query("UPDATE books SET startDate = 0 WHERE id = :id")
+    @Query("UPDATE books SET started_at = 0 WHERE id = :id")
     suspend fun clearFinishDate(id: String)
 }
