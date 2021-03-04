@@ -349,4 +349,12 @@ class BookshelfActivity : AppCompatActivity() {
             binding.sortView.sortViewAddedAtDescRadioButton
         )
     }
+
+    override fun onBackPressed() {
+        if (sortViewIsShown) {
+            closeSortView()
+        } else {
+            super.onBackPressed()
+        }
+    }
 }
