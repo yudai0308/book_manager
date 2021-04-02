@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
-import com.example.bookmanager.R
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.rooms.entities.BookInfo
@@ -26,8 +25,6 @@ class BookInfoViewModel(application: Application, val bookId: String) :
 
     private val context = application.applicationContext
 
-    //    private val bookId = bookId
-
     private val bookDao by lazy {
         Room.databaseBuilder(context, BookDatabase::class.java, C.DB_NAME).build().bookDao()
     }
@@ -36,7 +33,7 @@ class BookInfoViewModel(application: Application, val bookId: String) :
         runBlocking { bookDao.loadBookInfoById(bookId) }
     }
 
-    val statusStr = MutableLiveData<String>()
+    val statusCode = MutableLiveData<Int>()
 
     val startDateStr = MutableLiveData<String>()
 
@@ -45,7 +42,7 @@ class BookInfoViewModel(application: Application, val bookId: String) :
     var review: String = ""
 
     init {
-        statusStr.value = getStatusString(bookInfo.book.status)
+        statusCode.value = fetchCurrentStatus().code
         startDateStr.value = if (bookInfo.book.startedAt > 0) {
             val date = Date(bookInfo.book.startedAt * 1000)
             DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.JAPAN).format(date)
@@ -60,23 +57,22 @@ class BookInfoViewModel(application: Application, val bookId: String) :
         }
     }
 
-    private fun getStatusString(statusCode: Int): String {
-        return when (statusCode) {
-            Book.Status.WANT_TO_READ.code -> context.getString(R.string.book_status_want_to)
-            Book.Status.READING.code -> context.getString(R.string.book_status_reading)
-            Book.Status.FINISHED.code -> context.getString(R.string.book_status_finished)
-            else -> ""
+    private fun fetchCurrentStatus(): Book.Status {
+        val status = runBlocking {
+            bookDao.loadStatus(bookId)
+        }
+        return when (status) {
+            Book.Status.WANT_TO_READ.code -> Book.Status.WANT_TO_READ
+            Book.Status.READING.code -> Book.Status.READING
+            Book.Status.FINISHED.code -> Book.Status.FINISHED
+            else -> throw Exception("Detect invalid book status.")
         }
     }
 
-    fun fetchCurrentStatus(): Int = runBlocking {
-        bookDao.loadStatus(bookId)
-    }
-
-    fun updateStatus(statusCode: Int) {
-        statusStr.value = getStatusString(statusCode)
+    fun updateStatus(status: Book.Status) {
+        this.statusCode.value = status.code
         GlobalScope.launch {
-            bookDao.updateStatus(bookId, statusCode)
+            bookDao.updateStatus(bookId, status.code)
         }
     }
 
