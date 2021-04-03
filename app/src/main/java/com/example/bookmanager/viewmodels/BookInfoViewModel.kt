@@ -33,6 +33,8 @@ class BookInfoViewModel(application: Application, val bookId: String) :
         runBlocking { bookDao.loadBookInfoById(bookId) }
     }
 
+    val rating = MutableLiveData<Int>()
+
     val statusCode = MutableLiveData<Int>()
 
     val startDateStr = MutableLiveData<String>()
@@ -42,7 +44,8 @@ class BookInfoViewModel(application: Application, val bookId: String) :
     var review: String = ""
 
     init {
-        statusCode.value = fetchCurrentStatus().code
+        rating.value = bookInfo.book.rating
+        statusCode.value = getCurrentStatus().code
         startDateStr.value = if (bookInfo.book.startedAt > 0) {
             val date = Date(bookInfo.book.startedAt * 1000)
             DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.JAPAN).format(date)
@@ -57,15 +60,19 @@ class BookInfoViewModel(application: Application, val bookId: String) :
         }
     }
 
-    private fun fetchCurrentStatus(): Book.Status {
-        val status = runBlocking {
-            bookDao.loadStatus(bookId)
-        }
-        return when (status) {
+    private fun getCurrentStatus(): Book.Status {
+        return when (bookInfo.book.status) {
             Book.Status.WANT_TO_READ.code -> Book.Status.WANT_TO_READ
             Book.Status.READING.code -> Book.Status.READING
             Book.Status.FINISHED.code -> Book.Status.FINISHED
             else -> throw Exception("Detect invalid book status.")
+        }
+    }
+
+    fun updateRating(rating: Int) {
+        this.rating.value = rating
+        GlobalScope.launch {
+            bookDao.updateRating(bookId, rating)
         }
     }
 

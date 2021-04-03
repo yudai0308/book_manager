@@ -64,15 +64,22 @@ class BookMemoFragment : Fragment() {
             else -> null
         }
 
+        setOnRatingChangeListener()
         setOnStatusButtonsClickListener()
         setDatePicker()
-        setOnClearButtonClickListener()
+        setOnClearButtonsClickListener()
     }
 
     override fun onResume() {
         super.onResume()
 
         binding.root.requestLayout()
+    }
+
+    private fun setOnRatingChangeListener() {
+        binding.bookRating.setOnRatingBarChangeListener { _, rating, _ ->
+            viewModel.updateRating(rating.toInt())
+        }
     }
 
     private fun setOnStatusButtonsClickListener() {
@@ -141,7 +148,10 @@ class BookMemoFragment : Fragment() {
         }
     }
 
-    private fun setOnClearButtonClickListener() {
+    private fun setOnClearButtonsClickListener() {
+        binding.clearRatingButton.setOnClickListener {
+            viewModel.updateRating(0)
+        }
         binding.clearStartDateButton.setOnClickListener {
             viewModel.clearStartDate()
         }
