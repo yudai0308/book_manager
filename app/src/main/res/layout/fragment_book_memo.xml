@@ -38,8 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_narrow"
             android:isIndicator="false"
-            android:rating="@{viewModel.rating}"
             android:numStars="5"
+            android:rating="@{viewModel.rating}"
             android:stepSize="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,17 +47,17 @@
 
         <Button
             android:id="@+id/clear_rating_button"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_narrow"
-            android:layout_marginEnd="@dimen/space_default"
             android:background="@drawable/ic_baseline_close_24"
+            android:scaleY="0.8"
+            android:scaleX="0.8"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/book_rating"
+            android:translationX="-12dp"
+            android:translationY="8dp"
             app:layout_constraintStart_toEndOf="@id/book_rating"
-            app:layout_constraintTop_toTopOf="@id/book_rating" />
+            app:layout_constraintBottom_toTopOf="@id/book_rating"/>
 
         <FrameLayout
             android:id="@+id/horizontal_line_under_rating"
@@ -131,17 +131,20 @@
             android:id="@+id/start_reading_book_date"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginStart="@dimen/space_wide"
             android:layout_marginTop="@dimen/space_narrow"
-            android:layout_marginEnd="@dimen/space_default"
+            android:layout_marginEnd="@dimen/space_wide"
             android:autofillHints="@null"
+            android:background="@drawable/bg_edit_text_input_date"
             android:focusable="false"
+            android:gravity="center"
             android:hint="@null"
             android:inputType="date"
             android:labelFor="@id/start_reading_book_date_label"
             android:padding="@dimen/space_narrow"
             android:text="@={viewModel.startDateStr}"
-            app:layout_constraintEnd_toStartOf="@id/clear_start_date_button"
+            android:textColor="#666666"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical_center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/start_reading_book_date_label" />
 
@@ -150,14 +153,15 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_narrow"
             android:layout_marginEnd="@dimen/space_default"
             android:background="@drawable/ic_baseline_close_24"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            app:layout_constraintEnd_toEndOf="@id/guideline_vertical_center"
-            app:layout_constraintStart_toEndOf="@id/start_reading_book_date"
-            app:layout_constraintTop_toBottomOf="@id/start_reading_book_date_label" />
+            android:scaleY="0.8"
+            android:scaleX="0.8"
+            app:layout_constraintBottom_toBottomOf="@id/start_reading_book_date"
+            app:layout_constraintEnd_toEndOf="@id/start_reading_book_date"
+            app:layout_constraintTop_toTopOf="@id/start_reading_book_date" />
 
         <TextView
             android:id="@+id/finish_reading_book_date_label"
@@ -174,17 +178,20 @@
             android:id="@+id/finish_reading_book_date"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginStart="@dimen/space_wide"
             android:layout_marginTop="@dimen/space_narrow"
-            android:layout_marginEnd="@dimen/space_default"
+            android:layout_marginEnd="@dimen/space_wide"
             android:autofillHints="@null"
+            android:background="@drawable/bg_edit_text_input_date"
             android:focusable="false"
+            android:gravity="center"
             android:hint="@null"
             android:inputType="date"
             android:labelFor="@id/finish_reading_book_date_label"
             android:padding="@dimen/space_narrow"
             android:text="@={viewModel.finishDateStr}"
-            app:layout_constraintEnd_toStartOf="@id/clear_finish_date_button"
+            android:textColor="#666666"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_center"
             app:layout_constraintTop_toBottomOf="@id/finish_reading_book_date_label" />
 
@@ -193,14 +200,15 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_narrow"
             android:layout_marginEnd="@dimen/space_default"
             android:background="@drawable/ic_baseline_close_24"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/finish_reading_book_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/finish_reading_book_date" />
+            android:scaleY="0.8"
+            android:scaleX="0.8"
+            app:layout_constraintBottom_toBottomOf="@id/finish_reading_book_date"
+            app:layout_constraintEnd_toEndOf="@id/finish_reading_book_date"
+            app:layout_constraintTop_toTopOf="@id/finish_reading_book_date" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
