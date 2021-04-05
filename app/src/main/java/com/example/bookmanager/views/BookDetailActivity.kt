@@ -216,7 +216,6 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // ツールバーに「感想を書く」ボタンを追加。
         menuInflater.inflate(R.menu.book_detail_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -225,7 +224,7 @@ class BookDetailActivity : AppCompatActivity() {
         when (item.itemId) {
             // 感想を書く
             R.id.toolbar_edit_review -> {
-                startActivity(Intent(applicationContext, BookReviewEditingActivity::class.java).apply {
+                startActivity(Intent(this, BookReviewEditingActivity::class.java).apply {
                     putExtra(C.BOOK_ID, bookId)
                 })
             }
