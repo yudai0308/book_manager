@@ -10,6 +10,7 @@ data class Book(
     val title: String,
     val description: String,
     val image: String,
+    val rating: Int,
     val status: Int,
     val comment: String,
     @ColumnInfo(name = "started_at") val startedAt: Long,
@@ -20,7 +21,7 @@ data class Book(
     companion object {
         fun create(id: String, title: String, description: String, image: String): Book {
             val now = System.currentTimeMillis()
-            return Book(id, title, description, image, 0, "", 0, 0, now, now)
+            return Book(id, title, description, image, 0, 0, "", 0, 0, now, now)
         }
     }
 

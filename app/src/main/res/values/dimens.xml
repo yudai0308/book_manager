@@ -4,7 +4,8 @@
     <dimen name="space_narrow">4dp</dimen>
     <dimen name="space_default">8dp</dimen>
     <dimen name="space_wide">16dp</dimen>
-    <dimen name="space_super_wide">16dp</dimen>
+    <dimen name="space_x_wide">24dp</dimen>
+    <dimen name="space_xx_wide">32dp</dimen>
 
     <dimen name="elevation_default">15dp</dimen>
 

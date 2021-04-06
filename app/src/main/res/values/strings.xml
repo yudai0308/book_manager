@@ -46,22 +46,23 @@
     <string name="book_detail_tab_review">感想</string>
     <string name="description">説明</string>
     <string name="book_description_not_found">説明が見つかりませんでした。</string>
-    <string name="review_not_found">まだ感想はありません。</string>
+    <string name="review_not_found">まだ感想はありません</string>
+    <string name="button_title_add_review">感想を書く</string>
+    <string name="button_title_edit_review">編集する</string>
     <string name="markdown_supported">マークダウンでの記入も可能です。</string>
     <string name="unknown_author">著者不明</string>
     <string name="unknown_title">タイトル不明</string>
-    <string name="status_label">ステータス:</string>
-    <string name="start_date_label">読書開始日:</string>
-    <string name="finish_date_label">読書終了日:</string>
+    <string name="my_rating">自分の評価</string>
+    <string name="status_label">ステータス</string>
+    <string name="start_date_label">読書開始日</string>
+    <string name="finish_date_label">読書終了日</string>
     <string name="clear">クリア</string>
 
     <!-- レビュー作成ページ -->
-    <string name="toolbar_title_edit_review">感想を書く</string>
+    <string name="toolbar_title_add_review">感想を書く</string>
     <string name="dialog_discard_input_content">入力中の内容は保存されませんがよろしいでしょうか？</string>
     <string name="saved">保存しました。</string>
-    <string name="edit_review">感想を書く</string>
-    <string name="change_book_image">表紙を変更する</string>
-    <string name="delete_book">削除する</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_item_add_review">感想を書く</string>
+    <string name="menu_item_change_book_image">表紙を変更する</string>
+    <string name="menu_item_delete_book">削除する</string>
 </resources>

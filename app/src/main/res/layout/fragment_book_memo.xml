@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -9,121 +10,206 @@
             type="com.example.bookmanager.viewmodels.BookInfoViewModel" />
     </data>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical_center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/book_rating_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_x_wide"
+            android:text="@string/my_rating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RatingBar
+            android:id="@+id/book_rating"
+            style="?android:ratingBarStyleIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_narrow"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:rating="@{viewModel.rating}"
+            android:stepSize="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/book_rating_label" />
+
+        <Button
+            android:id="@+id/clear_rating_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_close_24"
+            android:scaleY="0.8"
+            android:scaleX="0.8"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:translationX="-12dp"
+            android:translationY="8dp"
+            app:layout_constraintStart_toEndOf="@id/book_rating"
+            app:layout_constraintBottom_toTopOf="@id/book_rating"/>
+
+        <FrameLayout
+            android:id="@+id/horizontal_line_under_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_wide"
+            android:layout_marginTop="@dimen/space_x_wide"
+            android:layout_marginEnd="@dimen/space_wide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/book_rating">
+
+            <include layout="@layout/horizontal_line" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/book_status"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_x_wide"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/horizontal_line_under_rating">
 
             <TextView
                 android:id="@+id/book_status_label"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_wide"
-                android:layout_marginTop="@dimen/space_wide"
-                android:layout_marginEnd="@dimen/space_wide"
-                android:text="@string/status_label"
-                app:layout_constraintEnd_toStartOf="@+id/book_status_value"
-                app:layout_constraintHorizontal_weight="3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Spinner
-                android:id="@+id/book_status_value"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_wide"
-                android:layout_marginEnd="@dimen/space_wide"
-                android:inputType="date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="7"
-                app:layout_constraintStart_toEndOf="@+id/book_status_label"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/start_reading_book_date_label"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_wide"
-                android:layout_marginTop="@dimen/space_wide"
-                android:layout_marginEnd="@dimen/space_wide"
-                android:text="@string/start_date_label"
-                app:layout_constraintEnd_toStartOf="@+id/start_reading_book_date"
-                app:layout_constraintHorizontal_weight="4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/book_status_label" />
-
-            <EditText
-                android:id="@+id/start_reading_book_date"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:autofillHints="@null"
-                android:focusable="false"
-                android:hint="@null"
-                android:inputType="date"
-                android:labelFor="@id/start_reading_book_date_label"
-                android:padding="@dimen/space_narrow"
-                android:text="@={viewModel.startDateStr}"
-                app:layout_constraintBaseline_toBaselineOf="@+id/start_reading_book_date_label"
-                app:layout_constraintEnd_toStartOf="@+id/clear_start_date_button"
-                app:layout_constraintHorizontal_weight="6"
-                app:layout_constraintStart_toEndOf="@+id/start_reading_book_date_label" />
-
-            <Button
-                android:id="@+id/clear_start_date_button"
-                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_default"
-                android:layout_marginEnd="@dimen/space_wide"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="@string/clear"
-                app:layout_constraintBaseline_toBaselineOf="@+id/start_reading_book_date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/start_reading_book_date" />
+                android:layout_gravity="center_horizontal"
+                android:text="@string/status_label" />
 
-            <TextView
-                android:id="@+id/finish_reading_book_date_label"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_wide"
-                android:layout_marginTop="@dimen/space_wide"
-                android:text="@string/finish_date_label"
-                app:layout_constraintEnd_toStartOf="@id/finish_reading_book_date"
-                app:layout_constraintHorizontal_weight="4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/start_reading_book_date_label" />
-
-            <EditText
-                android:id="@+id/finish_reading_book_date"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_wide"
-                android:autofillHints="@null"
-                android:focusable="false"
-                android:hint="@null"
-                android:inputType="date"
-                android:labelFor="@id/finish_reading_book_date_label"
-                android:padding="@dimen/space_narrow"
-                android:text="@={viewModel.finishDateStr}"
-                app:layout_constraintBaseline_toBaselineOf="@+id/finish_reading_book_date_label"
-                app:layout_constraintEnd_toStartOf="@id/clear_finish_date_button"
-                app:layout_constraintHorizontal_weight="6"
-                app:layout_constraintStart_toEndOf="@id/finish_reading_book_date_label" />
-
-            <Button
-                android:id="@+id/clear_finish_date_button"
-                style="@style/Widget.AppCompat.Button.Borderless"
+            <include
+                android:id="@+id/book_status_buttons"
+                layout="@layout/status_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_default"
-                android:layout_marginEnd="@dimen/space_wide"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="@string/clear"
-                app:layout_constraintBaseline_toBaselineOf="@+id/finish_reading_book_date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/finish_reading_book_date" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/space_default"
+                bind:viewModel="@{viewModel}" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/horizontal_line_under_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_wide"
+            android:layout_marginTop="@dimen/space_xx_wide"
+            android:layout_marginEnd="@dimen/space_wide"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/book_status">
+
+            <include layout="@layout/horizontal_line" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/start_reading_book_date_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xx_wide"
+            android:text="@string/start_date_label"
+            app:layout_constraintEnd_toEndOf="@+id/start_reading_book_date"
+            app:layout_constraintStart_toStartOf="@+id/start_reading_book_date"
+            app:layout_constraintTop_toBottomOf="@id/horizontal_line_under_status" />
+
+        <EditText
+            android:id="@+id/start_reading_book_date"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_wide"
+            android:layout_marginTop="@dimen/space_narrow"
+            android:layout_marginEnd="@dimen/space_wide"
+            android:autofillHints="@null"
+            android:background="@drawable/bg_rounded_square_light_gray"
+            android:focusable="false"
+            android:gravity="center"
+            android:hint="@null"
+            android:inputType="date"
+            android:labelFor="@id/start_reading_book_date_label"
+            android:padding="@dimen/space_narrow"
+            android:text="@={viewModel.startDateStr}"
+            android:textColor="@color/text_color_default"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical_center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/start_reading_book_date_label" />
+
+        <Button
+            android:id="@+id/clear_start_date_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_default"
+            android:background="@drawable/ic_baseline_close_24"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:scaleY="0.8"
+            android:scaleX="0.8"
+            app:layout_constraintBottom_toBottomOf="@id/start_reading_book_date"
+            app:layout_constraintEnd_toEndOf="@id/start_reading_book_date"
+            app:layout_constraintTop_toTopOf="@id/start_reading_book_date" />
+
+        <TextView
+            android:id="@+id/finish_reading_book_date_label"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_wide"
+            android:layout_marginTop="@dimen/space_xx_wide"
+            android:text="@string/finish_date_label"
+            app:layout_constraintEnd_toEndOf="@+id/finish_reading_book_date"
+            app:layout_constraintStart_toStartOf="@+id/finish_reading_book_date"
+            app:layout_constraintTop_toBottomOf="@id/horizontal_line_under_status" />
+
+        <EditText
+            android:id="@+id/finish_reading_book_date"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_wide"
+            android:layout_marginTop="@dimen/space_narrow"
+            android:layout_marginEnd="@dimen/space_wide"
+            android:autofillHints="@null"
+            android:background="@drawable/bg_rounded_square_light_gray"
+            android:focusable="false"
+            android:gravity="center"
+            android:hint="@null"
+            android:inputType="date"
+            android:labelFor="@id/finish_reading_book_date_label"
+            android:padding="@dimen/space_narrow"
+            android:text="@={viewModel.finishDateStr}"
+            android:textColor="@color/text_color_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_vertical_center"
+            app:layout_constraintTop_toBottomOf="@id/finish_reading_book_date_label" />
+
+        <Button
+            android:id="@+id/clear_finish_date_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_default"
+            android:background="@drawable/ic_baseline_close_24"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:scaleY="0.8"
+            android:scaleX="0.8"
+            app:layout_constraintBottom_toBottomOf="@id/finish_reading_book_date"
+            app:layout_constraintEnd_toEndOf="@id/finish_reading_book_date"
+            app:layout_constraintTop_toTopOf="@id/finish_reading_book_date" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

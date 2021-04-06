@@ -18,9 +18,9 @@
                 style="@style/FilterButton.Selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:padding="8dp"
+                android:layout_marginStart="@dimen/space_default"
+                android:layout_marginEnd="@dimen/space_default"
+                android:padding="@dimen/space_default"
                 android:text="@string/all_books" />
 
             <Button
@@ -28,7 +28,7 @@
                 style="@style/FilterButton.Selectable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="@dimen/space_default"
                 android:text="@string/book_status_want_to"
                 android:textColor="@color/white" />
 
@@ -37,7 +37,7 @@
                 style="@style/FilterButton.Selectable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="@dimen/space_default"
                 android:text="@string/book_status_reading"
                 android:textColor="@color/white" />
 
@@ -46,7 +46,7 @@
                 style="@style/FilterButton.Selectable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="@dimen/space_default"
                 android:text="@string/book_status_finished"
                 android:textColor="@color/white" />
 

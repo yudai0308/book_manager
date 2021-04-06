@@ -22,6 +22,7 @@
             android:layout_width="@dimen/match_constraint"
             android:layout_height="@dimen/match_constraint"
             android:autofillHints="マークダウン形式で入力できます。"
+            android:background="@color/transparent"
             android:gravity="top|start"
             android:hint="@string/markdown_supported"
             android:inputType="textMultiLine"

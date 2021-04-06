@@ -1,5 +1,6 @@
 package com.example.bookmanager.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,11 +44,16 @@ class BookReviewFragment : Fragment() {
             layoutInflater, R.layout.fragment_book_review, container, false
         )
 
+        binding.apply {
+            addReviewButton.setOnClickListener { startBookReviewEditingActivity() }
+            editReviewButton.setOnClickListener { startBookReviewEditingActivity() }
+        }
+
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         val markwon = context?.let { Markwon.create(it) }
         review = context?.let {
@@ -56,19 +62,21 @@ class BookReviewFragment : Fragment() {
 
         if (markwon != null && review.isNotBlank()) {
             markwon.setMarkdown(binding.bookReviewText, review)
-            binding.bookReviewText.visibility = View.VISIBLE
-            binding.noBookReview.visibility = View.INVISIBLE
+            binding.bookReview.visibility = View.VISIBLE
+            binding.noBookReview.visibility = View.GONE
         } else {
             binding.noBookReview.visibility = View.VISIBLE
-            binding.bookReviewText.visibility = View.INVISIBLE
+            binding.bookReview.visibility = View.GONE
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         binding.root.requestLayout()
-        binding.root.visibility = View.VISIBLE
+//        binding.root.visibility = View.VISIBLE
+    }
+
+    private fun startBookReviewEditingActivity() {
+        startActivity(Intent(context, BookReviewEditingActivity::class.java).apply {
+            putExtra(C.BOOK_ID, bookId)
+        })
     }
 
     companion object {

@@ -5,14 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.FragmentBookMemoBinding
+import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.viewmodels.BookInfoViewModel
 import java.text.DateFormat
@@ -28,6 +27,8 @@ class BookMemoFragment : Fragment() {
     private lateinit var viewModel: BookInfoViewModel
 
     private lateinit var binding: FragmentBookMemoBinding
+
+    private var selectedStatusButtonId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +57,17 @@ class BookMemoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initSpinner()
+        selectedStatusButtonId = when (viewModel.statusCode.value) {
+            Book.Status.WANT_TO_READ.code -> binding.bookStatusButtons.statusButtonWantToRead.id
+            Book.Status.READING.code -> binding.bookStatusButtons.statusButtonReading.id
+            Book.Status.FINISHED.code -> binding.bookStatusButtons.statusButtonFinished.id
+            else -> null
+        }
+
+        setOnRatingChangeListener()
+        setOnStatusButtonsClickListener()
         setDatePicker()
-        setOnClearButtonClickListener()
+        setOnClearButtonsClickListener()
     }
 
     override fun onResume() {
@@ -67,29 +76,37 @@ class BookMemoFragment : Fragment() {
         binding.root.requestLayout()
     }
 
-    private fun initSpinner() {
-        val adapter = context?.let {
-            val items = listOf(
-                getString(R.string.book_status_want_to),
-                getString(R.string.book_status_reading),
-                getString(R.string.book_status_finished)
+    private fun setOnRatingChangeListener() {
+        binding.bookRating.setOnRatingBarChangeListener { _, rating, _ ->
+            viewModel.updateRating(rating.toInt())
+        }
+    }
+
+    private fun setOnStatusButtonsClickListener() {
+        val buttons = binding.bookStatusButtons.run {
+            listOf(
+                statusButtonWantToRead,
+                statusButtonReading,
+                statusButtonFinished
             )
-            ArrayAdapter(it, android.R.layout.simple_spinner_item, items).apply {
-                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        buttons.forEach { button ->
+            button.setOnClickListener {
+                selectedStatusButtonId ?: return@setOnClickListener
+                if (it.id != selectedStatusButtonId) {
+                    val status = getBookStatusByButtonId(it.id)
+                    viewModel.updateStatus(status)
+                }
             }
         }
-        binding.bookStatusValue.also {
-            it.adapter = adapter
-            it.setSelection(viewModel.fetchCurrentStatus())
-            it.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
-                ) {
-                    viewModel.updateStatus(position)
-                }
+    }
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
+    private fun getBookStatusByButtonId(buttonId: Int): Book.Status {
+        return when (buttonId) {
+            binding.bookStatusButtons.statusButtonWantToRead.id -> Book.Status.WANT_TO_READ
+            binding.bookStatusButtons.statusButtonReading.id -> Book.Status.READING
+            binding.bookStatusButtons.statusButtonFinished.id -> Book.Status.FINISHED
+            else -> Book.Status.WANT_TO_READ
         }
     }
 
@@ -131,7 +148,10 @@ class BookMemoFragment : Fragment() {
         }
     }
 
-    private fun setOnClearButtonClickListener() {
+    private fun setOnClearButtonsClickListener() {
+        binding.clearRatingButton.setOnClickListener {
+            viewModel.updateRating(0)
+        }
         binding.clearStartDateButton.setOnClickListener {
             viewModel.clearStartDate()
         }

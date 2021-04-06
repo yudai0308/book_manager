@@ -68,7 +68,7 @@ class BookReviewEditingActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar as Toolbar)
 
         supportActionBar?.apply {
-            title = getString(R.string.toolbar_title_edit_review)
+            title = getString(R.string.toolbar_title_add_review)
             // ツールバーに戻るボタンを表示。
             setDisplayHomeAsUpEnabled(true)
         }

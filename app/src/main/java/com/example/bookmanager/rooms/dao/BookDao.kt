@@ -38,6 +38,9 @@ interface BookDao {
     @Query("SELECT status FROM books WHERE id = :id")
     suspend fun loadStatus(id: String): Int
 
+    @Query("UPDATE books SET rating = :rating WHERE id = :id")
+    suspend fun updateRating(id: String, rating: Int)
+
     @Query("UPDATE books SET status = :status WHERE id = :id")
     suspend fun updateStatus(id: String, status: Int)
 
