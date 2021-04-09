@@ -4,13 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ListItemBookshelfBinding
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.FileIO
+import com.example.bookmanager.utils.ViewUtil
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -24,18 +24,18 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
 
     private var onClickListener: View.OnClickListener? = null
 
-    private var listener: OnBindViewHolderListener? = null
+    private var onBindListener: OnBindViewHolderListener? = null
 
     interface OnBindViewHolderListener {
         fun onBound(view: View)
     }
 
     fun setOnClickListener(listener: View.OnClickListener) {
-        this.onClickListener = listener
+        onClickListener = listener
     }
 
     fun setOnBindViewHolderListener(listener: OnBindViewHolderListener) {
-        this.listener = listener
+        onBindListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookShelfHolder {
@@ -43,7 +43,7 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         val binding: ListItemBookshelfBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context), R.layout.list_item_bookshelf, parent, false
         )
-        binding.root.setOnClickListener(onClickListener)
+//        binding.root.setOnClickListener(onClickListener)
         return BookShelfHolder(binding)
     }
 
@@ -51,21 +51,34 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         val book = books[position]
         val image = runBlocking { FileIO.readBookImage(context, book.id) }
 
-        holder.binding.bookshelfItemCover.apply {
-            if (image != null) {
-                background = image
-                text = ""
-            } else {
-                background = ResourcesCompat.getDrawable(
-                    context.resources,
-                    R.drawable.white_680x800,
-                    null
-                )
-                text = book.title
+        val parentTotalPaddingPx = ViewUtil.dpToPx(context, 8)
+        val itemTotalMarginPx = ViewUtil.dpToPx(context, 8)
+        val itemWidth = getImageWidth(3, itemTotalMarginPx, parentTotalPaddingPx)
+        if (image != null) {
+            holder.binding.bookshelfItemCover.apply {
+                visibility = View.VISIBLE
+                setImageDrawable(image)
+                setOnClickListener(onClickListener)
+                layoutParams.width = itemWidth
             }
+            holder.binding.bookshelfItemTitle.visibility = View.GONE
+        } else {
+            holder.binding.bookshelfItemTitle.apply {
+                visibility = View.VISIBLE
+                text = book.title
+                setOnClickListener(onClickListener)
+                layoutParams.width = itemWidth
+            }
+            holder.binding.bookshelfItemCover.visibility = View.GONE
         }
 
-        listener?.onBound(holder.binding.root)
+        onBindListener?.onBound(holder.binding.root)
+    }
+
+    private fun getImageWidth(columnCount: Int, itemTotalMarginPx: Int, parentTotalPaddingPx: Int): Int {
+        val displayWidth = ViewUtil.getDisplayWidth(context)
+        val eachItemWidth = (displayWidth - parentTotalPaddingPx) / columnCount
+        return eachItemWidth - itemTotalMarginPx
     }
 
     override fun getItemCount(): Int {

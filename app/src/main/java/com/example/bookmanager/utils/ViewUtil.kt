@@ -26,14 +26,14 @@ class ViewUtil {
             return point.x
         }
 
-        fun dpToPx(context: Context, dp: Float): Float {
+        fun dpToPx(context: Context, dp: Int): Int {
             val metrics = context.resources.displayMetrics
-            return dp * metrics.density
+            return (dp * metrics.density).toInt()
         }
 
-        fun pxToDp(context: Context, px: Int): Float {
+        fun pxToDp(context: Context, px: Int): Int {
             val metrics = context.resources.displayMetrics
-            return px / metrics.density
+            return (px / metrics.density).toInt()
         }
     }
 }

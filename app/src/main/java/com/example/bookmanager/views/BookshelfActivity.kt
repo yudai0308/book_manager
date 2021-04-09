@@ -25,7 +25,6 @@ import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
-import com.example.bookmanager.utils.ViewUtil
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -107,7 +106,9 @@ class BookshelfActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         val listener = View.OnClickListener {
-            val position = binding.bookshelfBookList.getChildAdapterPosition(it)
+            // クリックされた ImageView / TextView の２つ親の FrameLayout を渡す必要がある。
+            val rootView = it.parent.parent as View
+            val position = binding.bookshelfBookList.getChildAdapterPosition(rootView)
             startBookDetailActivity(position)
         }
 
@@ -127,10 +128,6 @@ class BookshelfActivity : AppCompatActivity() {
             it.layoutManager = manager
             it.adapter = adapter
             it.setHasFixedSize(true)
-            it.addItemDecoration(GridSpacingItemDecoration(
-                this,
-                ViewUtil.dpToPx(this, 100F).toInt()
-            ))
         }
     }
 
