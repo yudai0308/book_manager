@@ -149,12 +149,15 @@ class BookshelfActivity : AppCompatActivity() {
         }
         buttons.forEach { button ->
             button.setOnClickListener {
-                showBooksAccordingToSelectedButton(it as Button)
+                val clickedButton = it as Button
+                switchButtonBackground(clickedButton)
+                updateSelectedFilter(clickedButton)
+                showBooksAccordingToSelectedFilter()
             }
         }
     }
 
-    private fun showBooksAccordingToSelectedButton(clickedButton: Button) {
+    private fun switchButtonBackground(clickedButton: Button) {
         if (clickedButton.id == selectedFilterButton.id) {
             return
         }
@@ -164,21 +167,40 @@ class BookshelfActivity : AppCompatActivity() {
         selectedFilterButton.background = selectableBackground
         selectedFilterButton = clickedButton
         clickedButton.background = selectedBackground
+    }
 
-        when (clickedButton.id) {
-            R.id.filter_button_all -> selectedFilter = null
-            R.id.filter_button_want_to_read -> selectedFilter = Book.Status.WANT_TO_READ
-            R.id.filter_button_reading -> selectedFilter = Book.Status.READING
-            R.id.filter_button_finished -> selectedFilter = Book.Status.FINISHED
+    private fun updateSelectedFilter(filterButton: Button) {
+        selectedFilter = when (filterButton.id) {
+            R.id.filter_button_all -> null
+            R.id.filter_button_want_to_read -> Book.Status.WANT_TO_READ
+            R.id.filter_button_reading -> Book.Status.READING
+            R.id.filter_button_finished -> Book.Status.FINISHED
+            else -> null
         }
+    }
 
-        GlobalScope.launch { viewModel.fetchBooks(selectedFilter, selectedSort) }
+    private fun showBooksAccordingToSelectedFilter() {
+        val books = runBlocking { viewModel.fetchBooks(selectedFilter, selectedSort) }
+        if (books.isNullOrEmpty()) {
+            binding.noBookText.text = getNoBoosText()
+            binding.noBookText.visibility = View.VISIBLE
+        } else {
+            binding.noBookText.text = ""
+            binding.noBookText.visibility = View.GONE
+        }
+    }
+
+    private fun getNoBoosText(): String {
+        return when (selectedFilter) {
+            Book.Status.WANT_TO_READ -> getString(R.string.no_books_want_to_read_on_bookshelf)
+            Book.Status.READING -> getString(R.string.no_books_reading_on_bookshelf)
+            Book.Status.FINISHED -> getString(R.string.no_books_finished_on_bookshelf)
+            else -> getString(R.string.no_books_on_bookshelf)
+        }
     }
 
     private fun startBookDetailActivity(position: Int) {
-        val book = viewModel.books.value?.get(position)
-        // TODO: book が null だった場合の処理。
-        book ?: return
+        val book = viewModel.books.value?.get(position) ?: return
         startActivity(Intent(applicationContext, BookDetailActivity::class.java).apply {
             putExtra(C.BOOK_ID, book.id)
         })

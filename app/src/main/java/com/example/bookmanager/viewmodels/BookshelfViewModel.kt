@@ -26,7 +26,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
 
     val books: LiveData<List<Book>> = _books
 
-    suspend fun fetchBooks(status: Book.Status?, condition: BookSortCondition) {
+    suspend fun fetchBooks(status: Book.Status?, condition: BookSortCondition): List<Book> {
         val books = if (status == null) {
             bookDao.loadAll()
         } else {
@@ -34,6 +34,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
         }
         val sortedBooks = getSortedBooks(books, condition)
         _books.postValue(sortedBooks)
+        return books
     }
 
     private fun getSortedBooks(books: List<Book>, condition: BookSortCondition): List<Book> {
