@@ -25,6 +25,10 @@
     <string name="desc">降順</string>
     <string name="new_to_old">新しい順</string>
     <string name="old_to_new">古い順</string>
+    <string name="no_books_on_bookshelf">本棚に本がありません</string>
+    <string name="no_books_want_to_read_on_bookshelf">読みたい本はありません</string>
+    <string name="no_books_reading_on_bookshelf">読んでいる本はありません</string>
+    <string name="no_books_finished_on_bookshelf">読み終わった本はありません</string>
     <string name="surface_view">surface view</string>
     <string name="close_button">close button</string>
 

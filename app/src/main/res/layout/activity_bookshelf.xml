@@ -33,12 +33,24 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/match_constraint"
             android:elevation="0dp"
+            android:padding="@dimen/space_narrow"
+            android:scrollbarSize="0dp"
             android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/filter_buttons"
             app:my_books="@{viewModel.books}" />
+
+        <TextView
+            android:id="@+id/no_book_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xx_wide"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bookshelf_book_list" />
 
         <View
             android:id="@+id/fab_add_book"
@@ -52,17 +64,17 @@
 
         <ImageView
             android:id="@+id/surface_view"
-            android:alpha="1.0"
-            android:visibility="invisible"
-            android:clickable="true"
-            android:src="@color/dark_gray"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="@dimen/match_constraint"
+            android:alpha="1.0"
+            android:clickable="true"
+            android:contentDescription="@string/surface_view"
+            android:src="@color/dark_gray"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/surface_view" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/bookshelf_sort_view"

@@ -25,7 +25,6 @@ import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
-import com.example.bookmanager.utils.ViewUtil
 import com.example.bookmanager.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -95,7 +94,7 @@ class BookshelfActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        GlobalScope.launch { viewModel.fetchBooks(selectedFilter, selectedSort) }
+        showBooksAccordingToSelectedFilter()
     }
 
     private fun initToolbar() {
@@ -107,7 +106,9 @@ class BookshelfActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         val listener = View.OnClickListener {
-            val position = binding.bookshelfBookList.getChildAdapterPosition(it)
+            // クリックされた ImageView / TextView の２つ親の FrameLayout を渡す必要がある。
+            val rootView = it.parent.parent as View
+            val position = binding.bookshelfBookList.getChildAdapterPosition(rootView)
             startBookDetailActivity(position)
         }
 
@@ -127,10 +128,6 @@ class BookshelfActivity : AppCompatActivity() {
             it.layoutManager = manager
             it.adapter = adapter
             it.setHasFixedSize(true)
-            it.addItemDecoration(GridSpacingItemDecoration(
-                this,
-                ViewUtil.dpToPx(this, 100F).toInt()
-            ))
         }
     }
 
@@ -152,12 +149,15 @@ class BookshelfActivity : AppCompatActivity() {
         }
         buttons.forEach { button ->
             button.setOnClickListener {
-                showBooksAccordingToSelectedButton(it as Button)
+                val clickedButton = it as Button
+                switchButtonBackground(clickedButton)
+                updateSelectedFilter(clickedButton)
+                showBooksAccordingToSelectedFilter()
             }
         }
     }
 
-    private fun showBooksAccordingToSelectedButton(clickedButton: Button) {
+    private fun switchButtonBackground(clickedButton: Button) {
         if (clickedButton.id == selectedFilterButton.id) {
             return
         }
@@ -167,21 +167,40 @@ class BookshelfActivity : AppCompatActivity() {
         selectedFilterButton.background = selectableBackground
         selectedFilterButton = clickedButton
         clickedButton.background = selectedBackground
+    }
 
-        when (clickedButton.id) {
-            R.id.filter_button_all -> selectedFilter = null
-            R.id.filter_button_want_to_read -> selectedFilter = Book.Status.WANT_TO_READ
-            R.id.filter_button_reading -> selectedFilter = Book.Status.READING
-            R.id.filter_button_finished -> selectedFilter = Book.Status.FINISHED
+    private fun updateSelectedFilter(filterButton: Button) {
+        selectedFilter = when (filterButton.id) {
+            R.id.filter_button_all -> null
+            R.id.filter_button_want_to_read -> Book.Status.WANT_TO_READ
+            R.id.filter_button_reading -> Book.Status.READING
+            R.id.filter_button_finished -> Book.Status.FINISHED
+            else -> null
         }
+    }
 
-        GlobalScope.launch { viewModel.fetchBooks(selectedFilter, selectedSort) }
+    private fun showBooksAccordingToSelectedFilter() {
+        val books = runBlocking { viewModel.fetchBooks(selectedFilter, selectedSort) }
+        if (books.isNullOrEmpty()) {
+            binding.noBookText.text = getNoBoosText()
+            binding.noBookText.visibility = View.VISIBLE
+        } else {
+            binding.noBookText.text = ""
+            binding.noBookText.visibility = View.GONE
+        }
+    }
+
+    private fun getNoBoosText(): String {
+        return when (selectedFilter) {
+            Book.Status.WANT_TO_READ -> getString(R.string.no_books_want_to_read_on_bookshelf)
+            Book.Status.READING -> getString(R.string.no_books_reading_on_bookshelf)
+            Book.Status.FINISHED -> getString(R.string.no_books_finished_on_bookshelf)
+            else -> getString(R.string.no_books_on_bookshelf)
+        }
     }
 
     private fun startBookDetailActivity(position: Int) {
-        val book = viewModel.books.value?.get(position)
-        // TODO: book が null だった場合の処理。
-        book ?: return
+        val book = viewModel.books.value?.get(position) ?: return
         startActivity(Intent(applicationContext, BookDetailActivity::class.java).apply {
             putExtra(C.BOOK_ID, book.id)
         })
@@ -196,7 +215,7 @@ class BookshelfActivity : AppCompatActivity() {
         }
 
         view?.let {
-            selectedBook = view
+            selectedBook = it.parent.parent as View
         }
     }
 
@@ -227,7 +246,7 @@ class BookshelfActivity : AppCompatActivity() {
                 runBlocking {
                     bookRepository.deleteBook(book)
                     FileIO.deleteBookImage(this@BookshelfActivity, book.id)
-                    viewModel.fetchBooks(selectedFilter, selectedSort)
+                    showBooksAccordingToSelectedFilter()
                 }
             })
             it.setNegativeButton(getString(R.string.cancel), null)

@@ -77,7 +77,7 @@ class BookInfoViewModel(application: Application, val bookId: String) :
     }
 
     fun updateStatus(status: Book.Status) {
-        this.statusCode.value = status.code
+        statusCode.value = status.code
         GlobalScope.launch {
             bookDao.updateStatus(bookId, status.code)
         }

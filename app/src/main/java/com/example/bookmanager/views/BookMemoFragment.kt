@@ -83,17 +83,16 @@ class BookMemoFragment : Fragment() {
     }
 
     private fun setOnStatusButtonsClickListener() {
-        val buttons = binding.bookStatusButtons.run {
-            listOf(
-                statusButtonWantToRead,
-                statusButtonReading,
-                statusButtonFinished
-            )
-        }
-        buttons.forEach { button ->
+        val buttons = binding.bookStatusButtons
+        listOf(
+            buttons.statusButtonWantToRead,
+            buttons.statusButtonReading,
+            buttons.statusButtonFinished
+        ).forEach { button ->
             button.setOnClickListener {
                 selectedStatusButtonId ?: return@setOnClickListener
                 if (it.id != selectedStatusButtonId) {
+                    selectedStatusButtonId = it.id
                     val status = getBookStatusByButtonId(it.id)
                     viewModel.updateStatus(status)
                 }
