@@ -94,7 +94,7 @@ class BookshelfActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        GlobalScope.launch { viewModel.fetchBooks(selectedFilter, selectedSort) }
+        showBooksAccordingToSelectedFilter()
     }
 
     private fun initToolbar() {
@@ -215,7 +215,7 @@ class BookshelfActivity : AppCompatActivity() {
         }
 
         view?.let {
-            selectedBook = view
+            selectedBook = it.parent.parent as View
         }
     }
 
@@ -246,7 +246,7 @@ class BookshelfActivity : AppCompatActivity() {
                 runBlocking {
                     bookRepository.deleteBook(book)
                     FileIO.deleteBookImage(this@BookshelfActivity, book.id)
-                    viewModel.fetchBooks(selectedFilter, selectedSort)
+                    showBooksAccordingToSelectedFilter()
                 }
             })
             it.setNegativeButton(getString(R.string.cancel), null)

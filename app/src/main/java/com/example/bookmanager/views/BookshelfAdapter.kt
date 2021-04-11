@@ -55,24 +55,24 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         val itemTotalMarginPx = ViewUtil.dpToPx(context, 8)
         val itemWidth = getImageWidth(3, itemTotalMarginPx, parentTotalPaddingPx)
         if (image != null) {
-            holder.binding.bookshelfItemCover.apply {
-                visibility = View.VISIBLE
-                setImageDrawable(image)
-                setOnClickListener(onClickListener)
-                layoutParams.width = itemWidth
+            holder.binding.bookshelfItemCover.also {
+                it.visibility = View.VISIBLE
+                it.setImageDrawable(image)
+                it.setOnClickListener(onClickListener)
+                it.layoutParams.width = itemWidth
+                onBindListener?.onBound(it)
             }
             holder.binding.bookshelfItemTitle.visibility = View.GONE
         } else {
-            holder.binding.bookshelfItemTitle.apply {
-                visibility = View.VISIBLE
-                text = book.title
-                setOnClickListener(onClickListener)
-                layoutParams.width = itemWidth
+            holder.binding.bookshelfItemTitle.also {
+                it.visibility = View.VISIBLE
+                it.text = book.title
+                it.setOnClickListener(onClickListener)
+                it.layoutParams.width = itemWidth
+                onBindListener?.onBound(it)
             }
             holder.binding.bookshelfItemCover.visibility = View.GONE
         }
-
-        onBindListener?.onBound(holder.binding.root)
     }
 
     private fun getImageWidth(columnCount: Int, itemTotalMarginPx: Int, parentTotalPaddingPx: Int): Int {
