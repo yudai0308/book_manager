@@ -243,7 +243,6 @@ class BookDetailActivity : AppCompatActivity() {
 
     private fun pickImage() {
         ImagePicker.with(this)
-            .crop(100F, 150F)
             .compress(C.IMAGE_MAX_SIZE)
             .start { resultCode, data ->
                 if (resultCode != Activity.RESULT_OK) {
@@ -254,7 +253,6 @@ class BookDetailActivity : AppCompatActivity() {
                 Glide.with(this).load(uri).into(binding.bookBasicInfo.bookDetailImage)
                 val bitmap = ImageUtil.getBitmapWithUri(this, uri)
                 FileIO.saveBookImage(this, bitmap, bookId)
-
         }
     }
 

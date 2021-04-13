@@ -2,93 +2,97 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/book_detail_image_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_wide"
-            android:layout_marginTop="@dimen/space_wide"
-            app:cardElevation="@dimen/elevation_default"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/book_detail_image"
-                android:layout_width="@dimen/bookshelf_image_width"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/book_detail_image_card"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/description_book_image" />
+                android:layout_marginStart="@dimen/space_wide"
+                android:layout_marginTop="@dimen/space_wide"
+                android:layout_marginBottom="@dimen/space_wide"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/book_detail_image"
+                    android:layout_width="@dimen/bookshelf_image_width"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/description_book_image" />
 
-        <TextView
-            android:id="@+id/book_detail_title"
-            android:layout_width="@dimen/match_constraint"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_wide"
-            android:layout_marginTop="@dimen/space_wide"
-            android:layout_marginEnd="@dimen/space_wide"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textSize="@dimen/text_size_book_title"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/book_detail_image_card"
-            app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/book_detail_author"
-            android:layout_width="@dimen/match_constraint"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_wide"
-            android:layout_marginTop="@dimen/space_default"
-            android:layout_marginEnd="@dimen/space_wide"
-            android:ellipsize="end"
-            android:maxLines="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/book_detail_image_card"
-            app:layout_constraintTop_toBottomOf="@+id/book_detail_title" />
+            <TextView
+                android:id="@+id/book_detail_title"
+                android:layout_width="@dimen/match_constraint"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_wide"
+                android:layout_marginTop="@dimen/space_wide"
+                android:layout_marginEnd="@dimen/space_wide"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textSize="@dimen/text_size_book_title"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/book_detail_image_card"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <RatingBar
-            android:id="@+id/book_detail_rating_bar"
-            style="?android:ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_wide"
-            android:layout_marginTop="@dimen/space_wide"
-            app:layout_constraintStart_toEndOf="@+id/book_detail_image_card"
-            app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
+            <TextView
+                android:id="@+id/book_detail_author"
+                android:layout_width="@dimen/match_constraint"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_wide"
+                android:layout_marginTop="@dimen/space_default"
+                android:layout_marginEnd="@dimen/space_wide"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/book_detail_image_card"
+                app:layout_constraintTop_toBottomOf="@+id/book_detail_title" />
 
-        <TextView
-            android:id="@+id/book_detail_ratings_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_default"
-            android:layout_marginTop="@dimen/space_wide"
-            android:text="@string/hyphen"
-            app:layout_constraintStart_toEndOf="@+id/book_detail_rating_bar"
-            app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
+            <RatingBar
+                android:id="@+id/book_detail_rating_bar"
+                style="?android:ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_wide"
+                android:layout_marginTop="@dimen/space_wide"
+                app:layout_constraintStart_toEndOf="@+id/book_detail_image_card"
+                app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
+
+            <TextView
+                android:id="@+id/book_detail_ratings_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_default"
+                android:text="@string/hyphen"
+                app:layout_constraintBottom_toBottomOf="@id/book_detail_rating_bar"
+                app:layout_constraintStart_toEndOf="@+id/book_detail_rating_bar"
+                app:layout_constraintTop_toTopOf="@id/book_detail_rating_bar" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/book_desc_summary_short"
-            android:layout_width="@dimen/match_constraint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_wide"
             android:layout_marginTop="@dimen/space_wide"
             android:layout_marginEnd="@dimen/space_wide"
-            android:maxLines="3"
             android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/book_detail_image_card" />
+            android:maxLines="3" />
 
         <TextView
             android:id="@+id/book_desc_summary_all"
-            android:layout_width="@dimen/match_constraint"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_wide"
             android:layout_marginTop="@dimen/space_wide"
@@ -98,6 +102,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/book_detail_image_card" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </layout>
