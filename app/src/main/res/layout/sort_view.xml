@@ -5,12 +5,15 @@
     <LinearLayout
         android:id="@+id/bookshelf_sort_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_sort_button_list"
         android:clickable="true"
         android:elevation="@dimen/elevation_default"
         android:orientation="vertical"
-        android:padding="@dimen/space_wide">
+        android:paddingStart="@dimen/space_wide"
+        android:paddingTop="@dimen/space_wide"
+        android:paddingEnd="@dimen/space_wide"
+        android:paddingBottom="@dimen/space_xx_wide">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,7 +49,7 @@
 
         <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +57,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline"
+                    android:id="@+id/vertical_guideline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -77,7 +80,7 @@
                     style="@style/SortRadioButton"
                     android:text="@string/asc"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_title"
-                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toEndOf="@id/vertical_guideline"
                     app:layout_constraintTop_toTopOf="@+id/sort_view_order_by_title" />
 
                 <RadioButton
@@ -103,7 +106,7 @@
                     style="@style/SortRadioButton"
                     android:text="@string/asc"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_author"
-                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toEndOf="@id/vertical_guideline"
                     app:layout_constraintTop_toTopOf="@+id/sort_view_order_by_author" />
 
                 <RadioButton
@@ -129,7 +132,7 @@
                     style="@style/SortRadioButton"
                     android:text="@string/new_to_old"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_added_at"
-                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintStart_toEndOf="@id/vertical_guideline"
                     app:layout_constraintTop_toTopOf="@+id/sort_view_order_by_added_at" />
 
                 <RadioButton

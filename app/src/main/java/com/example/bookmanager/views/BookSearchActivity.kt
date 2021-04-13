@@ -134,7 +134,6 @@ class BookSearchActivity : AppCompatActivity() {
             v ?: return
             val recyclerView: RecyclerView = binding.bookSearchResultList
             val position = recyclerView.getChildAdapterPosition(v)
-            // FIXME: resultBook が null だった場合の処理を検討。
             val resultItem = viewModel.bookSearchResult.value?.items?.get(position) ?: return
             val dialog = SimpleDialogFragment().apply {
                 val activity = this@BookSearchActivity
@@ -177,7 +176,6 @@ class BookSearchActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: 画像保存の処理はアクティビティから分離させたい。
     private fun saveImageToInternalStorage(url: String, fileName: String) {
         val activity = this
         GlobalScope.launch(Dispatchers.IO) {
@@ -200,16 +198,14 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun hideBottomProgressBar() {
-        val progressBar =
-            binding.root.findViewById<ProgressBar>(R.id.book_search_progress_bar_bottom)
+        val progressBar = binding.root.findViewById<ProgressBar>(R.id.book_search_progress_bar_bottom)
         progressBar?.apply {
             visibility = View.INVISIBLE
         }
     }
 
     private fun showBottomProgressBar() {
-        val progressBar =
-            binding.root.findViewById<ProgressBar>(R.id.book_search_progress_bar_bottom)
+        val progressBar = binding.root.findViewById<ProgressBar>(R.id.book_search_progress_bar_bottom)
         progressBar?.apply {
             visibility = View.VISIBLE
             bringToFront()
