@@ -254,17 +254,23 @@ class BookshelfActivity : AppCompatActivity() {
     }
 
     private fun showSortViewWithSlideAnim() {
-        ObjectAnimator.ofFloat(binding.bookshelfSortView, "translationY", -700F).apply {
+        val height = getSortViewHeight().toFloat()
+        ObjectAnimator.ofFloat(binding.bookshelfSortView, "translationY", height * -1).apply {
             duration = 300
             start()
         }
     }
 
     private fun hideSortViewWithSlideAnim() {
-        ObjectAnimator.ofFloat(binding.bookshelfSortView, "translationY", 700F).apply {
+        val height = getSortViewHeight().toFloat()
+        ObjectAnimator.ofFloat(binding.bookshelfSortView, "translationY", height).apply {
             duration = 300
             start()
         }
+    }
+
+    private fun getSortViewHeight(): Int {
+        return binding.bookshelfSortView.height
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

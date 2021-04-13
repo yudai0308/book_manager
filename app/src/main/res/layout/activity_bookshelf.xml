@@ -79,7 +79,7 @@
         <FrameLayout
             android:id="@+id/bookshelf_sort_view"
             android:layout_width="@dimen/match_constraint"
-            android:layout_height="1000dp"
+            android:layout_height="wrap_content"
             android:elevation="@dimen/elevation_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -26,6 +26,15 @@ class ViewUtil {
             return point.x
         }
 
+        fun getDisplayHeight(context: Context): Int {
+            val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val display = windowManager.defaultDisplay
+            val point = Point().also {
+                display.getRealSize(it)
+            }
+            return point.y
+        }
+
         fun dpToPx(context: Context, dp: Int): Int {
             val metrics = context.resources.displayMetrics
             return (dp * metrics.density).toInt()
