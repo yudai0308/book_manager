@@ -69,4 +69,30 @@
     <string name="menu_item_add_review">感想を書く</string>
     <string name="menu_item_change_book_image">表紙を変更する</string>
     <string name="menu_item_delete_book">削除する</string>
+    <string name="edit_review_hint">
+        一部のマークダウンが利用できます。\n
+        \n
+        # 見出し１\n
+        ## 見出し２\n
+        ### 見出し３\n
+        \n
+        - リスト１\n
+        - リスト２\n
+        - リスト３\n
+        \n
+        1. 番号付きリスト１\n
+        2. 番号付きリスト２\n
+        3. 番号付きリスト３\n
+        \n
+        *斜体*\n
+        \n
+        **太字**\n
+        \n
+        `インラインコード`\n
+        \n
+        ```\n
+        コードブロック\n
+        ```
+    </string>
+
 </resources>
