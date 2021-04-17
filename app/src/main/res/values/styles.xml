@@ -1,7 +1,5 @@
 <resources>
 
-    <!-- Color information -->
-    <!-- https://pigment.shapefactory.co/?d=1&a=243A60&b=DC9694 -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDefault</item>

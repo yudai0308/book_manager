@@ -65,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_wide"
                 android:layout_marginTop="@dimen/space_wide"
+                android:theme="@style/AppTheme"
                 app:layout_constraintStart_toEndOf="@+id/book_detail_image_card"
                 app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
 
