@@ -196,8 +196,7 @@ class BookDetailActivity : AppCompatActivity() {
         override fun onFailure(call: Call, e: IOException) {}
 
         override fun onResponse(call: Call, response: Response) {
-            val body = response.body?.string()
-            body ?: return
+            val body = response.body?.string() ?: return
             val jsonObj = JSONObject(body)
             val volumeInfo = jsonObj.getJSONObject("volumeInfo")
             if (volumeInfo.has("averageRating")) {

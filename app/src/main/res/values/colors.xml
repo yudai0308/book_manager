@@ -3,10 +3,10 @@
     <color name="colorPrimaryDark">#182C52</color>
     <color name="colorPrimaryDefault">#243A60</color>
     <color name="colorPrimaryLight">#354F75</color>
-    <color name="colorAccent">#DC9694</color>
-    <color name="colorAccentRipple">#B07876</color>
+    <color name="colorAccent">#7AA3DA</color>
+    <color name="colorAccentRipple">#6385B2</color>
 
-    <color name="text_color_default">#666666</color>
+    <color name="text_color_default">#4C4C4C</color>
     <color name="bg_search_bar">#F5F5F5</color>
     <color name="bg_sort_view">#F2F2F2</color>
     <color name="bg_default">#FAFAFA</color>

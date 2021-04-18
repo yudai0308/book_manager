@@ -1,5 +1,6 @@
 package com.example.bookmanager.views
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,17 +25,17 @@ class BookReviewFragment : Fragment() {
 
     private lateinit var binding: FragmentBookReviewBinding
 
+    private val sharedPref by lazy { activity?.getPreferences(Context.MODE_PRIVATE) }
+
+    private val markdownMode: Boolean
+        get() {
+            return sharedPref?.getBoolean(MARKDOWN_MODE, true) ?: true
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            if (it.getString(C.BOOK_ID) != null) {
-                bookId = it.getString(C.BOOK_ID) as String
-            } else {
-                // TODO: パラメーターが null だった場合の処理。
-                activity?.finish()
-            }
-        }
+        bookId = arguments?.getString(C.BOOK_ID) ?: return
     }
 
     override fun onCreateView(
@@ -47,7 +48,11 @@ class BookReviewFragment : Fragment() {
         binding.apply {
             addReviewButton.setOnClickListener { startBookReviewEditingActivity() }
             editReviewButton.setOnClickListener { startBookReviewEditingActivity() }
+            markdownInvisibleIcon.setOnClickListener { switchMarkdownMode(true) }
+            markdownVisibleIcon.setOnClickListener { switchMarkdownMode(false) }
         }
+
+        switchMarkdownMode(markdownMode)
 
         return binding.root
     }
@@ -60,8 +65,9 @@ class BookReviewFragment : Fragment() {
             FileIO.readReviewFile(it, bookId)
         } ?: ""
 
-        if (markwon != null && review.isNotBlank()) {
-            markwon.setMarkdown(binding.bookReviewText, review)
+        if (review.isNotBlank()) {
+            markwon?.setMarkdown(binding.bookReviewMarkdown, review)
+            binding.bookReviewSimpleText.text = review
             binding.bookReview.visibility = View.VISIBLE
             binding.noBookReview.visibility = View.GONE
         } else {
@@ -70,13 +76,48 @@ class BookReviewFragment : Fragment() {
         }
 
         binding.root.requestLayout()
-//        binding.root.visibility = View.VISIBLE
     }
 
     private fun startBookReviewEditingActivity() {
         startActivity(Intent(context, BookReviewEditingActivity::class.java).apply {
             putExtra(C.BOOK_ID, bookId)
         })
+    }
+
+    private fun switchMarkdownMode(isEnabled: Boolean) {
+        binding.apply {
+            if (isEnabled) {
+                switchOnMarkdownMode()
+            } else {
+                switchOffMarkdownMode()
+            }
+        }
+    }
+
+    private fun switchOnMarkdownMode() {
+        binding.apply {
+            markdownVisibleIcon.visibility = View.VISIBLE
+            markdownInvisibleIcon.visibility = View.INVISIBLE
+            bookReviewMarkdown.visibility = View.VISIBLE
+            bookReviewSimpleText.visibility = View.GONE
+        }
+        sharedPref?.edit()?.apply {
+            putBoolean(MARKDOWN_MODE, true)
+            apply()
+        }
+    }
+
+    private fun switchOffMarkdownMode() {
+        binding.apply {
+            markdownVisibleIcon.visibility = View.INVISIBLE
+            markdownInvisibleIcon.visibility = View.VISIBLE
+            bookReviewMarkdown.visibility = View.GONE
+            bookReviewSimpleText.visibility = View.VISIBLE
+        }
+        sharedPref?.edit()?.apply {
+            putBoolean(MARKDOWN_MODE, false)
+            apply()
+        }
     }
 
     companion object {
@@ -86,5 +127,7 @@ class BookReviewFragment : Fragment() {
                 putString(C.BOOK_ID, bookId)
             }
         }
+
+        private const val MARKDOWN_MODE = "markdown_mode"
     }
 }

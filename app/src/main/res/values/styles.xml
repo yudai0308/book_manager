@@ -1,7 +1,5 @@
 <resources>
 
-    <!-- Color information -->
-    <!-- https://pigment.shapefactory.co/?d=1&a=243A60&b=DC9694 -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDefault</item>
@@ -9,7 +7,7 @@
         <item name="android:fontFamily">@font/sawarabi_mincho_regular</item>
     </style>
 
-    <style name="FilterButton">
+    <style name="FilterButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:padding">@dimen/space_default</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_tiny</item>
@@ -25,7 +23,7 @@
         <item name="android:background">@drawable/bg_filter_btn_selectable</item>
     </style>
 
-    <style name="SortRadioButton">
+    <style name="SortRadioButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">120dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_big</item>
