@@ -5,6 +5,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/markdown_visible_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/space_narrow"
+            android:layout_marginEnd="@dimen/space_default"
+            android:clickable="true"
+            android:contentDescription="@string/description_markdown_is_visible"
+            android:src="@drawable/ic_baseline_visibility_32_on"
+            android:translationZ="1dp"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/markdown_invisible_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/space_narrow"
+            android:layout_marginEnd="@dimen/space_default"
+            android:clickable="true"
+            android:contentDescription="@string/description_markdown_is_invisible"
+            android:src="@drawable/ic_baseline_visibility_32_off"
+            android:translationZ="1dp"
+            android:visibility="invisible" />
+
         <LinearLayout
             android:id="@+id/book_review"
             android:layout_width="match_parent"
@@ -13,7 +39,13 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/book_review_text"
+                android:id="@+id/book_review_markdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/space_wide" />
+
+            <TextView
+                android:id="@+id/book_review_simple_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/space_wide" />
