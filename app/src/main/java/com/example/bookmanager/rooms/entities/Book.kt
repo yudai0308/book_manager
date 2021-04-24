@@ -13,15 +13,16 @@ data class Book(
     val rating: Int,
     val status: Int,
     val comment: String,
+    @ColumnInfo(name = "published_date") val publishedDate: Long,
     @ColumnInfo(name = "started_at") val startedAt: Long,
     @ColumnInfo(name = "finished_at") val finishedAt: Long,
     @ColumnInfo(name = "created_at") val createdAt: Long,
     @ColumnInfo(name = "updated_at") val updatedAt: Long
 ) {
     companion object {
-        fun create(id: String, title: String, description: String, image: String): Book {
+        fun create(id: String, title: String, description: String, image: String, publishedDate: Long): Book {
             val now = System.currentTimeMillis()
-            return Book(id, title, description, image, 0, 0, "", 0, 0, now, now)
+            return Book(id, title, description, image, 0, 0, "", publishedDate, 0, 0, now, now)
         }
     }
 

@@ -149,7 +149,8 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     inner class OnOkButtonClickListener(
-        private val resultItem: BookSearchResultItem, private val view: View
+        private val resultItem: BookSearchResultItem,
+        private val view: View
     ) : DialogInterface.OnClickListener {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {
@@ -160,7 +161,11 @@ class BookSearchActivity : AppCompatActivity() {
             }
 
             val newBook = Book.create(
-                resultItem.id, resultItem.title, resultItem.description, resultItem.image
+                resultItem.id,
+                resultItem.title,
+                resultItem.description,
+                resultItem.image,
+                resultItem.publishedDate
             )
 
             val authors = Author.createAll(resultItem.authors)

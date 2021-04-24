@@ -40,7 +40,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
     private fun getSortedBooks(books: List<Book>, condition: BookSortCondition): List<Book> {
         return when (condition.column) {
             Book.Column.TITLE -> sortByTitle(books, condition.isAsc)
-            Book.Column.AUTHOR -> sortBooksByAuthor(books, condition.isAsc)
+            Book.Column.AUTHOR -> sortByAuthor(books, condition.isAsc)
             Book.Column.CREATED_AT -> sortByDateAdded(books, condition.isAsc)
             else -> return books
         }
@@ -54,7 +54,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    private fun sortBooksByAuthor(books: List<Book>, isAsc: Boolean): List<Book> {
+    private fun sortByAuthor(books: List<Book>, isAsc: Boolean): List<Book> {
         val ids = books.map { it.id }
         val bookInfoList = runBlocking { bookDao.loadBookInfosByIds(ids) }
         val sortedBookInfoList = if (isAsc) {

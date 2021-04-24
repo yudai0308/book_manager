@@ -14,6 +14,8 @@ import com.example.bookmanager.utils.C
 import com.squareup.moshi.Moshi
 import okhttp3.*
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * 本の検索結果を保持するための ViewModel。
@@ -114,10 +116,14 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
     private fun createResultItems(items: List<Item>): List<BookSearchResultItem> {
         val books = mutableListOf<BookSearchResultItem>()
         for (item in items) {
-            val info = item.volumeInfo
+            val info = item.volumeInfo ?: continue
             val id = item.id
-            val title = info?.title ?: continue
+            val title = info.title ?: continue
             val authors = info.authors ?: listOf(context.getString(R.string.hyphen))
+            val date = info.publishedDate?.let {
+                SimpleDateFormat("yyyy-MM-dd", Locale.JAPAN).parse(it)
+            }
+            val publishedDate = date?.time
             val averageRating = info.averageRating
             val ratingsCount = info.ratingsCount ?: 0
             val description = info.description ?: ""
@@ -125,7 +131,8 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             val exist = repository.exist(id)
             books.add(
                 BookSearchResultItem(
-                    id, title, authors, averageRating, ratingsCount, description, image, exist
+                    id, title, authors, publishedDate ?: 0,
+                    averageRating, ratingsCount, description, image, exist
                 )
             )
         }

@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_begin="120dp" />
+                    app:layout_constraintGuide_begin="80dp" />
 
                 <TextView
                     android:id="@+id/sort_view_order_by_title"

@@ -15,6 +15,7 @@ import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.viewmodels.BookInfoViewModel
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -124,23 +125,23 @@ class BookMemoFragment : Fragment() {
 
     inner class OnDateClickListener(private val onDateSetListener: DatePickerDialog.OnDateSetListener) :
         View.OnClickListener {
+
         override fun onClick(v: View?) {
             val context = context ?: return
-            val c = Calendar.getInstance()
-            val editText = v as EditText
+            val editText = v as? EditText ?: return
+            val calendar = Calendar.getInstance()
             // 日付が入力されている場合は入力値をデフォルト値とする。
             if (editText.text.isNotBlank()) {
                 val dateStr = editText.text.toString()
-                val date =
-                    DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.JAPAN).parse(dateStr)
-                date?.let { d -> c.time = d }
+                val date = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN).parse(dateStr)
+                calendar.time = date ?: Date()
             }
             val dialog = DatePickerDialog(
                 context,
                 onDateSetListener,
-                c.get(Calendar.YEAR),
-                c.get(Calendar.MONTH),
-                c.get(Calendar.DAY_OF_MONTH)
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
             )
             // 読書開始日と完了日によって日にちを制御する。
             restrictDate(editText, dialog).show()
