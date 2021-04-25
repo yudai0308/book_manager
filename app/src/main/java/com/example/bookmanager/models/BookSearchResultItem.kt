@@ -8,6 +8,5 @@ data class BookSearchResultItem(
     val averageRating: Float?,
     val ratingsCount: Int,
     val description: String,
-    val image: String,
-    val exist: Boolean
+    val image: String
 )

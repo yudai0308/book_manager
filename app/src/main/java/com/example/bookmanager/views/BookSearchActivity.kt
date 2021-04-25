@@ -155,7 +155,7 @@ class BookSearchActivity : AppCompatActivity() {
 
         override fun onClick(dialog: DialogInterface?, which: Int) {
             // 本棚に存在するか確認。
-            if (repository.exist(resultItem.id)) {
+            if (repository.exists(resultItem.id)) {
                 ViewUtil.showSnackBarLong(view, getString(R.string.exists_in_my_shelf))
                 return
             }
