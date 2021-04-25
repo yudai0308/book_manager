@@ -10,11 +10,19 @@ import com.google.android.material.snackbar.Snackbar
 class ViewUtil {
     companion object {
         fun showSnackBarLong(view: View, msg: String) {
-            Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show()
+            try {
+                Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                return
+            }
         }
 
         fun showToastLong(context: Context, text: String) {
-            Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+            try {
+                Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                return
+            }
         }
 
         fun getDisplayWidth(context: Context): Int {
