@@ -47,11 +47,20 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun sortByTitle(books: List<Book>, isAsc: Boolean): List<Book> {
-        return if (isAsc) {
-            books.sortedBy { it.title }
+        val groupedBooksList = books.groupBy { it.seriesName }
+        val seriesNames = groupedBooksList.keys
+        val sortedSeriesNames = if (isAsc) {
+            seriesNames.sorted()
         } else {
-            books.sortedByDescending { it.title }
+            seriesNames.sortedDescending()
         }
+        var sortedBooks = listOf<Book>()
+        sortedSeriesNames.forEach { series ->
+            val seriesBooks = groupedBooksList[series] ?: return@forEach
+            sortedBooks = sortedBooks + sortedByPublishedDate(seriesBooks, isAsc)
+        }
+
+        return sortedBooks
     }
 
     private fun sortByAuthor(books: List<Book>, isAsc: Boolean): List<Book> {
@@ -70,6 +79,14 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
             books.sortedByDescending { it.createdAt }
         } else {
             books.sortedBy { it.createdAt }
+        }
+    }
+
+    private fun sortedByPublishedDate(books: List<Book>, isAsk: Boolean): List<Book> {
+        return if (isAsk) {
+            books.sortedBy { it.publishedDate }
+        } else {
+            books.sortedByDescending { it.publishedDate }
         }
     }
 }
