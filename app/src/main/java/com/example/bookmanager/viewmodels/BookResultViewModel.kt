@@ -121,21 +121,31 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             val title = info.title ?: continue
             val authors = info.authors ?: listOf(context.getString(R.string.hyphen))
             val date = info.publishedDate?.let {
-                SimpleDateFormat("yyyy-MM-dd", Locale.JAPAN).parse(it)
+                val dateString = createFormattedDateString(it)
+                SimpleDateFormat("yyyy-MM-dd", Locale.JAPAN).parse(dateString)
             }
             val publishedDate = date?.time
             val averageRating = info.averageRating
             val ratingsCount = info.ratingsCount ?: 0
             val description = info.description ?: ""
             val image = info.imageLinks?.thumbnail ?: ""
-            val exist = repository.exist(id)
             books.add(
                 BookSearchResultItem(
                     id, title, authors, publishedDate ?: 0,
-                    averageRating, ratingsCount, description, image, exist
+                    averageRating, ratingsCount, description, image
                 )
             )
         }
         return books
+    }
+
+    private fun createFormattedDateString(dateString: String): String {
+        val dateArray = dateString.split("-")
+        return when (dateArray.size) {
+            1 -> "${dateArray[0]}-01-01"
+            2 -> "${dateArray[0]}-${dateArray[1]}-01"
+            3 -> dateString
+            else -> "1970-01-01"
+        }
     }
 }
