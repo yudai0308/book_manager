@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.bookmanager.R
@@ -101,7 +102,7 @@ class BookReviewFragment : Fragment() {
             bookReviewMarkdown.visibility = View.VISIBLE
             bookReviewSimpleText.visibility = View.GONE
         }
-        sharedPref?.edit()?.apply {
+        sharedPref?.edit {
             putBoolean(MARKDOWN_MODE, true)
             apply()
         }

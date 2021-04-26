@@ -47,11 +47,20 @@ data class Book(
         FINISHED(2)
     }
 
-    enum class Column {
-        TITLE,
-        AUTHOR,
-        CREATED_AT,
-        STARTED_AT,
-        FINISHED_AT
+    enum class Column(val code: Int) {
+        TITLE(0),
+        AUTHOR(1),
+        CREATED_AT(2);
+
+        companion object {
+            fun getByCode(code: Int): Column? {
+                return when (code) {
+                    TITLE.code -> TITLE
+                    AUTHOR.code -> AUTHOR
+                    CREATED_AT.code -> CREATED_AT
+                    else -> null
+                }
+            }
+        }
     }
 }

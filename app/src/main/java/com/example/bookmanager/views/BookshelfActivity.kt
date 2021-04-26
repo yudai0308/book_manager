@@ -1,6 +1,7 @@
 package com.example.bookmanager.views
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -12,9 +13,11 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.Button
 import android.widget.RadioButton
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -48,6 +51,8 @@ class BookshelfActivity : AppCompatActivity() {
 
     private val bookRepository by lazy { BookRepository(this) }
 
+    private val sharedPref by lazy { getPreferences(Context.MODE_PRIVATE) }
+
     private var selectedBook: View? = null
 
     private lateinit var selectedFilterButton: Button
@@ -58,11 +63,14 @@ class BookshelfActivity : AppCompatActivity() {
 
     private var selectedFilter: Book.Status? = null
 
-    private var selectedSort: BookSortCondition = BookSortCondition(Book.Column.CREATED_AT, false)
+    private lateinit var selectedSort: BookSortCondition
 
     companion object {
         const val MENU_DETAIL = 0
         const val MENU_DELETE = 1
+
+        const val SORT_COND_COLUMN = "sort_cond_column"
+        const val SORT_COND_IS_ASC = "sort_cond_is_asc"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,9 +81,11 @@ class BookshelfActivity : AppCompatActivity() {
             it.lifecycleOwner = this
         }
 
+        selectedSort = getSavedSortCondition()
+        selectedSortButton = getSortButtonByCondition(selectedSort).apply {
+            isChecked = true
+        }
         selectedFilterButton = binding.filterButtons.filterButtonAll
-        selectedSortButton = binding.sortView.sortViewAddedAtDescRadioButton
-        binding.sortView.sortViewAddedAtDescRadioButton.isChecked = true
 
         initToolbar()
         initRecyclerView()
@@ -94,7 +104,33 @@ class BookshelfActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        showBooksAccordingToSelectedFilter()
+        showBooksAccordingToSelectedCondition()
+    }
+
+    private fun getSortButtonByCondition(condition: BookSortCondition): RadioButton {
+        return when (condition.column) {
+            Book.Column.TITLE -> {
+                if (condition.isAsc) {
+                    binding.sortView.sortViewTitleAscRadioButton
+                } else {
+                    binding.sortView.sortViewTitleDescRadioButton
+                }
+            }
+            Book.Column.AUTHOR -> {
+                if (condition.isAsc) {
+                    binding.sortView.sortViewAuthorAscRadioButton
+                } else {
+                    binding.sortView.sortViewAuthorDescRadioButton
+                }
+            }
+            Book.Column.CREATED_AT -> {
+                if (condition.isAsc) {
+                    binding.sortView.sortViewAddedAtAscRadioButton
+                } else {
+                    binding.sortView.sortViewAddedAtDescRadioButton
+                }
+            }
+        }
     }
 
     private fun initToolbar() {
@@ -150,14 +186,21 @@ class BookshelfActivity : AppCompatActivity() {
         buttons.forEach { button ->
             button.setOnClickListener {
                 val clickedButton = it as Button
-                switchButtonBackground(clickedButton)
+                switchFilterButtonBackground(clickedButton)
                 updateSelectedFilter(clickedButton)
-                showBooksAccordingToSelectedFilter()
+                showBooksAccordingToSelectedCondition()
             }
         }
     }
 
-    private fun switchButtonBackground(clickedButton: Button) {
+    private fun getSavedSortCondition(): BookSortCondition {
+        val columnCode = sharedPref.getInt(SORT_COND_COLUMN, Book.Column.CREATED_AT.code)
+        val column = Book.Column.getByCode(columnCode) ?: Book.Column.CREATED_AT
+        val isAsc = sharedPref.getBoolean(SORT_COND_IS_ASC, false)
+        return BookSortCondition(column, isAsc)
+    }
+
+    private fun switchFilterButtonBackground(clickedButton: Button) {
         if (clickedButton.id == selectedFilterButton.id) {
             return
         }
@@ -179,10 +222,10 @@ class BookshelfActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBooksAccordingToSelectedFilter() {
+    private fun showBooksAccordingToSelectedCondition() {
         val books = runBlocking { viewModel.fetchBooks(selectedFilter, selectedSort) }
         if (books.isNullOrEmpty()) {
-            binding.noBookText.text = getNoBoosText()
+            binding.noBookText.text = getNoBooksText()
             binding.noBookText.visibility = View.VISIBLE
         } else {
             binding.noBookText.text = ""
@@ -190,7 +233,7 @@ class BookshelfActivity : AppCompatActivity() {
         }
     }
 
-    private fun getNoBoosText(): String {
+    private fun getNoBooksText(): String {
         return when (selectedFilter) {
             Book.Status.WANT_TO_READ -> getString(R.string.no_books_want_to_read_on_bookshelf)
             Book.Status.READING -> getString(R.string.no_books_reading_on_bookshelf)
@@ -246,7 +289,7 @@ class BookshelfActivity : AppCompatActivity() {
                 runBlocking {
                     bookRepository.deleteBook(book)
                     FileIO.deleteBookImage(this@BookshelfActivity, book.id)
-                    showBooksAccordingToSelectedFilter()
+                    showBooksAccordingToSelectedCondition()
                 }
             })
             it.setNegativeButton(getString(R.string.cancel), null)
@@ -323,9 +366,11 @@ class BookshelfActivity : AppCompatActivity() {
                 if (compoundButton.id == selectedSortButton.id) {
                     return@setOnCheckedChangeListener
                 }
+
                 selectedSortButton.isChecked = false
                 selectedSortButton = compoundButton as RadioButton
                 sortBooks(selectedSortButton.id)
+                savePreferences()
                 Handler().postDelayed({
                     closeSortView()
                 }, 500)
@@ -333,7 +378,7 @@ class BookshelfActivity : AppCompatActivity() {
         }
     }
 
-    private fun sortBooks(radioButtonId: Int) {
+    private fun sortBooks(@IdRes radioButtonId: Int) {
         when (radioButtonId) {
             binding.sortView.sortViewTitleAscRadioButton.id -> {
                 selectedSort.column = Book.Column.TITLE
@@ -373,6 +418,14 @@ class BookshelfActivity : AppCompatActivity() {
             binding.sortView.sortViewAddedAtAscRadioButton,
             binding.sortView.sortViewAddedAtDescRadioButton
         )
+    }
+
+    private fun savePreferences() {
+        sharedPref.edit {
+            putInt(SORT_COND_COLUMN, selectedSort.column.code)
+            putBoolean(SORT_COND_IS_ASC, selectedSort.isAsc)
+            apply()
+        }
     }
 
     override fun onBackPressed() {

@@ -42,7 +42,6 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
             Book.Column.TITLE -> sortByTitle(books, condition.isAsc)
             Book.Column.AUTHOR -> sortByAuthor(books, condition.isAsc)
             Book.Column.CREATED_AT -> sortByDateAdded(books, condition.isAsc)
-            else -> return books
         }
     }
 
