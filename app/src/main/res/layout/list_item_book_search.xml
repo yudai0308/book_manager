@@ -8,18 +8,25 @@
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true">
 
-        <ImageView
-            android:id="@+id/book_search_item_image"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/book_search_item_image_card"
             android:layout_width="@dimen/book_row_image_width"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_default"
             android:layout_marginTop="@dimen/space_default"
             android:layout_marginBottom="@dimen/space_default"
-            android:contentDescription="@string/description_book_image"
-            android:maxHeight="@dimen/book_row_image_height"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/book_search_item_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/description_book_image" />
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/book_search_item_title"
@@ -33,7 +40,7 @@
             android:textSize="@dimen/text_size_book_title"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/book_search_item_image"
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image_card"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -46,7 +53,7 @@
             android:maxLines="1"
             android:textSize="@dimen/text_size_book_author"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/book_search_item_image"
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image_card"
             app:layout_constraintTop_toBottomOf="@id/book_search_item_title" />
 
         <RatingBar
@@ -56,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_default"
             android:layout_marginTop="@dimen/space_narrow"
-            app:layout_constraintStart_toEndOf="@+id/book_search_item_image"
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image_card"
             app:layout_constraintTop_toBottomOf="@id/book_search_item_author" />
 
         <TextView
