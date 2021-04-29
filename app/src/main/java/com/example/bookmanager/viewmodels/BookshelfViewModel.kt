@@ -10,6 +10,7 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import kotlinx.coroutines.runBlocking
+import java.util.*
 
 /**
  * 本棚に保存されている本の情報を保持するための ViewModel。
@@ -40,29 +41,45 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
     private fun getSortedBooks(books: List<Book>, condition: BookSortCondition): List<Book> {
         return when (condition.column) {
             Book.Column.TITLE -> sortByTitle(books, condition.isAsc)
-            Book.Column.AUTHOR -> sortBooksByAuthor(books, condition.isAsc)
+            Book.Column.AUTHOR -> sortByAuthor(books, condition.isAsc)
             Book.Column.CREATED_AT -> sortByDateAdded(books, condition.isAsc)
-            else -> return books
+            Book.Column.RATING -> sortByRating(books, condition.isAsc)
         }
     }
 
     private fun sortByTitle(books: List<Book>, isAsc: Boolean): List<Book> {
-        return if (isAsc) {
-            books.sortedBy { it.title }
+        val groupedBooksList = books.groupBy { it.seriesName }
+        val seriesNames = groupedBooksList.keys
+        val sortedSeriesNames = if (isAsc) {
+            seriesNames.sorted()
         } else {
-            books.sortedByDescending { it.title }
+            seriesNames.sortedDescending()
         }
+        var sortedBooks = listOf<Book>()
+        sortedSeriesNames.forEach { series ->
+            val seriesBooks = groupedBooksList[series] ?: return@forEach
+            sortedBooks = sortedBooks + sortByPublishedDate(seriesBooks, isAsc)
+        }
+
+        return sortedBooks
     }
 
-    private fun sortBooksByAuthor(books: List<Book>, isAsc: Boolean): List<Book> {
+    private fun sortByAuthor(books: List<Book>, isAsc: Boolean): List<Book> {
         val ids = books.map { it.id }
         val bookInfoList = runBlocking { bookDao.loadBookInfosByIds(ids) }
-        val sortedBookInfoList = if (isAsc) {
-            bookInfoList.sortedBy { it.authors.first().name }
-        } else {
-            bookInfoList.sortedByDescending { it.authors.first().name }
+        val groupedBookInfoList = bookInfoList.groupBy { it.authors.first().name }.let {
+            if (isAsc) {
+                it.toSortedMap()
+            } else {
+                it.toSortedMap(Comparator.reverseOrder())
+            }
         }
-        return sortedBookInfoList.map { it.book }
+        var sortedBooks = listOf<Book>()
+        groupedBookInfoList.forEach { (_, infoList) ->
+            sortedBooks = sortedBooks + sortByTitle(infoList.map { it.book }, true)
+        }
+
+        return sortedBooks
     }
 
     private fun sortByDateAdded(books: List<Book>, newToOld: Boolean): List<Book> {
@@ -70,6 +87,33 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
             books.sortedByDescending { it.createdAt }
         } else {
             books.sortedBy { it.createdAt }
+        }
+    }
+
+    private fun sortByRating(books: List<Book>, isAsc: Boolean): List<Book> {
+        val booksHaveNoRating = books.filter { it.rating == 0 }
+        val booksHaveRating = books.filter { it.rating > 0 }
+        val groupedBooks = booksHaveRating.groupBy { it.rating }.let {
+            if (isAsc) {
+                it.toSortedMap()
+            } else {
+                it.toSortedMap(reverseOrder())
+            }
+        }
+        var sortedBooks = listOf<Book>()
+        groupedBooks.forEach { (_, books) ->
+            sortedBooks = sortedBooks + sortByTitle(books, true)
+        }
+
+        val a = sortedBooks + sortByTitle(booksHaveNoRating, true)
+        return a
+    }
+
+    private fun sortByPublishedDate(books: List<Book>, isAsk: Boolean): List<Book> {
+        return if (isAsk) {
+            books.sortedBy { it.publishedDate }
+        } else {
+            books.sortedByDescending { it.publishedDate }
         }
     }
 }

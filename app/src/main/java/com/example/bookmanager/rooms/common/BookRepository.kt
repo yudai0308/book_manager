@@ -74,7 +74,7 @@ class BookRepository(private val context: Context) {
         }
     }
 
-    fun exist(id: String): Boolean {
+    fun exists(id: String): Boolean {
         return runBlocking { bookDao.exists(id) } > 0
     }
 }

@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonClass
 class VolumeInfo(
     var title: String?,
     var authors: List<String>?,
+    var publishedDate: String?,
     var averageRating: Float?,
     var ratingsCount: Int?,
     var description: String?,

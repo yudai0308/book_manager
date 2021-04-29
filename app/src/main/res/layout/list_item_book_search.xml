@@ -11,11 +11,12 @@
         <ImageView
             android:id="@+id/book_search_item_image"
             android:layout_width="@dimen/book_row_image_width"
-            android:layout_height="@dimen/book_row_image_height"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_default"
             android:layout_marginTop="@dimen/space_default"
             android:layout_marginBottom="@dimen/space_default"
             android:contentDescription="@string/description_book_image"
+            android:maxHeight="@dimen/book_row_image_height"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

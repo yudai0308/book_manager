@@ -21,10 +21,13 @@
     <string name="order_by_title">タイトル</string>
     <string name="order_by_author">著者名</string>
     <string name="order_by_date_added">追加日</string>
+    <string name="order_by_my_rating">自分の評価</string>
     <string name="asc">昇順</string>
     <string name="desc">降順</string>
     <string name="new_to_old">新しい順</string>
     <string name="old_to_new">古い順</string>
+    <string name="low_to_height">低い順</string>
+    <string name="height_to_low">高い順</string>
     <string name="no_books_on_bookshelf">本棚に本がありません</string>
     <string name="no_books_want_to_read_on_bookshelf">読みたい本はありません</string>
     <string name="no_books_reading_on_bookshelf">読んでいる本はありません</string>

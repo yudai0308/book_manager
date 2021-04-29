@@ -32,6 +32,7 @@
             android:id="@+id/bookshelf_book_list"
             android:layout_width="match_parent"
             android:layout_height="@dimen/match_constraint"
+            android:clipToPadding="false"
             android:elevation="0dp"
             android:padding="@dimen/space_narrow"
             android:scrollbarSize="0dp"

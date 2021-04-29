@@ -14,6 +14,7 @@ import com.example.bookmanager.databinding.ListItemBookSearchBinding
 import com.example.bookmanager.databinding.ListItemBookSearchBottomBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
+import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.utils.StringUtil
 
 /**
@@ -98,7 +99,8 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private fun setDataToBookSearchViewHolder(
-        resultItem: BookSearchResultItem, holder: BookSearchViewHolder
+        resultItem: BookSearchResultItem,
+        holder: BookSearchViewHolder
     ) {
         holder.binding.apply {
             lifecycleOwner = context as LifecycleOwner
@@ -110,7 +112,8 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             } else {
                 context.getString(R.string.hyphen)
             }
-            bookSearchBookmark.visibility = if (resultItem.exist) {
+            val repository = BookRepository(context)
+            bookSearchBookmark.visibility = if (repository.exists(resultItem.id)) {
                 View.VISIBLE
             } else {
                 View.INVISIBLE
