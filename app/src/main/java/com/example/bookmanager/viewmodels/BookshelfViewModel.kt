@@ -10,6 +10,7 @@ import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import kotlinx.coroutines.runBlocking
+import java.util.*
 
 /**
  * 本棚に保存されている本の情報を保持するための ViewModel。
@@ -65,12 +66,19 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
     private fun sortByAuthor(books: List<Book>, isAsc: Boolean): List<Book> {
         val ids = books.map { it.id }
         val bookInfoList = runBlocking { bookDao.loadBookInfosByIds(ids) }
-        val sortedBookInfoList = if (isAsc) {
-            bookInfoList.sortedBy { it.authors.first().name }
-        } else {
-            bookInfoList.sortedByDescending { it.authors.first().name }
+        val groupedBookInfoList = bookInfoList.groupBy { it.authors.first().name }.let {
+            if (isAsc) {
+                it.toSortedMap()
+            } else {
+                it.toSortedMap(Comparator.reverseOrder())
+            }
         }
-        return sortedBookInfoList.map { it.book }
+        var sortedBooks = listOf<Book>()
+        groupedBookInfoList.forEach { (_, infoList) ->
+            sortedBooks = sortedBooks + sortByTitle(infoList.map { it.book }, true)
+        }
+
+        return sortedBooks
     }
 
     private fun sortByDateAdded(books: List<Book>, newToOld: Boolean): List<Book> {

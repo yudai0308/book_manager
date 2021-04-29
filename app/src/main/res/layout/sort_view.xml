@@ -78,6 +78,7 @@
                 <RadioButton
                     android:id="@+id/sort_view_title_asc_radio_button"
                     style="@style/SortRadioButton"
+                    android:background="@color/transparent"
                     android:text="@string/asc"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_title"
                     app:layout_constraintStart_toEndOf="@id/vertical_guideline"
@@ -86,6 +87,7 @@
                 <RadioButton
                     android:id="@+id/sort_view_title_desc_radio_button"
                     style="@style/SortRadioButton"
+                    android:background="@color/transparent"
                     android:text="@string/desc"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_title_asc_radio_button"
                     app:layout_constraintStart_toEndOf="@id/sort_view_title_asc_radio_button"
@@ -104,6 +106,7 @@
                 <RadioButton
                     android:id="@+id/sort_view_author_asc_radio_button"
                     style="@style/SortRadioButton"
+                    android:background="@color/transparent"
                     android:text="@string/asc"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_author"
                     app:layout_constraintStart_toEndOf="@id/vertical_guideline"
@@ -112,6 +115,7 @@
                 <RadioButton
                     android:id="@+id/sort_view_author_desc_radio_button"
                     style="@style/SortRadioButton"
+                    android:background="@color/transparent"
                     android:text="@string/desc"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_author_asc_radio_button"
                     app:layout_constraintStart_toEndOf="@id/sort_view_author_asc_radio_button"
@@ -130,6 +134,7 @@
                 <RadioButton
                     android:id="@+id/sort_view_added_at_desc_radio_button"
                     style="@style/SortRadioButton"
+                    android:background="@color/transparent"
                     android:text="@string/new_to_old"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_order_by_added_at"
                     app:layout_constraintStart_toEndOf="@id/vertical_guideline"
@@ -138,6 +143,7 @@
                 <RadioButton
                     android:id="@+id/sort_view_added_at_asc_radio_button"
                     style="@style/SortRadioButton"
+                    android:background="@color/transparent"
                     android:text="@string/old_to_new"
                     app:layout_constraintBottom_toBottomOf="@+id/sort_view_added_at_desc_radio_button"
                     app:layout_constraintStart_toEndOf="@id/sort_view_added_at_desc_radio_button"
