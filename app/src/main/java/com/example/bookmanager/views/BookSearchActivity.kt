@@ -78,9 +78,8 @@ class BookSearchActivity : AppCompatActivity() {
         binding.also {
             it.viewModel = viewModel
             it.lifecycleOwner = this
+            view = it.root
         }
-
-        view = binding.root
 
         // `as Toolbar` がないとエラーになる。
         setSupportActionBar(binding.toolbar as Toolbar)
@@ -90,15 +89,13 @@ class BookSearchActivity : AppCompatActivity() {
             // ツールバーに戻るボタンを表示。
             setDisplayHomeAsUpEnabled(true)
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-
-        // TODO: onCreate() に移動するべき？
+        initRecyclerView()
         initMessageView()
         initSpinner()
+    }
 
+    private fun initRecyclerView() {
         val adapter = BookSearchAdapter().apply {
             setListener(OnSearchResultClickListener())
         }
