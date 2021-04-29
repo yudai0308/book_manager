@@ -130,6 +130,13 @@ class BookshelfActivity : AppCompatActivity() {
                     binding.sortView.sortViewAddedAtDescRadioButton
                 }
             }
+            Book.Column.RATING -> {
+                if (condition.isAsc) {
+                    binding.sortView.sortViewMyRatingAscRadioButton
+                } else {
+                    binding.sortView.sortViewMyRatingDescRadioButton
+                }
+            }
         }
     }
 
@@ -404,6 +411,14 @@ class BookshelfActivity : AppCompatActivity() {
                 selectedSort.column = Book.Column.CREATED_AT
                 selectedSort.isAsc = false
             }
+            binding.sortView.sortViewMyRatingAscRadioButton.id -> {
+                selectedSort.column = Book.Column.RATING
+                selectedSort.isAsc = true
+            }
+            binding.sortView.sortViewMyRatingDescRadioButton.id -> {
+                selectedSort.column = Book.Column.RATING
+                selectedSort.isAsc = false
+            }
         }
 
         GlobalScope.launch { viewModel.fetchBooks(selectedFilter, selectedSort) }
@@ -416,7 +431,9 @@ class BookshelfActivity : AppCompatActivity() {
             binding.sortView.sortViewAuthorAscRadioButton,
             binding.sortView.sortViewAuthorDescRadioButton,
             binding.sortView.sortViewAddedAtAscRadioButton,
-            binding.sortView.sortViewAddedAtDescRadioButton
+            binding.sortView.sortViewAddedAtDescRadioButton,
+            binding.sortView.sortViewMyRatingAscRadioButton,
+            binding.sortView.sortViewMyRatingDescRadioButton
         )
     }
 

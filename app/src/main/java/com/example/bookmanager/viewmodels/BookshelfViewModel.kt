@@ -43,6 +43,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
             Book.Column.TITLE -> sortByTitle(books, condition.isAsc)
             Book.Column.AUTHOR -> sortByAuthor(books, condition.isAsc)
             Book.Column.CREATED_AT -> sortByDateAdded(books, condition.isAsc)
+            Book.Column.RATING -> sortByRating(books, condition.isAsc)
         }
     }
 
@@ -57,7 +58,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
         var sortedBooks = listOf<Book>()
         sortedSeriesNames.forEach { series ->
             val seriesBooks = groupedBooksList[series] ?: return@forEach
-            sortedBooks = sortedBooks + sortedByPublishedDate(seriesBooks, isAsc)
+            sortedBooks = sortedBooks + sortByPublishedDate(seriesBooks, isAsc)
         }
 
         return sortedBooks
@@ -89,7 +90,26 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    private fun sortedByPublishedDate(books: List<Book>, isAsk: Boolean): List<Book> {
+    private fun sortByRating(books: List<Book>, isAsc: Boolean): List<Book> {
+        val booksHaveNoRating = books.filter { it.rating == 0 }
+        val booksHaveRating = books.filter { it.rating > 0 }
+        val groupedBooks = booksHaveRating.groupBy { it.rating }.let {
+            if (isAsc) {
+                it.toSortedMap()
+            } else {
+                it.toSortedMap(reverseOrder())
+            }
+        }
+        var sortedBooks = listOf<Book>()
+        groupedBooks.forEach { (_, books) ->
+            sortedBooks = sortedBooks + sortByTitle(books, true)
+        }
+
+        val a = sortedBooks + sortByTitle(booksHaveNoRating, true)
+        return a
+    }
+
+    private fun sortByPublishedDate(books: List<Book>, isAsk: Boolean): List<Book> {
         return if (isAsk) {
             books.sortedBy { it.publishedDate }
         } else {

@@ -50,7 +50,8 @@ data class Book(
     enum class Column(val code: Int) {
         TITLE(0),
         AUTHOR(1),
-        CREATED_AT(2);
+        CREATED_AT(2),
+        RATING(3);
 
         companion object {
             fun getByCode(code: Int): Column? {
@@ -58,6 +59,7 @@ data class Book(
                     TITLE.code -> TITLE
                     AUTHOR.code -> AUTHOR
                     CREATED_AT.code -> CREATED_AT
+                    RATING.code -> RATING
                     else -> null
                 }
             }
