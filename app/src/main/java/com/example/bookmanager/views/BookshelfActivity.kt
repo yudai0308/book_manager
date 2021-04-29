@@ -49,6 +49,7 @@ class BookshelfActivity : AppCompatActivity() {
         DataBindingUtil.setContentView<ActivityBookshelfBinding>(this, R.layout.activity_bookshelf)
     }
 
+    // TODO: リポジトリは ViewModel 経由で操作したい
     private val bookRepository by lazy { BookRepository(this) }
 
     private val sharedPref by lazy { getPreferences(Context.MODE_PRIVATE) }

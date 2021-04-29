@@ -260,6 +260,7 @@ class BookDetailActivity : AppCompatActivity() {
             it.setTitle(book.title)
             it.setMessage(getString(R.string.delete_dialog_message))
             it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
+                // TODO: リポジトリは ViewModel 経由で操作したい
                 val daoController = BookRepository(this)
                 runBlocking {
                     daoController.deleteBook(book)

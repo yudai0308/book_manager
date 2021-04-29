@@ -41,6 +41,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private val handler = Handler()
 
+    // TODO: リポジトリは ViewModel 経由で操作したい
     private val repository by lazy { BookRepository(this) }
 
     private val viewModel by lazy {

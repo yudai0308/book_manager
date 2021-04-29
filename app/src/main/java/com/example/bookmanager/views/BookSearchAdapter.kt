@@ -112,6 +112,7 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             } else {
                 context.getString(R.string.hyphen)
             }
+            // TODO: リポジトリは ViewModel 経由で操作したい
             val repository = BookRepository(context)
             bookSearchBookmark.visibility = if (repository.exists(resultItem.id)) {
                 View.VISIBLE
