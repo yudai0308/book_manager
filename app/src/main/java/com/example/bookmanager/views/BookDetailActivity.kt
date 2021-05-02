@@ -3,6 +3,7 @@ package com.example.bookmanager.views
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -74,6 +75,7 @@ class BookDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_book_detail)
 
         initToolbar()
+        initLinkButton()
         createViewPagerContents()
         showAverageRating(bookId)
     }
@@ -107,6 +109,19 @@ class BookDetailActivity : AppCompatActivity() {
             title = getString(R.string.toolbar_title_book_detail)
             // ツールバーに戻るボタンを表示。
             setDisplayHomeAsUpEnabled(true)
+        }
+    }
+    
+    private fun initLinkButton() {
+        val url = bookInfo.book.infoLink
+        val button = binding.bookBasicInfo.bookDetailLinkButton
+        if (url.isNotBlank()) {
+            button.setOnClickListener {
+                val uri = Uri.parse(url)
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+        } else {
+            button.visibility = View.GONE
         }
     }
 
