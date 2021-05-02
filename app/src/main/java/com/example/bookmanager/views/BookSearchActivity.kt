@@ -98,7 +98,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         val adapter = BookSearchAdapter().apply {
-            setListener(OnSearchResultClickListener())
+            setOnItemClickListener(OnSearchResultClickListener())
         }
         binding.bookSearchResultList.also {
             it.adapter = adapter
@@ -163,6 +163,7 @@ class BookSearchActivity : AppCompatActivity() {
                 resultItem.title,
                 resultItem.description,
                 resultItem.image,
+                resultItem.infoLink,
                 resultItem.publishedDate
             )
 

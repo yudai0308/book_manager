@@ -13,7 +13,8 @@ data class Book(
     val rating: Int,
     val status: Int,
     val comment: String,
-    var seriesName: String,
+    @ColumnInfo(name = "series_name") val seriesName: String,
+    @ColumnInfo(name = "info_link") val infoLink: String,
     @ColumnInfo(name = "published_date") val publishedDate: Long,
     @ColumnInfo(name = "started_at") val startedAt: Long,
     @ColumnInfo(name = "finished_at") val finishedAt: Long,
@@ -21,10 +22,10 @@ data class Book(
     @ColumnInfo(name = "updated_at") val updatedAt: Long
 ) {
     companion object {
-        fun create(id: String, title: String, description: String, image: String, publishedDate: Long): Book {
+        fun create(id: String, title: String, description: String, image: String, infoLink: String, publishedDate: Long): Book {
             val now = System.currentTimeMillis()
             val seriesName = removeNumber(title)
-            return Book(id, title, description, image, 0, 0, "", seriesName, publishedDate, 0, 0, now, now)
+            return Book(id, title, description, image, 0, 0, "", seriesName, infoLink, publishedDate, 0, 0, now, now)
         }
 
         private fun removeNumber(string: String): String {

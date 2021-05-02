@@ -129,10 +129,11 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             val ratingsCount = info.ratingsCount ?: 0
             val description = info.description ?: ""
             val image = info.imageLinks?.thumbnail ?: ""
+            val infoLink = info.infoLink ?: ""
             books.add(
                 BookSearchResultItem(
                     id, title, authors, publishedDate ?: 0,
-                    averageRating, ratingsCount, description, image
+                    averageRating, ratingsCount, description, image, infoLink
                 )
             )
         }
