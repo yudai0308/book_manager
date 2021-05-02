@@ -149,9 +149,6 @@ class BookMemoFragment : Fragment() {
     }
 
     private fun setOnClearButtonsClickListener() {
-        binding.clearRatingButton.setOnClickListener {
-            viewModel.updateRating(0)
-        }
         binding.clearStartDateButton.setOnClickListener {
             viewModel.clearStartDate()
         }

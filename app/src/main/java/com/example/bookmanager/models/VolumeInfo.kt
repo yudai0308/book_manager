@@ -10,5 +10,6 @@ class VolumeInfo(
     var averageRating: Float?,
     var ratingsCount: Int?,
     var description: String?,
-    var imageLinks: ImageLinks?
+    var imageLinks: ImageLinks?,
+    var infoLink: String?
 )

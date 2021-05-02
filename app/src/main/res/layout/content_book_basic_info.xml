@@ -79,6 +79,24 @@
                 app:layout_constraintStart_toEndOf="@+id/book_detail_rating_bar"
                 app:layout_constraintTop_toTopOf="@id/book_detail_rating_bar" />
 
+            <Button
+                android:id="@+id/book_detail_link_button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="@dimen/match_constraint"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_wide"
+                android:layout_marginTop="@dimen/space_wide"
+                android:layout_marginEnd="@dimen/space_wide"
+                android:background="@drawable/bg_rounded_square_light_blue"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="@dimen/space_narrow"
+                android:text="@string/open_book_detail"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/book_detail_image_card"
+                app:layout_constraintTop_toBottomOf="@id/book_detail_rating_bar" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

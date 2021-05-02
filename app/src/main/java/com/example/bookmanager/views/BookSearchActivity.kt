@@ -41,6 +41,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private val handler = Handler()
 
+    // TODO: リポジトリは ViewModel 経由で操作したい
     private val repository by lazy { BookRepository(this) }
 
     private val viewModel by lazy {
@@ -97,7 +98,7 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         val adapter = BookSearchAdapter().apply {
-            setListener(OnSearchResultClickListener())
+            setOnItemClickListener(OnSearchResultClickListener())
         }
         binding.bookSearchResultList.also {
             it.adapter = adapter
@@ -162,6 +163,7 @@ class BookSearchActivity : AppCompatActivity() {
                 resultItem.title,
                 resultItem.description,
                 resultItem.image,
+                resultItem.infoLink,
                 resultItem.publishedDate
             )
 

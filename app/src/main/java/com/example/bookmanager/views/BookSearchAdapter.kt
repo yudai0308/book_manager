@@ -1,6 +1,8 @@
 package com.example.bookmanager.views
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,10 +28,10 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var bookSearchResult: BookSearchResult = BookSearchResult(0, listOf())
 
-    private var listener: View.OnClickListener? = null
+    private var itemClickListener: View.OnClickListener? = null
 
-    fun setListener(listener: View.OnClickListener) {
-        this.listener = listener
+    fun setOnItemClickListener(listener: View.OnClickListener) {
+        this.itemClickListener = listener
     }
 
     companion object {
@@ -47,7 +49,7 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     parent,
                     false
                 )
-                binding.root.setOnClickListener(listener)
+                binding.root.setOnClickListener(itemClickListener)
                 BookSearchViewHolder(binding)
             }
             BOOK_RESULT_LIST_BOTTOM -> {
@@ -70,6 +72,7 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 setDataToBookSearchViewHolder(item, holder as BookSearchViewHolder)
             }
             BOOK_RESULT_LIST_BOTTOM -> {
+                // Do nothing.
             }
         }
     }
@@ -112,6 +115,15 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             } else {
                 context.getString(R.string.hyphen)
             }
+            if (resultItem.infoLink.isNotBlank()) {
+                bookSearchDetailLinkButton.setOnClickListener {
+                    val uri = Uri.parse(resultItem.infoLink)
+                    context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                }
+            } else {
+                bookSearchDetailLinkButton.visibility = View.GONE
+            }
+            // TODO: リポジトリは ViewModel 経由で操作したい
             val repository = BookRepository(context)
             bookSearchBookmark.visibility = if (repository.exists(resultItem.id)) {
                 View.VISIBLE
@@ -119,15 +131,15 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 View.INVISIBLE
             }
         }
-        if (resultItem.image.isBlank()) {
-            holder.binding.bookSearchItemImage.setImageDrawable(
-                ContextCompat.getDrawable(context, R.drawable.no_image)
-            )
-        } else {
+        if (resultItem.image.isNotBlank()) {
             Glide.with(context)
                 .load(resultItem.image)
                 .placeholder(R.drawable.now_loading)
                 .into(holder.binding.bookSearchItemImage)
+        } else {
+            holder.binding.bookSearchItemImage.setImageDrawable(
+                ContextCompat.getDrawable(context, R.drawable.no_image)
+            )
         }
     }
 

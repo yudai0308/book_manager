@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.ContextMenu
@@ -49,6 +50,7 @@ class BookshelfActivity : AppCompatActivity() {
         DataBindingUtil.setContentView<ActivityBookshelfBinding>(this, R.layout.activity_bookshelf)
     }
 
+    // TODO: リポジトリは ViewModel 経由で操作したい
     private val bookRepository by lazy { BookRepository(this) }
 
     private val sharedPref by lazy { getPreferences(Context.MODE_PRIVATE) }
@@ -66,11 +68,14 @@ class BookshelfActivity : AppCompatActivity() {
     private lateinit var selectedSort: BookSortCondition
 
     companion object {
-        const val MENU_DETAIL = 0
-        const val MENU_DELETE = 1
-
         const val SORT_COND_COLUMN = "sort_cond_column"
         const val SORT_COND_IS_ASC = "sort_cond_is_asc"
+    }
+
+    private enum class BookMenu(val id: Int, val title: Int) {
+        MANAGE(0, R.string.manage),
+        DETAIL(1, R.string.detail),
+        DELETE(2, R.string.delete)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -152,7 +157,7 @@ class BookshelfActivity : AppCompatActivity() {
             // クリックされた ImageView / TextView の２つ親の FrameLayout を渡す必要がある。
             val rootView = it.parent.parent as View
             val position = binding.bookshelfBookList.getChildAdapterPosition(rootView)
-            startBookDetailActivity(position)
+            viewModel.books.value?.get(position)?.let { book ->  startBookDetailActivity(book) }
         }
 
         val adapter = BookshelfAdapter().apply {
@@ -249,8 +254,7 @@ class BookshelfActivity : AppCompatActivity() {
         }
     }
 
-    private fun startBookDetailActivity(position: Int) {
-        val book = viewModel.books.value?.get(position) ?: return
+    private fun startBookDetailActivity(book: Book) {
         startActivity(Intent(applicationContext, BookDetailActivity::class.java).apply {
             putExtra(C.BOOK_ID, book.id)
         })
@@ -260,8 +264,9 @@ class BookshelfActivity : AppCompatActivity() {
         menu: ContextMenu?, view: View?, menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         menu?.let {
-            it.add(Menu.NONE, 0, Menu.NONE, getString(R.string.detail))
-            it.add(Menu.NONE, 1, Menu.NONE, getString(R.string.delete))
+            it.add(Menu.NONE, BookMenu.MANAGE.id, Menu.NONE, BookMenu.MANAGE.title)
+            it.add(Menu.NONE, BookMenu.DETAIL.id, Menu.NONE, BookMenu.DETAIL.title)
+            it.add(Menu.NONE, BookMenu.DELETE.id, Menu.NONE, BookMenu.DELETE.title)
         }
 
         view?.let {
@@ -273,14 +278,19 @@ class BookshelfActivity : AppCompatActivity() {
         val position = selectedBook?.let {
             binding.bookshelfBookList.getChildAdapterPosition(it)
         }
-        position ?: return super.onContextItemSelected(item)
+        val book = position?.let {
+            viewModel.books.value?.get(it)
+        } ?: return super.onContextItemSelected(item)
 
         when (item.itemId) {
-            MENU_DETAIL -> {
-                selectedBook?.let { startBookDetailActivity(position) }
+            BookMenu.MANAGE.id -> {
+                selectedBook?.let { startBookDetailActivity(book) }
             }
-            MENU_DELETE -> {
-                val book = viewModel.books.value?.get(position) ?: return super.onContextItemSelected(item)
+            BookMenu.DETAIL.id -> {
+                val uri = Uri.parse(book.infoLink)
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+            BookMenu.DELETE.id -> {
                 val dialog = createDeleteConfirmationDialog(book)
                 dialog.show(supportFragmentManager, C.DIALOG_TAG_DELETE_BOOK)
             }
