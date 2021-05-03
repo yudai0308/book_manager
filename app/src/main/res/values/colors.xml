@@ -14,6 +14,7 @@
     <color name="transparent">#00000000</color>
     <color name="bg_selected_button">#696969</color>
     <color name="bg_selectable_button">#A9A9A9</color>
+    <color name="progress_bar_color">#56895A</color>
 
     <color name="light_gray">#E5E5E5</color>
     <color name="dark_gray">#696969</color>
