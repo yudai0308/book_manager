@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import com.example.bookmanager.R
 import com.example.bookmanager.models.BookSortCondition
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
@@ -65,9 +66,12 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun sortByAuthor(books: List<Book>, isAsc: Boolean): List<Book> {
+        val noAuthorString = context.getString(R.string.hyphen)
         val ids = books.map { it.id }
         val bookInfoList = runBlocking { bookDao.loadBookInfosByIds(ids) }
-        val groupedBookInfoList = bookInfoList.groupBy { it.authors.first().name }.let {
+        val infoListHaveAuthor = bookInfoList.filter { it.authors.first().name != noAuthorString }
+        val infoListHaveNoAuthor = bookInfoList.filter { it.authors.first().name == noAuthorString }
+        val groupedBookInfoList = infoListHaveAuthor.groupBy { it.authors.first().name }.let {
             if (isAsc) {
                 it.toSortedMap()
             } else {
@@ -79,7 +83,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
             sortedBooks = sortedBooks + sortByTitle(infoList.map { it.book }, true)
         }
 
-        return sortedBooks
+        return sortedBooks + sortByTitle(infoListHaveNoAuthor.map { it.book }, true)
     }
 
     private fun sortByDateAdded(books: List<Book>, newToOld: Boolean): List<Book> {
