@@ -15,6 +15,8 @@
     <string name="book_status_want_to">読みたい本</string>
     <string name="book_status_reading">読んでいる本</string>
     <string name="book_status_finished">読み終わった本</string>
+    <string name="num">%1$d</string>
+    <string name="str">%1$s</string>
 
     <!-- 本棚ページ -->
     <string name="toolbar_title_bookshelf">本棚</string>
@@ -40,6 +42,8 @@
     <string name="search_with_free_word">フリーワード検索</string>
     <string name="search_with_title">タイトル検索</string>
     <string name="search_with_author">著者名検索</string>
+    <string name="add_to_bookshelf">本棚に追加</string>
+    <string name="already_added">追加済</string>
     <string name="open_book_detail">詳細</string>
     <string name="search_error">エラーが発生しました。再度お試しください。</string>
     <string name="item_not_fount">お探しの本が見つかりませんでした。</string>

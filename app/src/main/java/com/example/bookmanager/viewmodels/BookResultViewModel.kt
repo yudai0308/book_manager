@@ -120,24 +120,33 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             val id = item.id
             val title = info.title ?: continue
             val authors = info.authors ?: listOf(context.getString(R.string.hyphen))
-            val date = info.publishedDate?.let {
-                val dateString = createFormattedDateString(it)
-                SimpleDateFormat("yyyy-MM-dd", Locale.JAPAN).parse(dateString)
-            }
-            val publishedDate = date?.time
+            val publishedDate = info.publishedDate?.let {
+                getDateTimeFromDateString(it)
+            } ?: 0
             val averageRating = info.averageRating
             val ratingsCount = info.ratingsCount ?: 0
             val description = info.description ?: ""
             val image = info.imageLinks?.thumbnail ?: ""
             val infoLink = info.infoLink ?: ""
+            val isAlreadyAdded = repository.exists(id)
             books.add(
                 BookSearchResultItem(
-                    id, title, authors, publishedDate ?: 0,
-                    averageRating, ratingsCount, description, image, infoLink
+                    id, title, authors, publishedDate, averageRating,
+                    ratingsCount, description, image, infoLink, isAlreadyAdded
                 )
             )
         }
         return books
+    }
+
+    private fun getDateTimeFromDateString(dateString: String): Long {
+        val formattedDateString = createFormattedDateString(dateString)
+        return try {
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.JAPAN).parse(formattedDateString)
+            date?.time ?: 0
+        } catch (e: Exception) {
+            0
+        }
     }
 
     private fun createFormattedDateString(dateString: String): String {

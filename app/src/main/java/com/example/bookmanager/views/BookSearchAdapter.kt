@@ -1,8 +1,6 @@
 package com.example.bookmanager.views
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +14,11 @@ import com.example.bookmanager.databinding.ListItemBookSearchBinding
 import com.example.bookmanager.databinding.ListItemBookSearchBottomBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
-import com.example.bookmanager.rooms.common.BookRepository
-import com.example.bookmanager.utils.StringUtil
 
 /**
  * 本の検索結果をリスト表示するためのアダプター。
  */
-class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BookSearchAdapter(private val listener: ClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
@@ -30,8 +26,9 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var itemClickListener: View.OnClickListener? = null
 
-    fun setOnItemClickListener(listener: View.OnClickListener) {
-        this.itemClickListener = listener
+    interface ClickListener {
+        fun getOnAddButtonClickListener(item: BookSearchResultItem): View.OnClickListener
+        fun getOnDetailButtonClickListener(item: BookSearchResultItem): View.OnClickListener
     }
 
     companion object {
@@ -107,28 +104,14 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     ) {
         holder.binding.apply {
             lifecycleOwner = context as LifecycleOwner
-            bookSearchItemTitle.text = resultItem.title
-            bookSearchItemAuthor.text = StringUtil.listToString(resultItem.authors)
-            bookSearchRating.rating = resultItem.averageRating ?: 0F
-            bookSearchRatingsCount.text = if (resultItem.ratingsCount > 0) {
-                resultItem.ratingsCount.toString()
-            } else {
-                context.getString(R.string.hyphen)
-            }
+            item = resultItem
+            bookSearchAddButton.setOnClickListener(
+                listener.getOnAddButtonClickListener(resultItem)
+            )
             if (resultItem.infoLink.isNotBlank()) {
-                bookSearchDetailLinkButton.setOnClickListener {
-                    val uri = Uri.parse(resultItem.infoLink)
-                    context.startActivity(Intent(Intent.ACTION_VIEW, uri))
-                }
-            } else {
-                bookSearchDetailLinkButton.visibility = View.GONE
-            }
-            // TODO: リポジトリは ViewModel 経由で操作したい
-            val repository = BookRepository(context)
-            bookSearchBookmark.visibility = if (repository.exists(resultItem.id)) {
-                View.VISIBLE
-            } else {
-                View.INVISIBLE
+                bookSearchDetailLinkButton.setOnClickListener(
+                    listener.getOnDetailButtonClickListener(resultItem)
+                )
             }
         }
         if (resultItem.image.isNotBlank()) {
