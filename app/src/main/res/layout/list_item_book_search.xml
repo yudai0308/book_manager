@@ -15,13 +15,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/space_default"
-        android:paddingBottom="@dimen/space_default">
+        android:padding="@dimen/space_default">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/book_search_item_image_card"
             android:layout_width="@dimen/book_row_image_width"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_narrow"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
