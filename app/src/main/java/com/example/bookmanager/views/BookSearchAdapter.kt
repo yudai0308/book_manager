@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
@@ -23,8 +24,6 @@ class BookSearchAdapter(private val listener: ClickListener) : RecyclerView.Adap
     private lateinit var context: Context
 
     private var bookSearchResult: BookSearchResult = BookSearchResult(0, listOf())
-
-    private var itemClickListener: View.OnClickListener? = null
 
     interface ClickListener {
         fun getOnAddButtonClickListener(item: BookSearchResultItem): View.OnClickListener
@@ -46,7 +45,6 @@ class BookSearchAdapter(private val listener: ClickListener) : RecyclerView.Adap
                     parent,
                     false
                 )
-                binding.root.setOnClickListener(itemClickListener)
                 BookSearchViewHolder(binding)
             }
             BOOK_RESULT_LIST_BOTTOM -> {
@@ -126,14 +124,38 @@ class BookSearchAdapter(private val listener: ClickListener) : RecyclerView.Adap
         }
     }
 
-    fun update(result: BookSearchResult) {
-        bookSearchResult = result
-        notifyDataSetChanged()
+    fun update(newResult: BookSearchResult) {
+        val oldResult = bookSearchResult
+        bookSearchResult = newResult
+        val diffResult = DiffUtil.calculateDiff(SearchResultDiffCallback(oldResult, newResult))
+        diffResult.dispatchUpdatesTo(this)
     }
 
-    class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
+    private class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    class BookSearchBottomViewHolder(val binding: ListItemBookSearchBottomBinding) :
+    private class BookSearchBottomViewHolder(binding: ListItemBookSearchBottomBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    private class SearchResultDiffCallback(
+        val oldResult: BookSearchResult,
+        val newResult: BookSearchResult
+    ) : DiffUtil.Callback() {
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val old = oldResult.items[oldItemPosition]
+            val new = newResult.items[newItemPosition]
+            return old.id == new.id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val old = oldResult.items[oldItemPosition]
+            val new = newResult.items[newItemPosition]
+            return old == new
+        }
+
+        override fun getOldListSize() = oldResult.items.size
+
+        override fun getNewListSize() = newResult.items.size
+    }
 }

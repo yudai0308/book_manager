@@ -4,14 +4,21 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.rooms.common.BookRepository
+import com.example.bookmanager.rooms.entities.Author
+import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
+import com.example.bookmanager.utils.FileIO
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -157,5 +164,49 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             3 -> dateString
             else -> "1970-01-01"
         }
+    }
+
+    fun saveBook(item: BookSearchResultItem) {
+        if (repository.exists(item.id)) {
+            return
+        }
+
+        val newBook = Book.create(
+            item.id,
+            item.title,
+            item.description,
+            item.image,
+            item.infoLink,
+            item.publishedDate
+        )
+        val authors = Author.createAll(item.authors)
+        GlobalScope.launch {
+            repository.insertBookWithAuthors(newBook, authors)
+        }
+        if (newBook.image.isNotBlank()) {
+            saveImageToInternalStorage(newBook.image, newBook.id)
+        }
+
+        switchItemStateToAdded(item.id)
+    }
+
+    private fun saveImageToInternalStorage(url: String, fileName: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val bitmap = Glide.with(context).asBitmap().load(url).submit().get()
+            FileIO.saveBookImage(context, bitmap, fileName)
+        }
+    }
+
+    private fun switchItemStateToAdded(id: String) {
+        val itemCount = _bookSearchResult.value?.itemCount ?: return
+        val items = _bookSearchResult.value?.items ?: return
+        val updatedItems = items.map {
+            if (it.id == id) {
+                it.copy(isAlreadyAdded = true)
+            } else {
+                it
+            }
+        }
+        _bookSearchResult.postValue(BookSearchResult(itemCount, updatedItems))
     }
 }

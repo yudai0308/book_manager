@@ -10,5 +10,5 @@ data class BookSearchResultItem(
     val description: String,
     val image: String,
     val infoLink: String,
-    var isAlreadyAdded: Boolean = false
+    var isAlreadyAdded: Boolean
 )
