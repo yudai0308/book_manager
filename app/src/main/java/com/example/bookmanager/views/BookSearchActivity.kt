@@ -7,10 +7,12 @@ import android.os.Handler
 import android.view.Menu
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -95,11 +97,25 @@ class BookSearchActivity : AppCompatActivity() {
 
     private fun createButtonClickListener(): BookSearchAdapter.ClickListener {
         return object : BookSearchAdapter.ClickListener {
-            override fun getOnAddButtonClickListener(item: BookSearchResultItem)
-                = View.OnClickListener { viewModel.saveBook(item) }
+            override fun getOnAddButtonClickListener(item: BookSearchResultItem) =
+                View.OnClickListener {
+                    viewModel.saveBook(item)
+                    switchAddButtonStatus(it as Button)
+                }
 
             override fun getOnDetailButtonClickListener(item: BookSearchResultItem)
                 = createOnDetailButtonClickListener(item)
+        }
+    }
+
+    private fun switchAddButtonStatus(button: Button) {
+        button.also {
+            it.text = getString(R.string.already_added)
+            it.background = ContextCompat.getDrawable(
+                this,
+                R.drawable.bg_rounded_square_light_blue
+            )
+            it.setTextColor(getColor(R.color.white))
         }
     }
 

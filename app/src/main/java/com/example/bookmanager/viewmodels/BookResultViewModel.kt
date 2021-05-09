@@ -167,6 +167,11 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun saveBook(item: BookSearchResultItem) {
+        saveBookToDb(item)
+        updateIsAlreadyAdded(item.id, true)
+    }
+
+    private fun saveBookToDb(item: BookSearchResultItem) {
         if (repository.exists(item.id)) {
             return
         }
@@ -186,8 +191,16 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
         if (newBook.image.isNotBlank()) {
             saveImageToInternalStorage(newBook.image, newBook.id)
         }
+    }
 
-        switchItemStateToAdded(item.id)
+    private fun updateIsAlreadyAdded(id: String, flag: Boolean) {
+        _bookSearchResult.value?.apply {
+            items.forEach {
+                if (it.id == id) {
+                    it.isAlreadyAdded = flag
+                }
+            }
+        }
     }
 
     private fun saveImageToInternalStorage(url: String, fileName: String) {
@@ -195,18 +208,5 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             val bitmap = Glide.with(context).asBitmap().load(url).submit().get()
             FileIO.saveBookImage(context, bitmap, fileName)
         }
-    }
-
-    private fun switchItemStateToAdded(id: String) {
-        val itemCount = _bookSearchResult.value?.itemCount ?: return
-        val items = _bookSearchResult.value?.items ?: return
-        val updatedItems = items.map {
-            if (it.id == id) {
-                it.copy(isAlreadyAdded = true)
-            } else {
-                it
-            }
-        }
-        _bookSearchResult.postValue(BookSearchResult(itemCount, updatedItems))
     }
 }
