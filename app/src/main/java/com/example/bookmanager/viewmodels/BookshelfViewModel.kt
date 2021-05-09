@@ -86,11 +86,11 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
         return sortedBooks + sortByTitle(infoListHaveNoAuthor.map { it.book }, true)
     }
 
-    private fun sortByDateAdded(books: List<Book>, newToOld: Boolean): List<Book> {
-        return if (newToOld) {
-            books.sortedByDescending { it.createdAt }
-        } else {
+    private fun sortByDateAdded(books: List<Book>, oldToNew: Boolean): List<Book> {
+        return if (oldToNew) {
             books.sortedBy { it.createdAt }
+        } else {
+            books.sortedByDescending { it.createdAt }
         }
     }
 
@@ -109,8 +109,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
             sortedBooks = sortedBooks + sortByTitle(books, true)
         }
 
-        val a = sortedBooks + sortByTitle(booksHaveNoRating, true)
-        return a
+        return sortedBooks + sortByTitle(booksHaveNoRating, true)
     }
 
     private fun sortByPublishedDate(books: List<Book>, isAsk: Boolean): List<Book> {

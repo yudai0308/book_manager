@@ -1,36 +1,28 @@
 package com.example.bookmanager.views
 
-import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.ImageView
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookSearchBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
-import com.example.bookmanager.rooms.common.BookRepository
-import com.example.bookmanager.rooms.entities.Author
-import com.example.bookmanager.rooms.entities.Book
-import com.example.bookmanager.utils.C
-import com.example.bookmanager.utils.FileIO
-import com.example.bookmanager.utils.ViewUtil
 import com.example.bookmanager.viewmodels.BookResultViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 /**
  * 本検索ページのアクティビティ。
@@ -40,9 +32,6 @@ class BookSearchActivity : AppCompatActivity() {
     private lateinit var view: View
 
     private val handler = Handler()
-
-    // TODO: リポジトリは ViewModel 経由で操作したい
-    private val repository by lazy { BookRepository(this) }
 
     private val viewModel by lazy {
         ViewModelProvider(
@@ -97,15 +86,42 @@ class BookSearchActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        val adapter = BookSearchAdapter().apply {
-            setOnItemClickListener(OnSearchResultClickListener())
-        }
+        val adapter = BookSearchAdapter(createButtonClickListener())
         binding.bookSearchResultList.also {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(this)
             it.addOnScrollListener(AdditionalSearchListener())
             it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         }
+    }
+
+    private fun createButtonClickListener(): BookSearchAdapter.ClickListener {
+        return object : BookSearchAdapter.ClickListener {
+            override fun getOnAddButtonClickListener(item: BookSearchResultItem) =
+                View.OnClickListener {
+                    viewModel.saveBook(item)
+                    switchAddButtonStatus(it as Button)
+                }
+
+            override fun getOnDetailButtonClickListener(item: BookSearchResultItem)
+                = createOnDetailButtonClickListener(item)
+        }
+    }
+
+    private fun switchAddButtonStatus(button: Button) {
+        button.also {
+            it.text = getString(R.string.already_added)
+            it.background = ContextCompat.getDrawable(
+                this,
+                R.drawable.bg_rounded_square_light_blue
+            )
+            it.setTextColor(getColor(R.color.white))
+        }
+    }
+
+    private fun createOnDetailButtonClickListener(item: BookSearchResultItem) = View.OnClickListener {
+        val uri = Uri.parse(item.infoLink)
+        startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
     private fun initMessageView() {
@@ -125,67 +141,6 @@ class BookSearchActivity : AppCompatActivity() {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
         binding.bookSearchSpinner.adapter = adapter
-    }
-
-    inner class OnSearchResultClickListener : View.OnClickListener {
-        override fun onClick(v: View?) {
-            v ?: return
-            val recyclerView: RecyclerView = binding.bookSearchResultList
-            val position = recyclerView.getChildAdapterPosition(v)
-            val resultItem = viewModel.bookSearchResult.value?.items?.get(position) ?: return
-            val dialog = SimpleDialogFragment().apply {
-                val activity = this@BookSearchActivity
-                setTitle(resultItem.title)
-                setMessage(activity.getString(R.string.dialog_add_book_msg))
-                setPositiveButton(
-                    activity.getString(R.string.yes), OnOkButtonClickListener(resultItem, v)
-                )
-                setNegativeButton(activity.getString(R.string.cancel), null)
-            }
-            dialog.show(supportFragmentManager, C.DIALOG_TAG_ADD_BOOK)
-        }
-    }
-
-    inner class OnOkButtonClickListener(
-        private val resultItem: BookSearchResultItem,
-        private val view: View
-    ) : DialogInterface.OnClickListener {
-
-        override fun onClick(dialog: DialogInterface?, which: Int) {
-            // 本棚に存在するか確認。
-            if (repository.exists(resultItem.id)) {
-                ViewUtil.showSnackBarLong(view, getString(R.string.exists_in_my_shelf))
-                return
-            }
-
-            val newBook = Book.create(
-                resultItem.id,
-                resultItem.title,
-                resultItem.description,
-                resultItem.image,
-                resultItem.infoLink,
-                resultItem.publishedDate
-            )
-
-            val authors = Author.createAll(resultItem.authors)
-
-            GlobalScope.launch {
-                repository.insertBookWithAuthors(newBook, authors)
-            }
-            if (newBook.image.isNotBlank()) {
-                saveImageToInternalStorage(newBook.image, newBook.id)
-            }
-            view.findViewById<ImageView>(R.id.book_search_bookmark).visibility = View.VISIBLE
-            ViewUtil.showSnackBarLong(view, C.ADD_BOOK)
-        }
-    }
-
-    private fun saveImageToInternalStorage(url: String, fileName: String) {
-        val activity = this
-        GlobalScope.launch(Dispatchers.IO) {
-            val bitmap = Glide.with(activity).asBitmap().load(url).submit().get()
-            FileIO.saveBookImage(activity, bitmap, fileName)
-        }
     }
 
     private fun hideCenterProgressBar() {

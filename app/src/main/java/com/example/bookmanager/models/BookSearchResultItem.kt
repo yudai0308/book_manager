@@ -9,5 +9,6 @@ data class BookSearchResultItem(
     val ratingsCount: Int,
     val description: String,
     val image: String,
-    val infoLink: String
+    val infoLink: String,
+    var isAlreadyAdded: Boolean
 )

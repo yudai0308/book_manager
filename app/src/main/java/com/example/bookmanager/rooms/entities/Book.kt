@@ -24,14 +24,16 @@ data class Book(
     companion object {
         fun create(id: String, title: String, description: String, image: String, infoLink: String, publishedDate: Long): Book {
             val now = System.currentTimeMillis()
-            val seriesName = removeNumber(title)
+            val seriesName = getSeriesName(title)
             return Book(id, title, description, image, 0, 0, "", seriesName, infoLink, publishedDate, 0, 0, now, now)
         }
 
-        private fun removeNumber(string: String): String {
-            val removedStringArray = string.split("").map {
-                if (it.toIntOrNull() == null) {
-                    it
+        private fun getSeriesName(string: String): String {
+            val stringArray = string.split("").filter { it.isNotBlank() }
+            val removedStringArray = stringArray.mapIndexed { i, str ->
+                // タイトルの最初の１文字が数字だったら削除しない。
+                if (i == 0 || str.toIntOrNull() == null) {
+                    str
                 } else {
                     ""
                 }

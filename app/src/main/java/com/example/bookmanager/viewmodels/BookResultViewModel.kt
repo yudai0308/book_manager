@@ -4,14 +4,21 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
 import com.example.bookmanager.models.Item
 import com.example.bookmanager.models.SearchResult
 import com.example.bookmanager.rooms.common.BookRepository
+import com.example.bookmanager.rooms.entities.Author
+import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
+import com.example.bookmanager.utils.FileIO
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -120,24 +127,33 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             val id = item.id
             val title = info.title ?: continue
             val authors = info.authors ?: listOf(context.getString(R.string.hyphen))
-            val date = info.publishedDate?.let {
-                val dateString = createFormattedDateString(it)
-                SimpleDateFormat("yyyy-MM-dd", Locale.JAPAN).parse(dateString)
-            }
-            val publishedDate = date?.time
+            val publishedDate = info.publishedDate?.let {
+                getDateTimeFromDateString(it)
+            } ?: 0
             val averageRating = info.averageRating
             val ratingsCount = info.ratingsCount ?: 0
             val description = info.description ?: ""
             val image = info.imageLinks?.thumbnail ?: ""
             val infoLink = info.infoLink ?: ""
+            val isAlreadyAdded = repository.exists(id)
             books.add(
                 BookSearchResultItem(
-                    id, title, authors, publishedDate ?: 0,
-                    averageRating, ratingsCount, description, image, infoLink
+                    id, title, authors, publishedDate, averageRating,
+                    ratingsCount, description, image, infoLink, isAlreadyAdded
                 )
             )
         }
         return books
+    }
+
+    private fun getDateTimeFromDateString(dateString: String): Long {
+        val formattedDateString = createFormattedDateString(dateString)
+        return try {
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.JAPAN).parse(formattedDateString)
+            date?.time ?: 0
+        } catch (e: Exception) {
+            0
+        }
     }
 
     private fun createFormattedDateString(dateString: String): String {
@@ -147,6 +163,50 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             2 -> "${dateArray[0]}-${dateArray[1]}-01"
             3 -> dateString
             else -> "1970-01-01"
+        }
+    }
+
+    fun saveBook(item: BookSearchResultItem) {
+        saveBookToDb(item)
+        updateIsAlreadyAdded(item.id, true)
+    }
+
+    private fun saveBookToDb(item: BookSearchResultItem) {
+        if (repository.exists(item.id)) {
+            return
+        }
+
+        val newBook = Book.create(
+            item.id,
+            item.title,
+            item.description,
+            item.image,
+            item.infoLink,
+            item.publishedDate
+        )
+        val authors = Author.createAll(item.authors)
+        GlobalScope.launch {
+            repository.insertBookWithAuthors(newBook, authors)
+        }
+        if (newBook.image.isNotBlank()) {
+            saveImageToInternalStorage(newBook.image, newBook.id)
+        }
+    }
+
+    private fun updateIsAlreadyAdded(id: String, flag: Boolean) {
+        _bookSearchResult.value?.apply {
+            items.forEach {
+                if (it.id == id) {
+                    it.isAlreadyAdded = flag
+                }
+            }
+        }
+    }
+
+    private fun saveImageToInternalStorage(url: String, fileName: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val bitmap = Glide.with(context).asBitmap().load(url).submit().get()
+            FileIO.saveBookImage(context, bitmap, fileName)
         }
     }
 }

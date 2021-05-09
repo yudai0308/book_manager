@@ -85,7 +85,7 @@ class BookDetailActivity : AppCompatActivity() {
 
         val bookTitle = bookInfo.book.title
         val authors = bookInfo.authors.map { it.name }
-        val authorsString = StringUtil.listToString(authors)
+        val authorsString = StringUtil.divideWithComma(authors)
         val bookImage = runBlocking {
             val context = this@BookDetailActivity
             val image = FileIO.readBookImage(context, bookId)

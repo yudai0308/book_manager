@@ -2,7 +2,9 @@ package com.example.bookmanager.utils
 
 class StringUtil {
     companion object {
-        fun listToString(list: List<String>, divider: String = ", "): String {
+        @JvmStatic
+        fun divideWithComma(list: List<String>): String {
+            val divider = ", "
             var returnVal = ""
             val count = list.size
             list.forEachIndexed { index: Int, string: String ->

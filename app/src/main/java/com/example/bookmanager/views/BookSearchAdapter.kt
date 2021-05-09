@@ -1,14 +1,13 @@
 package com.example.bookmanager.views
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
@@ -16,22 +15,19 @@ import com.example.bookmanager.databinding.ListItemBookSearchBinding
 import com.example.bookmanager.databinding.ListItemBookSearchBottomBinding
 import com.example.bookmanager.models.BookSearchResult
 import com.example.bookmanager.models.BookSearchResultItem
-import com.example.bookmanager.rooms.common.BookRepository
-import com.example.bookmanager.utils.StringUtil
 
 /**
  * 本の検索結果をリスト表示するためのアダプター。
  */
-class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BookSearchAdapter(private val listener: ClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
     private var bookSearchResult: BookSearchResult = BookSearchResult(0, listOf())
 
-    private var itemClickListener: View.OnClickListener? = null
-
-    fun setOnItemClickListener(listener: View.OnClickListener) {
-        this.itemClickListener = listener
+    interface ClickListener {
+        fun getOnAddButtonClickListener(item: BookSearchResultItem): View.OnClickListener
+        fun getOnDetailButtonClickListener(item: BookSearchResultItem): View.OnClickListener
     }
 
     companion object {
@@ -49,7 +45,6 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     parent,
                     false
                 )
-                binding.root.setOnClickListener(itemClickListener)
                 BookSearchViewHolder(binding)
             }
             BOOK_RESULT_LIST_BOTTOM -> {
@@ -107,28 +102,14 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     ) {
         holder.binding.apply {
             lifecycleOwner = context as LifecycleOwner
-            bookSearchItemTitle.text = resultItem.title
-            bookSearchItemAuthor.text = StringUtil.listToString(resultItem.authors)
-            bookSearchRating.rating = resultItem.averageRating ?: 0F
-            bookSearchRatingsCount.text = if (resultItem.ratingsCount > 0) {
-                resultItem.ratingsCount.toString()
-            } else {
-                context.getString(R.string.hyphen)
-            }
+            item = resultItem
+            bookSearchAddButton.setOnClickListener(
+                listener.getOnAddButtonClickListener(resultItem)
+            )
             if (resultItem.infoLink.isNotBlank()) {
-                bookSearchDetailLinkButton.setOnClickListener {
-                    val uri = Uri.parse(resultItem.infoLink)
-                    context.startActivity(Intent(Intent.ACTION_VIEW, uri))
-                }
-            } else {
-                bookSearchDetailLinkButton.visibility = View.GONE
-            }
-            // TODO: リポジトリは ViewModel 経由で操作したい
-            val repository = BookRepository(context)
-            bookSearchBookmark.visibility = if (repository.exists(resultItem.id)) {
-                View.VISIBLE
-            } else {
-                View.INVISIBLE
+                bookSearchDetailLinkButton.setOnClickListener(
+                    listener.getOnDetailButtonClickListener(resultItem)
+                )
             }
         }
         if (resultItem.image.isNotBlank()) {
@@ -143,14 +124,38 @@ class BookSearchAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun update(result: BookSearchResult) {
-        bookSearchResult = result
-        notifyDataSetChanged()
+    fun update(newResult: BookSearchResult) {
+        val oldResult = bookSearchResult
+        bookSearchResult = newResult
+        val diffResult = DiffUtil.calculateDiff(SearchResultDiffCallback(oldResult, newResult))
+        diffResult.dispatchUpdatesTo(this)
     }
 
-    class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
+    private class BookSearchViewHolder(val binding: ListItemBookSearchBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    class BookSearchBottomViewHolder(val binding: ListItemBookSearchBottomBinding) :
+    private class BookSearchBottomViewHolder(binding: ListItemBookSearchBottomBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    private class SearchResultDiffCallback(
+        val oldResult: BookSearchResult,
+        val newResult: BookSearchResult
+    ) : DiffUtil.Callback() {
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val old = oldResult.items[oldItemPosition]
+            val new = newResult.items[newItemPosition]
+            return old.id == new.id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val old = oldResult.items[oldItemPosition]
+            val new = newResult.items[newItemPosition]
+            return old == new
+        }
+
+        override fun getOldListSize() = oldResult.items.size
+
+        override fun getNewListSize() = newResult.items.size
+    }
 }

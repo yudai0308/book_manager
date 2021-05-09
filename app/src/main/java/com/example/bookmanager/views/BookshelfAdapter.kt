@@ -43,7 +43,6 @@ class BookshelfAdapter : RecyclerView.Adapter<BookshelfAdapter.BookShelfHolder>(
         val binding: ListItemBookshelfBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context), R.layout.list_item_bookshelf, parent, false
         )
-//        binding.root.setOnClickListener(onClickListener)
         return BookShelfHolder(binding)
     }
 
