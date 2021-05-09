@@ -14,11 +14,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true" >
-        <activity android:name=".views.BookReviewEditingActivity" />
-        <activity android:name=".views.BookDetailActivity" />
-        <activity android:name=".views.BookSearchActivity" />
-        <activity android:name=".views.BookshelfActivity">
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".views.BookReviewEditingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.BookDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.BookSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.BookshelfActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
