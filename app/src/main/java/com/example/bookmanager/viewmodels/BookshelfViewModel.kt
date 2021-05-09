@@ -109,8 +109,7 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
             sortedBooks = sortedBooks + sortByTitle(books, true)
         }
 
-        val a = sortedBooks + sortByTitle(booksHaveNoRating, true)
-        return a
+        return sortedBooks + sortByTitle(booksHaveNoRating, true)
     }
 
     private fun sortByPublishedDate(books: List<Book>, isAsk: Boolean): List<Book> {
