@@ -1,6 +1,6 @@
 <resources>
     <!-- 共通 -->
-    <string name="app_name">本棚アプリ</string>
+    <string name="app_name">本棚アプリ HON-MA</string>
     <string name="yes">はい</string>
     <string name="cancel">キャンセル</string>
     <string name="save">保存</string>
