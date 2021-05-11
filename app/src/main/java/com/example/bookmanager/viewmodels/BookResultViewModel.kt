@@ -113,6 +113,7 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             } else {
                 createResultItems(originalResult.items as List<Item>)
             }
+            // 追加検索の場合は現在表示されているアイテムと取得したアイテムをマージする。
             if (searchType == SearchType.ADDITIONAL) {
                 val currentItems = _bookSearchResult.value?.items ?: listOf()
                 resultItems = mergeItemsWithoutDuplication(currentItems, resultItems)
