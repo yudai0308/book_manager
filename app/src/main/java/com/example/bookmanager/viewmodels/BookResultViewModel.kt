@@ -99,19 +99,23 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
         }
 
         override fun onResponse(call: Call, response: Response) {
+            val emptyBookSearchResult = BookSearchResult(0, listOf())
+            val emptySearchResult = SearchResult(0, listOf())
+
             val resBody = response.body?.string()
             if (resBody.isNullOrBlank()) {
+                searchCallback?.onSearchSucceeded(emptyBookSearchResult)
                 return
             }
             val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
-            val originalResult = adapter.fromJson(resBody) ?: return
+            val originalResult = adapter.fromJson(resBody) ?: emptySearchResult
             var resultItems = if (originalResult.items == null) {
                 listOf()
             } else {
                 createResultItems(originalResult.items as List<Item>)
             }
             if (searchType == SearchType.ADDITIONAL) {
-                val currentItems = _bookSearchResult.value?.items ?: return
+                val currentItems = _bookSearchResult.value?.items ?: listOf()
                 resultItems = currentItems + resultItems
             }
             val bookSearchResult = BookSearchResult(originalResult.totalItems, resultItems)
