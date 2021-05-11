@@ -40,7 +40,7 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
     private val repository by lazy { BookRepository(context) }
 
     companion object {
-        const val ADD_QUERY = "?q="
+        const val QUERY = "?q="
         const val PARAM_TITLE = "intitle:"
         const val PARAM_AUTHOR = "inauthor:"
         const val PARAM_MAX = "&maxResults="
@@ -76,8 +76,7 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
     private fun createUrlWithParameter(
         type: String, keyword: String, max: Int, index: Int = 0
     ): String {
-        var param = ADD_QUERY
-        param += when (type) {
+        val param = QUERY + when (type) {
             context.getString(R.string.search_with_title) -> PARAM_TITLE
             context.getString(R.string.search_with_author) -> PARAM_AUTHOR
             else -> ""
@@ -99,20 +98,25 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
         }
 
         override fun onResponse(call: Call, response: Response) {
+            val emptyBookSearchResult = BookSearchResult(0, listOf())
+            val emptySearchResult = SearchResult(0, listOf())
+
             val resBody = response.body?.string()
             if (resBody.isNullOrBlank()) {
+                searchCallback?.onSearchSucceeded(emptyBookSearchResult)
                 return
             }
             val adapter = Moshi.Builder().build().adapter(SearchResult::class.java)
-            val originalResult = adapter.fromJson(resBody) ?: return
+            val originalResult = adapter.fromJson(resBody) ?: emptySearchResult
             var resultItems = if (originalResult.items == null) {
                 listOf()
             } else {
                 createResultItems(originalResult.items as List<Item>)
             }
+            // 追加検索の場合は現在表示されているアイテムと取得したアイテムをマージする。
             if (searchType == SearchType.ADDITIONAL) {
-                val currentItems = _bookSearchResult.value?.items ?: return
-                resultItems = currentItems + resultItems
+                val currentItems = _bookSearchResult.value?.items ?: listOf()
+                resultItems = mergeItemsWithoutDuplication(currentItems, resultItems)
             }
             val bookSearchResult = BookSearchResult(originalResult.totalItems, resultItems)
             _bookSearchResult.postValue(bookSearchResult)
@@ -144,6 +148,18 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
             )
         }
         return books
+    }
+
+    private fun mergeItemsWithoutDuplication(
+        baseItems: List<BookSearchResultItem>,
+        additionalItems: List<BookSearchResultItem>
+    ): List<BookSearchResultItem> {
+        // ブリーチ
+        val baseIds = baseItems.map { it.id }
+        val additionalIds = additionalItems.map { it.id }
+        val filteredIds = additionalIds.filter { !baseIds.contains(it) }
+        val filteredItems = additionalItems.filter { filteredIds.contains(it.id) }
+        return baseItems + filteredItems
     }
 
     private fun getDateTimeFromDateString(dateString: String): Long {
