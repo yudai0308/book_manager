@@ -30,6 +30,9 @@ import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
 import com.example.bookmanager.viewmodels.BookshelfViewModel
+import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -80,6 +83,10 @@ class BookshelfActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Firebase の初期化
+        FirebaseApp.initializeApp(applicationContext)
+        Firebase.crashlytics.setCrashlyticsCollectionEnabled(true)
 
         binding.also {
             it.viewModel = viewModel
@@ -181,6 +188,7 @@ class BookshelfActivity : AppCompatActivity() {
 
     private fun setFabClickListener() {
         binding.fabAddBook.setOnClickListener {
+            throw RuntimeException("Test crash!")
             val intent = Intent(applicationContext, BookSearchActivity::class.java)
             startActivity(intent)
         }
