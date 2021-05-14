@@ -188,7 +188,6 @@ class BookshelfActivity : AppCompatActivity() {
 
     private fun setFabClickListener() {
         binding.fabAddBook.setOnClickListener {
-            throw RuntimeException("Test crash!")
             val intent = Intent(applicationContext, BookSearchActivity::class.java)
             startActivity(intent)
         }
