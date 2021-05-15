@@ -26,11 +26,8 @@ class BookRepository(private val context: Context) {
 
     private val authorBookDao by lazy { db.authorBookDao() }
 
-    // TODO: トランザクションが正常に動作しているか確認。
-    // TODO: 著者がすでに登録されていたら中間テーブルにのみ登録。
     @Transaction
     suspend fun insertBookWithAuthors(book: Book, authors: List<Author>) {
-        // TODO: 著者名が登録済みなら登録しない（登録しようとするとユニーク制約エラー発生）
         bookDao.insert(book)
         val authorIds = insertOrGetIds(authors)
         val authorBooks = authorIds.map {
@@ -55,8 +52,7 @@ class BookRepository(private val context: Context) {
     }
 
     @Transaction
-    suspend fun deleteBook(book: Book) = withContext(Dispatchers.IO) {
-        // TODO: 著者が null の場合どうなる？
+    suspend fun delete(book: Book) = withContext(Dispatchers.IO) {
         val authorBooks = authorBookDao.getRecordsByBookId(book.id)
         val authorIds = authorBooks.map { it.authorId }
         // 中間テーブルからレコードを削除。

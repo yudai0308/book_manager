@@ -93,7 +93,6 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
 
     inner class BookSearchCallback(private val searchType: SearchType) : Callback {
         override fun onFailure(call: Call, e: IOException) {
-            // TODO: 検索失敗時の処理
             searchCallback?.onSearchFailed()
         }
 

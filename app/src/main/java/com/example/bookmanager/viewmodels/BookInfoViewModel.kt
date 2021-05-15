@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.rooms.entities.BookInfo
@@ -28,6 +29,9 @@ class BookInfoViewModel(application: Application, val bookId: String) :
     private val bookDao by lazy {
         Room.databaseBuilder(context, BookDatabase::class.java, C.DB_NAME).build().bookDao()
     }
+
+    private val repository by lazy { BookRepository(context) }
+
 
     private val bookInfo: BookInfo by lazy {
         runBlocking { bookDao.loadBookInfoById(bookId) }
@@ -122,6 +126,10 @@ class BookInfoViewModel(application: Application, val bookId: String) :
     }
 
     fun getDescription() = bookInfo.book.description
+
+    suspend fun delete(book: Book) {
+        repository.delete(book)
+    }
 
     /**
      * Book ID を引数として受け取るために、独自の Factory クラスを作成。
