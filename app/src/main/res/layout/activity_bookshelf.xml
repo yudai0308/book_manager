@@ -33,6 +33,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/match_constraint"
             android:elevation="0dp"
+            android:paddingStart="@dimen/space_narrow"
+            android:paddingEnd="@dimen/space_narrow"
             android:scrollbarSize="0dp"
             android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
