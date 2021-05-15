@@ -19,7 +19,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookDetailBinding
-import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
@@ -275,10 +274,8 @@ class BookDetailActivity : AppCompatActivity() {
             it.setTitle(book.title)
             it.setMessage(getString(R.string.delete_dialog_message))
             it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
-                // TODO: リポジトリは ViewModel 経由で操作したい
-                val daoController = BookRepository(this)
                 runBlocking {
-                    daoController.deleteBook(book)
+                    viewModel.delete(book)
                     FileIO.deleteBookImage(this@BookDetailActivity, book.id)
                 }
                 finish()

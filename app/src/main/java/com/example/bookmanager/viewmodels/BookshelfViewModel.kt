@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.bookmanager.R
 import com.example.bookmanager.models.BookSortCondition
+import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.database.BookDatabase
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
@@ -23,6 +24,8 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
     private val bookDao = Room.databaseBuilder(
         context, BookDatabase::class.java, C.DB_NAME
     ).build().bookDao()
+
+    private val repository by lazy { BookRepository(context) }
 
     private val _books: MutableLiveData<List<Book>> = MutableLiveData()
 
@@ -118,5 +121,9 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
         } else {
             books.sortedByDescending { it.publishedDate }
         }
+    }
+
+    suspend fun delete(book: Book) {
+        repository.delete(book)
     }
 }

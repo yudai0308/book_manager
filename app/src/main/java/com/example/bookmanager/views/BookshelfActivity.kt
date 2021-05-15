@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.ActivityBookshelfBinding
 import com.example.bookmanager.models.BookSortCondition
-import com.example.bookmanager.rooms.common.BookRepository
 import com.example.bookmanager.rooms.entities.Book
 import com.example.bookmanager.utils.C
 import com.example.bookmanager.utils.FileIO
@@ -36,7 +35,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
 
 /**
  * 本棚ページのアクティビティ。
@@ -52,9 +50,6 @@ class BookshelfActivity : AppCompatActivity() {
     private val binding by lazy {
         DataBindingUtil.setContentView<ActivityBookshelfBinding>(this, R.layout.activity_bookshelf)
     }
-
-    // TODO: リポジトリは ViewModel 経由で操作したい
-    private val bookRepository by lazy { BookRepository(this) }
 
     private val sharedPref by lazy { getPreferences(Context.MODE_PRIVATE) }
 
@@ -311,7 +306,7 @@ class BookshelfActivity : AppCompatActivity() {
             it.setMessage(getString(R.string.delete_dialog_message))
             it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
                 runBlocking {
-                    bookRepository.deleteBook(book)
+                    viewModel.delete(book)
                     FileIO.deleteBookImage(this@BookshelfActivity, book.id)
                     showBooksAccordingToSelectedCondition()
                 }
