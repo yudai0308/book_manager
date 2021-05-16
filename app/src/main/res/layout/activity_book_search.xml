@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.bookmanager.viewmodels.BookResultViewModel" />
+            type="io.github.yudai0308.honma.viewmodels.BookResultViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
