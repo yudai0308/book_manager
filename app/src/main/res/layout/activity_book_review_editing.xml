@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.bookmanager.viewmodels.BookInfoViewModel" />
+            type="io.github.yudai0308.honma.viewmodels.BookInfoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

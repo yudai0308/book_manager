@@ -4,12 +4,12 @@
 
     <data>
 
-        <import type="com.example.bookmanager.utils.StringUtil" />
+        <import type="io.github.yudai0308.honma.utils.StringUtil" />
         <import type="android.view.View"/>
 
         <variable
             name="item"
-            type="com.example.bookmanager.models.BookSearchResultItem" />
+            type="io.github.yudai0308.honma.models.BookSearchResultItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
