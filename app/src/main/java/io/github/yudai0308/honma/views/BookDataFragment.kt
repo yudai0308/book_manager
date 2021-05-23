@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import io.github.yudai0308.honma.R
-import io.github.yudai0308.honma.databinding.FragmentBookMemoBinding
+import io.github.yudai0308.honma.databinding.FragmentBookDataBinding
 import io.github.yudai0308.honma.rooms.entities.Book
 import io.github.yudai0308.honma.utils.C
 import io.github.yudai0308.honma.viewmodels.BookInfoViewModel
@@ -19,15 +19,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * 本詳細ページ内、メモタブのフラグメント。
+ * 本詳細ページ内、データタブのフラグメント。
  */
-class BookMemoFragment : Fragment() {
+class BookDataFragment : Fragment() {
 
     private lateinit var bookId: String
 
     private lateinit var viewModel: BookInfoViewModel
 
-    private lateinit var binding: FragmentBookMemoBinding
+    private lateinit var binding: FragmentBookDataBinding
 
     private var selectedStatusButtonId: Int? = null
 
@@ -45,7 +45,7 @@ class BookMemoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            layoutInflater, R.layout.fragment_book_memo, container, false
+            layoutInflater, R.layout.fragment_book_data, container, false
         )
         binding.also {
             it.viewModel = viewModel
@@ -181,7 +181,7 @@ class BookMemoFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun getInstance(bookId: String) = BookMemoFragment().apply {
+        fun getInstance(bookId: String) = BookDataFragment().apply {
             arguments = Bundle().apply {
                 putString(C.BOOK_ID, bookId)
             }

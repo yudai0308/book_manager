@@ -145,7 +145,7 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     /**
-     * ViewPager 内のコンテンツ「メモ」と「感想」を作成する。
+     * ViewPager 内のコンテンツ「データ」と「感想」を作成する。
      */
     private fun createViewPagerContents() {
         val viewPager = createViewPager()
@@ -159,12 +159,12 @@ class BookDetailActivity : AppCompatActivity() {
      * @return [ViewPager2] オブジェクト
      */
     private fun createViewPager(): ViewPager2 {
-        val bookMemoFragment = BookMemoFragment.getInstance(bookId)
+        val bookDataFragment = BookDataFragment.getInstance(bookId)
         val bookReviewFragment = BookReviewFragment.getInstance(bookId)
         return binding.bookDetailViewPager.also {
             it.isUserInputEnabled = false
             it.adapter = BookDetailPagerAdapter(
-                this, bookMemoFragment, bookReviewFragment
+                this, bookDataFragment, bookReviewFragment
             )
         }
     }
@@ -179,8 +179,8 @@ class BookDetailActivity : AppCompatActivity() {
         val tabLayout = binding.bookDetailTabLayout
         return TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
-                BookDetailPagerAdapter.Tab.BOOK_MEMO.position -> {
-                    getString(R.string.book_detail_tab_memo)
+                BookDetailPagerAdapter.Tab.BOOK_DATA.position -> {
+                    getString(R.string.book_detail_tab_data)
                 }
                 BookDetailPagerAdapter.Tab.BOOK_REVIEW.position -> {
                     getString(R.string.book_detail_tab_review)
