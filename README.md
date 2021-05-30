@@ -55,7 +55,7 @@ Android アプリ「本マ」はシンプルな本の管理アプリです。
 
 ### 主なライブラリ
 
-- [Android Jetpack][1]関連ライブラリ
+- [Android Jetpack][1] 関連ライブラリ
 - [OkHttp][2] 4.6.0
 - [Moshi][3] 1.9.2
 - [glide][4] 4.11.0
