@@ -23,10 +23,7 @@ import io.github.yudai0308.honma.R
 import io.github.yudai0308.honma.databinding.ActivityBookDetailBinding
 import io.github.yudai0308.honma.rooms.database.BookDatabase
 import io.github.yudai0308.honma.rooms.entities.Book
-import io.github.yudai0308.honma.utils.C
-import io.github.yudai0308.honma.utils.FileIO
-import io.github.yudai0308.honma.utils.ImageUtil
-import io.github.yudai0308.honma.utils.StringUtil
+import io.github.yudai0308.honma.utils.*
 import io.github.yudai0308.honma.viewmodels.BookInfoViewModel
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
@@ -275,8 +272,8 @@ class BookDetailActivity : AppCompatActivity() {
             it.setMessage(getString(R.string.delete_dialog_message))
             it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
                 runBlocking {
-                    viewModel.delete(book)
-                    FileIO.deleteBookImage(this@BookDetailActivity, book.id)
+                    viewModel.delete(this@BookDetailActivity, book)
+                    ViewUtil.showToastLong(this@BookDetailActivity, getString(R.string.deleted))
                 }
                 finish()
             })

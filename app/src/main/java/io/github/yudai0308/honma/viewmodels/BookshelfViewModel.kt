@@ -1,6 +1,7 @@
 package io.github.yudai0308.honma.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,7 @@ import io.github.yudai0308.honma.rooms.common.BookRepository
 import io.github.yudai0308.honma.rooms.database.BookDatabase
 import io.github.yudai0308.honma.rooms.entities.Book
 import io.github.yudai0308.honma.utils.C
+import io.github.yudai0308.honma.utils.FileIO
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
@@ -123,7 +125,9 @@ class BookshelfViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    suspend fun delete(book: Book) {
+    suspend fun delete(context: Context, book: Book) {
         repository.delete(book)
+        FileIO.deleteBookImage(context, book.id)
+        FileIO.deleteBookReviewFile(context, book.id)
     }
 }
