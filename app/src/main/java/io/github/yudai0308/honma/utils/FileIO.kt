@@ -49,7 +49,7 @@ class FileIO {
         fun deleteBookImage(context: Context, bookId: String): Boolean {
             return try {
                 val file = getFile(context, C.DIRECTORY_NAME_BOOK_IMAGE, bookId)
-                if (file.delete()) {
+                if (file.exists() && file.delete()) {
                     Log.i(TAG, "画像を削除しました / bookId: $bookId")
                     true
                 } else {
@@ -58,6 +58,22 @@ class FileIO {
                 }
             } catch (e: IOException) {
                 Log.e(TAG, "画像の削除に失敗しました / bookId: $bookId")
+                false
+            }
+        }
+        
+        fun deleteBookReviewFile(context: Context, bookId: String): Boolean {
+            return try {
+                val file = getFile(context, C.DIRECTORY_NAME_BOOK_REVIEW, bookId)
+                if (file.exists() && file.delete()) {
+                    Log.i(TAG, "レビューファイルを削除しました / bookId: $bookId")
+                    true
+                } else {
+                    Log.e(TAG, "レビューファイルの削除に失敗しました / bookId: $bookId")
+                    false
+                }
+            } catch (e: IOException) {
+                Log.e(TAG, "レビューファイルの削除に失敗しました / bookId: $bookId")
                 false
             }
         }

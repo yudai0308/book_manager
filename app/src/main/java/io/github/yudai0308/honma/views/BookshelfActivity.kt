@@ -30,7 +30,7 @@ import io.github.yudai0308.honma.databinding.ActivityBookshelfBinding
 import io.github.yudai0308.honma.models.BookSortCondition
 import io.github.yudai0308.honma.rooms.entities.Book
 import io.github.yudai0308.honma.utils.C
-import io.github.yudai0308.honma.utils.FileIO
+import io.github.yudai0308.honma.utils.ViewUtil
 import io.github.yudai0308.honma.viewmodels.BookshelfViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -306,8 +306,8 @@ class BookshelfActivity : AppCompatActivity() {
             it.setMessage(getString(R.string.delete_dialog_message))
             it.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener { _, _ ->
                 runBlocking {
-                    viewModel.delete(book)
-                    FileIO.deleteBookImage(this@BookshelfActivity, book.id)
+                    viewModel.delete(this@BookshelfActivity, book)
+                    ViewUtil.showToastLong(this@BookshelfActivity, getString(R.string.deleted))
                     showBooksAccordingToSelectedCondition()
                 }
             })

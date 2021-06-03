@@ -1,6 +1,7 @@
 package io.github.yudai0308.honma.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -127,8 +128,10 @@ class BookInfoViewModel(application: Application, val bookId: String) :
 
     fun getDescription() = bookInfo.book.description
 
-    suspend fun delete(book: Book) {
+    suspend fun delete(context: Context, book: Book) {
         repository.delete(book)
+        FileIO.deleteBookImage(context, book.id)
+        FileIO.deleteBookReviewFile(context, book.id)
     }
 
     /**
