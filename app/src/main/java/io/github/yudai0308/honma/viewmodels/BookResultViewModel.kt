@@ -153,7 +153,6 @@ class BookResultViewModel(application: Application) : AndroidViewModel(applicati
         baseItems: List<BookSearchResultItem>,
         additionalItems: List<BookSearchResultItem>
     ): List<BookSearchResultItem> {
-        // ブリーチ
         val baseIds = baseItems.map { it.id }
         val additionalIds = additionalItems.map { it.id }
         val filteredIds = additionalIds.filter { !baseIds.contains(it) }
