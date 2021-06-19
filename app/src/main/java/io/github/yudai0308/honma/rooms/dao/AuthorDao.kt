@@ -17,6 +17,9 @@ interface AuthorDao {
     @Delete
     suspend fun delete(author: Author)
 
+    @Query("SELECT * FROM authors")
+    suspend fun loadAll(): List<Author>
+
     @Query("SELECT * FROM authors WHERE id = :id LIMIT 1")
     suspend fun loadById(id: Long): Author
 
