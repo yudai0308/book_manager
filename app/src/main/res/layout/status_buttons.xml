@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="io.github.yudai0308.honma.viewmodels.BookInfoViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_narrow"
+        android:orientation="horizontal">
+
+        <Button
+            app:book_status="@{viewModel.statusCode}"
+            android:id="@+id/status_button_want_to_read"
+            style="@style/FilterButton.Selectable"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_narrow"
+            android:layout_marginEnd="@dimen/space_narrow"
+            android:text="@string/book_status_want_to"
+            android:textColor="@color/white" />
+
+        <Button
+            app:book_status="@{viewModel.statusCode}"
+            android:id="@+id/status_button_reading"
+            style="@style/FilterButton.Selectable"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_narrow"
+            android:layout_marginEnd="@dimen/space_narrow"
+            android:text="@string/book_status_reading"
+            android:textColor="@color/white" />
+
+        <Button
+            app:book_status="@{viewModel.statusCode}"
+            android:id="@+id/status_button_finished"
+            style="@style/FilterButton.Selectable"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_narrow"
+            android:layout_marginEnd="@dimen/space_narrow"
+            android:text="@string/book_status_finished"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</layout>

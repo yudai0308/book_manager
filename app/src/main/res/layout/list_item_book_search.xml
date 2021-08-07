@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="io.github.yudai0308.honma.utils.StringUtil" />
+        <import type="android.view.View"/>
+
+        <variable
+            name="item"
+            type="io.github.yudai0308.honma.models.BookSearchResultItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_default">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/book_search_item_image_card"
+            android:layout_width="@dimen/book_row_image_width"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_narrow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/book_search_item_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/description_book_image"
+                android:src="@drawable/now_loading" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/book_search_item_title"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginEnd="@dimen/space_default"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{item.title}"
+            android:textSize="@dimen/text_size_book_title"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image_card"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/book_search_item_author"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginTop="@dimen/space_default"
+            android:layout_marginEnd="@dimen/space_default"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{item.authors != null ? @string/str(StringUtil.divideWithComma(item.authors)) : @string/hyphen}"
+            android:textSize="@dimen/text_size_book_author"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image_card"
+            app:layout_constraintTop_toBottomOf="@id/book_search_item_title" />
+
+        <RatingBar
+            android:id="@+id/book_search_rating"
+            style="?android:ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginTop="@dimen/space_default"
+            android:rating="@{item.averageRating != null ? item.averageRating : (float) 0}"
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image_card"
+            app:layout_constraintTop_toBottomOf="@id/book_search_item_author" />
+
+        <TextView
+            android:id="@+id/book_search_ratings_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginTop="@dimen/space_narrow"
+            android:text="@{item.ratingsCount > 0 ? @string/num(item.ratingsCount) : @string/hyphen}"
+            app:layout_constraintStart_toEndOf="@+id/book_search_rating"
+            app:layout_constraintTop_toBottomOf="@id/book_search_item_author" />
+
+        <Button
+            android:id="@+id/book_search_add_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginTop="@dimen/space_wide"
+            android:background="@{item.isAlreadyAdded ? @drawable/bg_rounded_square_light_blue : @drawable/bg_rounded_square_light_blue_border}"
+            android:clickable="@{!item.isAlreadyAdded}"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="@dimen/space_narrow"
+            android:text="@{item.isAlreadyAdded ? @string/already_added : @string/add_to_bookshelf}"
+            android:textColor="@{item.isAlreadyAdded ? @color/white : @color/colorAccent}"
+            app:layout_constraintEnd_toStartOf="@id/book_search_detail_link_button"
+            app:layout_constraintStart_toEndOf="@id/book_search_item_image_card"
+            app:layout_constraintTop_toBottomOf="@id/book_search_rating" />
+
+        <Button
+            android:visibility="@{item.infoLink != null ? View.VISIBLE : View.INVISIBLE}"
+            android:id="@+id/book_search_detail_link_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_default"
+            android:layout_marginTop="@dimen/space_wide"
+            android:background="@drawable/bg_rounded_square_dark_gray"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="@dimen/space_narrow"
+            android:text="@string/open_book_detail"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/book_search_add_button"
+            app:layout_constraintTop_toBottomOf="@id/book_search_rating" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
