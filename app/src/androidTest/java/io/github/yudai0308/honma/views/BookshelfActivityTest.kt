@@ -1,17 +1,12 @@
 package io.github.yudai0308.honma.views
 
 
-import android.view.View
-import androidx.annotation.IdRes
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.Toolbar
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -21,7 +16,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import io.github.yudai0308.honma.R
-import org.hamcrest.Matcher
+import io.github.yudai0308.honma.test_utils.RecyclerViewUtil
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.Is.`is`
 import org.junit.Before
@@ -63,11 +58,11 @@ class BookshelfActivityTest {
         val waitSuccess1 = device.wait(searchResultCond, 3000L)
         assertThat(waitSuccess1, `is`(true))
 
-        onView(withId(R.id.book_search_result_list)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<BookshelfAdapter.BookShelfHolder>(
-                0, clickChildViewWithId(R.id.book_search_add_button)
+        onView(
+            RecyclerViewUtil.withDescendantViewAtPosition(
+                R.id.book_search_result_list, R.id.book_search_add_button, 0
             )
-        )
+        ).perform(click())
 
         val backButton = onView(
             allOf(
@@ -82,25 +77,11 @@ class BookshelfActivityTest {
                 "io.github.yudai0308.honma", "bookshelf_item_cover"
             )
         )
-        val waitSuccess2 = device.wait(bookshelfCond, 3000L)
+        val waitSuccess2 = device.wait(bookshelfCond, 5000L)
         assertThat(waitSuccess2, `is`(true))
 
         val imageView = onView(withId(R.id.bookshelf_item_cover))
         imageView.check(matches(isDisplayed()))
         doesNotExist()
-    }
-
-    private fun clickChildViewWithId(@IdRes id: Int) = object : ViewAction {
-        override fun getConstraints(): Matcher<View>? = null
-
-        override fun getDescription(): String {
-            return "Click on a child view with specified id."
-        }
-
-        override fun perform(uiController: UiController?, view: View?) {
-            view?.findViewById<View>(id)?.also {
-                it.performClick()
-            }
-        }
     }
 }
