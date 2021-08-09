@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
+        android:id="@+id/bookshelf_item_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clipToPadding="false">

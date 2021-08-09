@@ -1,4 +1,4 @@
-package io.github.yudai0308.honma.test_utils
+package io.github.yudai0308.honma.testutils
 
 import android.view.InputDevice
 import android.view.MotionEvent
