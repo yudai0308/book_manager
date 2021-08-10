@@ -6,8 +6,9 @@ class StringUtil {
         fun divideWithComma(list: List<String>): String {
             val divider = ", "
             var returnVal = ""
-            val count = list.size
-            list.forEachIndexed { index: Int, string: String ->
+            val listHasNoEmpty = list.filter { it.isNotEmpty() }
+            val count = listHasNoEmpty.size
+            listHasNoEmpty.forEachIndexed { index: Int, string: String ->
                 val add = if (index == count - 1) string else string + divider
                 returnVal += add
             }

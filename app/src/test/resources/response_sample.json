@@ -1,0 +1,662 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 1612,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "VcCMQgAACAAJ",
+      "etag": "wyKJylYzcqo",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/VcCMQgAACAAJ",
+      "volumeInfo": {
+        "title": "夏目漱石を読む",
+        "authors": [
+          "吉本隆明"
+        ],
+        "publishedDate": "2009-09",
+        "description": "深刻なテーマを追い求める「暗い」漱石と長年、多くの読者から愛される「国民的作家」漱石のあいだには何が横たわっているのか。その二つはどこでつながっているのか。「吾輩は猫である」「夢十夜」「それから」「坊っちゃん」「虞美人草」「三四郎」「門」「彼岸過迄」「行人」「こころ」「道草」「明暗」...主要十二作品を解明し、漱石が繰り返し語ろうとしている主題を明らかにし、漱石自身の資質とのかかわりを平明に語りつくす、卓抜な漱石講義。小林秀雄賞受賞。",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "4480426426"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9784480426420"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 287,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=VcCMQgAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=VcCMQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "un",
+        "previewLink": "http://books.google.co.jp/books?id=VcCMQgAACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=1&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=VcCMQgAACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3%E3%82%92%E8%AA%AD%E3%82%80.html?hl=&id=VcCMQgAACAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=VcCMQgAACAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "深刻なテーマを追い求める「暗い」漱石と長年、多くの読者から愛される「国民的作家」漱石のあいだには何が横たわっているのか。その二つはどこでつながっているのか。「吾 ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "UKwGtAEACAAJ",
+      "etag": "nwbVnzL1vm8",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/UKwGtAEACAAJ",
+      "volumeInfo": {
+        "title": "夏目漱石解体全書",
+        "authors": [
+          "香日ゆら"
+        ],
+        "publishedDate": "2017-05",
+        "description": "文豪・夏目漱石の生涯も作品も記念館も趣味も友達も全部ガイドしちゃいます!!",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "4309025757"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9784309025759"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 127,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=UKwGtAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=UKwGtAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "un",
+        "previewLink": "http://books.google.co.jp/books?id=UKwGtAEACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=2&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=UKwGtAEACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3%E8%A7%A3%E4%BD%93%E5%85%A8%E6%9B%B8.html?hl=&id=UKwGtAEACAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=UKwGtAEACAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "文豪・夏目漱石の生涯も作品も記念館も趣味も友達も全部ガイドしちゃいます!!"
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "ib1OAAAAMAAJ",
+      "etag": "6vpXGkltaxc",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/ib1OAAAAMAAJ",
+      "volumeInfo": {
+        "title": "文豪ナビ夏目漱石",
+        "authors": [
+          "新潮文庫"
+        ],
+        "publishedDate": "2004-11",
+        "description": "漱石の作品は、かなりヘンテコリンで面白い。『こころ』は男同士の恋愛を軸に展開する話とも読めるし、『文鳥・夢十夜』では文鳥を眺めて美しい女の影を夢想しながら、実生活では奥さんの尻に敷かれがちな漱石の姿が見えてきます。それは普通の人間の、百年経っても色褪せない日々の姿です。",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015060681247"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 159,
+        "printType": "BOOK",
+        "categories": [
+          "Japanese fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.1.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=ib1OAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=ib1OAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "un",
+        "previewLink": "http://books.google.co.jp/books?id=ib1OAAAAMAAJ&q=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=3&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=ib1OAAAAMAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E6%96%87%E8%B1%AA%E3%83%8A%E3%83%93%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3.html?hl=&id=ib1OAAAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=ib1OAAAAMAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "漱石の作品は、かなりヘンテコリンで面白い。『こころ』は男同士の恋愛を軸に展開する話とも読めるし、『文鳥・夢十夜』では文鳥を眺めて美しい女の影を夢想しながら、実生 ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "IbKxAAAAIAAJ",
+      "etag": "1tDpIiiL1cg",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/IbKxAAAAIAAJ",
+      "volumeInfo": {
+        "title": "決定版夏目漱石",
+        "authors": [
+          "江藤淳"
+        ],
+        "publishedDate": "1979",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCSD:31822004985784"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 579,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.1.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=IbKxAAAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=IbKxAAAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "un",
+        "previewLink": "http://books.google.co.jp/books?id=IbKxAAAAIAAJ&q=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=4&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=IbKxAAAAIAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E6%B1%BA%E5%AE%9A%E7%89%88%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3.html?hl=&id=IbKxAAAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=IbKxAAAAIAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "Kfa1rQEACAAJ",
+      "etag": "dGaGAd0GVMw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Kfa1rQEACAAJ",
+      "volumeInfo": {
+        "title": "夏目漱石",
+        "publishedDate": "2014-12",
+        "description": "西洋の文学を学んだ夏目漱石は、ひとりひとりの個性を大切にした個人主義をはじめて小説に取りいれました。そして、『吾輩は猫である』『坊っちゃん』『それから』『こころ』など、すばらしい作品を次々と生み出し、現代日本文学の礎をきずいたのです。",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "4591142396"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9784591142394"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 126,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=Kfa1rQEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=Kfa1rQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "un",
+        "previewLink": "http://books.google.co.jp/books?id=Kfa1rQEACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=5&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=Kfa1rQEACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3.html?hl=&id=Kfa1rQEACAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=Kfa1rQEACAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "西洋の文学を学んだ夏目漱石は、ひとりひとりの個性を大切にした個人主義をはじめて小説に取りいれました。そして、『吾輩は猫である』『坊っちゃん』『それから』『こころ ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "4hL4jwEACAAJ",
+      "etag": "CtJ1MhP8/M4",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/4hL4jwEACAAJ",
+      "volumeInfo": {
+        "title": "夏目漱石博物館",
+        "subtitle": "絵で読む漱石の明治",
+        "authors": [
+          "石崎等",
+          "中山繁信"
+        ],
+        "publishedDate": "2016-05",
+        "description": "漱石が生活した町、名作を生んだ家...猫、坊っちゃん、三四郎の舞台は、どのようなところだったのか?都市空間から漱石を読み直す!",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "4395320643"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9784395320646"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 104,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=4hL4jwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=4hL4jwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "un",
+        "previewLink": "http://books.google.co.jp/books?id=4hL4jwEACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=6&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=4hL4jwEACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3%E5%8D%9A%E7%89%A9%E9%A4%A8.html?hl=&id=4hL4jwEACAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=4hL4jwEACAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "漱石が生活した町、名作を生んだ家...猫、坊っちゃん、三四郎の舞台は、どのようなところだったのか?都市空間から漱石を読み直す!"
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "UqoqAQAAIAAJ",
+      "etag": "di6Iuw+d9AA",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/UqoqAQAAIAAJ",
+      "volumeInfo": {
+        "title": "夏目漱石",
+        "publishedDate": "1970",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UCSD:31822006416481"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 299,
+        "printType": "BOOK",
+        "categories": [
+          "Authors, Japanese"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=UqoqAQAAIAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=UqoqAQAAIAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=UqoqAQAAIAAJ&q=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=7&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=UqoqAQAAIAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3.html?hl=&id=UqoqAQAAIAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=UqoqAQAAIAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "\u003cb\u003e夏目漱石\u003c/b\u003e工研究参考文献(昭和四十四年以降 6 主要单行本仁限 5 )島柄重緒雄有\u003cbr\u003e\n土居健郎漱石の心的世界至文堂昭神谷正明漱石の文学審滴叫端德辦觀\u003cb\u003e夏目漱石\u003c/b\u003e集[\u003cbr\u003e\n日本近代文学大系 8 ]内田道雄注积角川昭以田中保隆\u003cb\u003e夏目漱石\u003c/b\u003e[写真作家会叢書 4 )\u003cbr\u003e\n&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "hW-uoAEACAAJ",
+      "etag": "ZYq5Wl8Oi5w",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/hW-uoAEACAAJ",
+      "volumeInfo": {
+        "title": "夏目漱石『こころ』をどう読むか",
+        "authors": [
+          "石原千秋"
+        ],
+        "publishedDate": "2014-05-30",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "4309022898"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9784309022895"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 227,
+        "printType": "BOOK",
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=hW-uoAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=hW-uoAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "un",
+        "previewLink": "http://books.google.co.jp/books?id=hW-uoAEACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=8&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=hW-uoAEACAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3_%E3%81%93%E3%81%93%E3%82%8D_%E3%82%92%E3%81%A9%E3%81%86%E8%AA%AD%E3%82%80.html?hl=&id=hW-uoAEACAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=hW-uoAEACAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "Jb3GNmCzcIoC",
+      "etag": "JhwIbmSmvIA",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Jb3GNmCzcIoC",
+      "volumeInfo": {
+        "title": "こころ",
+        "authors": [
+          "夏目漱石"
+        ],
+        "publisher": "Google, Inc.",
+        "publishedDate": "1961",
+        "description": "夏目漱石 -- 慶応3年1月5日(新暦2月9日)江戸牛込馬場下横町に生まれる。本名は夏目金之助。帝国大学文科大学(東京大学文学部)を卒業後、東京高等師範学校、松山中学、第五高等学校などの教師生活を経て、1900年イギリスに留学する。帰国後、第一高等学校で教鞭をとりながら、1905年処女作「吾輩は猫である」を発表。1906年「坊っちゃん」「草枕」を発表。1907年教職を辞し、朝日新聞社に入社。そして「虞美人草」「三四郎」などを発表するが、胃病に苦しむようになる。1916年12月9日、「明暗」の連載途中に胃潰瘍で永眠。享年50歳であった。(青空文庫図書カードより)",
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 244,
+        "printType": "BOOK",
+        "categories": [
+          "Literary Collections"
+        ],
+        "averageRating": 3.5,
+        "ratingsCount": 49,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.20.20.0.full.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=Jb3GNmCzcIoC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=Jb3GNmCzcIoC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "un",
+        "previewLink": "http://books.google.co.jp/books?id=Jb3GNmCzcIoC&printsec=frontcover&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=9&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=Jb3GNmCzcIoC&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=Jb3GNmCzcIoC"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "FREE",
+        "isEbook": true,
+        "buyLink": "https://play.google.com/store/books/details?id=Jb3GNmCzcIoC&rdid=book-Jb3GNmCzcIoC&rdot=1&source=gbs_api"
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "ALL_PAGES",
+        "embeddable": true,
+        "publicDomain": true,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "downloadLink": "http://books.google.co.jp/books/download/%E3%81%93%E3%81%93%E3%82%8D.epub?id=Jb3GNmCzcIoC&hl=&output=epub&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "downloadLink": "http://books.google.co.jp/books/download/%E3%81%93%E3%81%93%E3%82%8D.pdf?id=Jb3GNmCzcIoC&hl=&output=pdf&sig=ACfU3U2OrPyciDnejjdO-apy5K8TK2NbKQ&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=Jb3GNmCzcIoC&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "FULL_PUBLIC_DOMAIN",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "夏目漱石 -- 慶応3年1月5日(新暦2月9日)江戸牛込馬場下横町に生まれる。本名は夏目金之助。帝国大学文科大学(東京大学文学部)を卒業後、東京高等師範学校、松山中学、第五高等 ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "7GpNAAAAMAAJ",
+      "etag": "pDI4dwprRZU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/7GpNAAAAMAAJ",
+      "volumeInfo": {
+        "title": "夏目漱石",
+        "authors": [
+          "三好行雄"
+        ],
+        "publishedDate": "1984",
+        "industryIdentifiers": [
+          {
+            "type": "OTHER",
+            "identifier": "UOM:39015057297569"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 460,
+        "printType": "BOOK",
+        "categories": [
+          "Authors, Japanese"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.5.2.0.preview.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=7GpNAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=7GpNAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "language": "ja",
+        "previewLink": "http://books.google.co.jp/books?id=7GpNAAAAMAAJ&q=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&cd=10&source=gbs_api",
+        "infoLink": "http://books.google.co.jp/books?id=7GpNAAAAMAAJ&dq=%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/%E5%A4%8F%E7%9B%AE%E6%BC%B1%E7%9F%B3.html?hl=&id=7GpNAAAAMAAJ"
+      },
+      "saleInfo": {
+        "country": "JP",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "JP",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=7GpNAAAAMAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "松本健次郎漱石の精神界(金剛出版昭%・ 2 )有精堂『一冊の講座』編集部一冊の\u003cbr\u003e\n講座\u003cb\u003e夏目漱石\u003c/b\u003e日本の近代文学田(有精堂昭切・ 2 )佐渡谷重信漱石と世紀末芸術(\u003cbr\u003e\n美術公論社昭切・ 2 )角野喜六漱石のロンドン(荒竹出版昭55 ) 8 )日本文学研究\u003cbr\u003e\n資料&nbsp;..."
+      }
+    }
+  ]
+}
